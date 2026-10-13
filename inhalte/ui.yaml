@@ -29,6 +29,8 @@ navigation:
   sprache_wechseln: { de: "English", en: "Deutsch" }
   menue_oeffnen: { de: "Menü öffnen", en: "Open menu" }
   menue_schliessen: { de: "Menü schließen", en: "Close menu" }
+  hauptmenue: { de: "Hauptmenü", en: "Main menu" }
+  zum_inhalt: { de: "Zum Inhalt springen", en: "Skip to content" }
 
 buttons:
   termin_anfragen: { de: "Termin anfragen", en: "Request an appointment" }

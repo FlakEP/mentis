@@ -1,0 +1,233 @@
+---
+// Fußbereich jeder Seite (dunkel): Logo, Kurzbeschreibung, Selbstzahler-Hinweis, Links zu allen Seiten,
+// Kontaktdaten sowie Impressum und Datenschutz. Benutzt in src/layouts/Basis.astro.
+import { BEREICHE, seitenUrl, type Sprache } from '../config/site';
+import { bogenPaar } from '../lib/bogen';
+import { holeKontaktdaten, uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
+const t = await uebersetzer(sprache);
+const kontakt = await holeKontaktdaten(sprache);
+const jahr = new Date().getFullYear();
+const [deko1, deko2] = bogenPaar(300, 300, 240, -24, 0.9);
+---
+
+<footer class="fuss" data-sperrbar>
+  <svg class="fuss__deko" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
+    <path d={deko1} class="fuss__deko-bogen fuss__deko-bogen--1"></path>
+    <path d={deko2} class="fuss__deko-bogen fuss__deko-bogen--2"></path>
+  </svg>
+
+  <div class="inhalt fuss__raster">
+    <div class="fuss__marke">
+      <a class="fuss__logo" href={seitenUrl('start', sprache)}>
+        <Logo sprache={sprache} ton="negativ" />
+      </a>
+      <p class="fuss__beschreibung">{t('footer.kurzbeschreibung')}</p>
+      <p class="fuss__zahler">{t('selbstzahler.kurz')}</p>
+    </div>
+
+    <ul class="fuss__liste" role="list">
+      {
+        BEREICHE.map((bereich) => (
+          <li>
+            <a href={seitenUrl(bereich, sprache)}>{t(`navigation.${bereich}`)}</a>
+          </li>
+        ))
+      }
+      <li><a href={seitenUrl('ueber_uns', sprache)}>{t('navigation.ueber_uns')}</a></li>
+      <li><a href={seitenUrl('kontakt', sprache)}>{t('navigation.kontakt')}</a></li>
+    </ul>
+
+    <ul class="fuss__liste fuss__kontakt" role="list">
+      <li>
+        <Icon name="mail" groesse={18} />
+        <a href={`mailto:${kontakt.email}`}>{kontakt.email}</a>
+      </li>
+      {
+        kontakt.telefon && (
+          <li>
+            <a href={`tel:${kontakt.telefon.replace(/[^\d+]/g, '')}`}>
+              <Text text={kontakt.telefon} />
+            </a>
+          </li>
+        )
+      }
+      <li>
+        <Icon name="ort" groesse={18} />
+        <span>{kontakt.ort}</span>
+      </li>
+      <li>
+        <Icon name="kalender" groesse={18} />
+        <span>{t('footer.termine')}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="inhalt fuss__unten">
+    <p>{t('footer.copyright', { jahr })}</p>
+    <ul class="fuss__recht" role="list">
+      <li><a href={seitenUrl('impressum', sprache)}>{t('navigation.impressum')}</a></li>
+      <li><a href={seitenUrl('datenschutz', sprache)}>{t('navigation.datenschutz')}</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .fuss {
+    position: relative;
+    overflow: hidden;
+    background: var(--farbe-footer-hintergrund);
+    color: var(--farbe-footer-text);
+    padding-top: clamp(4rem, 3rem + 4vw, 6.5rem);
+    font-size: 1.0625rem;
+  }
+
+  .fuss :focus-visible {
+    outline-color: var(--sand-100);
+  }
+
+  .fuss a {
+    color: var(--farbe-footer-text);
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  }
+
+  .fuss a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* Große, ruhige Bögen rechts im Hintergrund */
+  .fuss__deko {
+    position: absolute;
+    right: -14rem;
+    top: -6rem;
+    width: 40rem;
+    height: auto;
+    pointer-events: none;
+    opacity: 0.16;
+  }
+
+  .fuss__deko-bogen {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .fuss__deko-bogen--1 {
+    stroke: var(--sage-300);
+  }
+
+  .fuss__deko-bogen--2 {
+    stroke: var(--terra-300);
+  }
+
+  .fuss__raster {
+    position: relative;
+    display: grid;
+    gap: var(--raum-xl);
+  }
+
+  @media (min-width: 48em) {
+    .fuss__raster {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--raum-xl) var(--raum-2xl);
+    }
+  }
+
+  .fuss__logo {
+    display: inline-block;
+    border-radius: var(--radius-klein);
+  }
+
+  .fuss__logo :global(.logo) {
+    width: 15rem;
+  }
+
+  .fuss__beschreibung {
+    margin-top: var(--raum-m);
+    max-width: 36ch;
+    color: var(--farbe-footer-text-leise);
+  }
+
+  .fuss__zahler {
+    margin-top: var(--raum-s);
+    max-width: 36ch;
+    color: var(--farbe-footer-text-leise);
+    font-size: var(--text-klein);
+  }
+
+  .fuss__liste {
+    display: grid;
+    gap: var(--raum-2xs);
+    align-content: start;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fuss__liste a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--beruehrziel);
+  }
+
+  @media (min-width: 48em) {
+    .fuss__liste a {
+      min-height: 2rem;
+    }
+  }
+
+  .fuss__kontakt li {
+    display: flex;
+    align-items: center;
+    gap: var(--raum-xs);
+    min-height: 2rem;
+    color: var(--farbe-footer-text-leise);
+  }
+
+  .fuss__kontakt :global(.icon) {
+    flex: none;
+    color: var(--sage-300);
+  }
+
+  .fuss__unten {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--raum-xs) var(--raum-l);
+    margin-top: clamp(3rem, 2rem + 4vw, 5rem);
+    padding-block: var(--raum-m);
+    border-top: var(--linie-duenn) solid color-mix(in srgb, var(--sand-100) 14%, transparent);
+    color: var(--farbe-footer-text-leise);
+    font-size: var(--text-klein);
+  }
+
+  /* Platz für die Handy-Leiste, damit sie das Seitenende nicht verdeckt */
+  @media (max-width: 39.99em) {
+    .fuss__unten {
+      padding-bottom: calc(var(--raum-m) + var(--mobil-leiste-hoehe));
+    }
+  }
+
+  .fuss__recht {
+    display: flex;
+    gap: var(--raum-l);
+    padding: 0;
+    list-style: none;
+  }
+
+  .fuss__recht a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--beruehrziel);
+    color: var(--farbe-footer-text-leise);
+  }
+</style>

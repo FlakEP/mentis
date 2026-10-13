@@ -1,0 +1,94 @@
+---
+// Das Bogen-Motiv aus der Bildmarke als Deko.
+// art="paar": die zwei Bögen (grün/terrakotta) als Rahmen um eine Ziffer oder Initialen (Inhalt per <slot />).
+// art="trenner": ein kurzer Terrakotta-Bogen als ruhiger Abschnittstrenner.
+// Benutzt im Ablauf (Startseite), später auch für die Initialen auf „Über uns“.
+import { bogenPaar, bogenPfad } from '../lib/bogen';
+
+interface Props {
+  art?: 'paar' | 'trenner';
+  /** Kantenlänge in px (bei „paar“) */
+  groesse?: number;
+  /** Strichstärke im Verhältnis zur Größe (bei „paar“) */
+  strich?: number;
+  class?: string;
+}
+
+const { art = 'paar', groesse = 64, strich = 3, class: klasse } = Astro.props;
+const [bogen1, bogen2] = bogenPaar(50, 50, 44, 0);
+// Flacher Bogen oben auf einem großen Kreis (wie ein Ausschnitt der Bildmarke)
+const trennerPfad = bogenPfad(60, 132, 120, 238, 64);
+---
+
+{
+  art === 'paar' ? (
+    <span class:list={['bogenpaar', klasse]} style={`--groesse: ${groesse}px`}>
+      <svg class="bogenpaar__svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <path d={bogen1} class="bogenpaar__bogen bogenpaar__bogen--1" style={`stroke-width: ${strich}`} />
+        <path d={bogen2} class="bogenpaar__bogen bogenpaar__bogen--2" style={`stroke-width: ${strich}`} />
+      </svg>
+      <span class="bogenpaar__inhalt">
+        <slot />
+      </span>
+    </span>
+  ) : (
+    <svg class:list={['trenner', klasse]} viewBox="0 0 120 30" aria-hidden="true" focusable="false">
+      <path d={trennerPfad} class="trenner__bogen" />
+    </svg>
+  )
+}
+
+<style>
+  .bogenpaar {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: var(--groesse);
+    height: var(--groesse);
+    flex: none;
+  }
+
+  .bogenpaar__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .bogenpaar__bogen {
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .bogenpaar__bogen--1 {
+    stroke: var(--farbe-bogen-1);
+  }
+
+  .bogenpaar__bogen--2 {
+    stroke: var(--farbe-bogen-2);
+  }
+
+  .bogenpaar__inhalt {
+    position: relative;
+    font-family: var(--schrift-serif);
+    font-size: var(--text-ziffer);
+    line-height: 1;
+    color: var(--farbe-text);
+    font-variant-numeric: lining-nums;
+  }
+
+  .trenner {
+    display: block;
+    width: 4.5rem;
+    height: auto;
+    overflow: visible;
+  }
+
+  .trenner__bogen {
+    fill: none;
+    stroke: var(--farbe-akzent);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+</style>

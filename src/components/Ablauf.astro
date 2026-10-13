@@ -1,0 +1,96 @@
+---
+// Ablauf in Schritten mit Ziffern im Bogen-Motiv (z. B. „So läuft eine Diagnostik bei uns ab“).
+// Auf großen Bildschirmen nebeneinander, auf Handys untereinander. Benutzt auf der Startseite.
+import Bogen from './Bogen.astro';
+import Text from './Text.astro';
+
+interface Props {
+  schritte: { titel: string; text: string }[];
+}
+
+const { schritte } = Astro.props;
+---
+
+<ol class="ablauf" role="list" style={`--anzahl: ${schritte.length}`}>
+  {
+    schritte.map((schritt, index) => (
+      <li class="ablauf__schritt">
+        <Bogen groesse={64} strich={3.2} class="ablauf__ziffer">
+          {index + 1}
+        </Bogen>
+        <div class="ablauf__text">
+          <h3 class="ablauf__titel">
+            <Text text={schritt.titel} />
+          </h3>
+          <p>
+            <Text text={schritt.text} />
+          </p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .ablauf {
+    --ziffer: 64px;
+    display: grid;
+    gap: var(--raum-xl);
+    padding: 0;
+    list-style: none;
+  }
+
+  .ablauf__schritt {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--ziffer) 1fr;
+    gap: var(--raum-m);
+    align-items: start;
+  }
+
+  /* Feine Verbindungslinie zwischen den Ziffern (Handy: senkrecht) */
+  .ablauf__schritt:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--ziffer) / 2);
+    top: calc(var(--ziffer) + var(--raum-s));
+    bottom: calc(-1 * var(--raum-xl) + var(--raum-s));
+    border-left: var(--linie-duenn) dashed var(--farbe-deko);
+  }
+
+  .ablauf__titel {
+    margin-top: 0.85rem;
+    margin-bottom: var(--raum-2xs);
+  }
+
+  .ablauf__text p {
+    color: var(--farbe-text-leise);
+    max-width: 38ch;
+  }
+
+  @media (min-width: 60em) {
+    .ablauf {
+      grid-template-columns: repeat(var(--anzahl, 4), minmax(0, 1fr));
+      gap: var(--raum-l);
+    }
+
+    .ablauf__schritt {
+      grid-template-columns: 1fr;
+      gap: var(--raum-m);
+    }
+
+    /* Desktop: waagerechte Linie von Ziffer zu Ziffer */
+    .ablauf__schritt:not(:last-child)::after {
+      left: calc(var(--ziffer) + var(--raum-s));
+      right: calc(-1 * var(--raum-l) + var(--raum-s));
+      top: calc(var(--ziffer) / 2);
+      bottom: auto;
+      border-left: 0;
+      border-top: var(--linie-duenn) dashed var(--farbe-deko);
+    }
+
+    .ablauf__titel {
+      margin-top: 0;
+    }
+  }
+</style>

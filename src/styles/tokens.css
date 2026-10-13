@@ -1,0 +1,130 @@
+/*
+  Design-Tokens: alle Farben, Schriften, Größen und Abstände der Website an einer Stelle.
+  Wird in src/layouts/Basis.astro geladen und gilt auf jeder Seite.
+  ÄNDERN: Wer eine Farbe oder einen Abstand anpassen möchte, ändert ihn nur hier.
+*/
+
+:root {
+  /* ------------------------------------------------------------------
+     1. Grundfarben (Palette)
+     ÄNDERN: Farbwerte hier anpassen. Die Kontrastangaben beziehen sich
+     auf den Seitenhintergrund --sand-50. Text muss mindestens 4,5:1 haben.
+     ------------------------------------------------------------------ */
+  --sand-50: #fbf8f3;   /* Seitenhintergrund */
+  --sand-100: #f5efe5;  /* abgesetzte Abschnitte, Karten */
+  --sand-200: #eadfce;  /* Linien, Rahmen */
+  --sand-300: #d9c9b0;  /* Deko */
+
+  --ink: #2f2a25;       /* Fließtext, Überschriften (13,4:1) */
+  --ink-soft: #5e554c;  /* Nebentexte (6,9:1) */
+  --ink-muted: #776c61; /* nur Logo-Unterzeile und Deko */
+
+  --sage-100: #e3eae1;  /* ruhige Flächen, z. B. Selbsttest-Box */
+  --sage-300: #a9bda9;  /* nur Deko auf dunklem Grund (Logo negativ) */
+  --sage-500: #6f8a73;  /* nur Deko (Logo, Bögen) – nicht für Text */
+  --sage-700: #4f6a55;  /* Links, Fokus-Ring, Akzenttexte (5,6:1) */
+
+  --terra-100: #f4e1d8; /* Hinweisflächen */
+  --terra-300: #e0937a; /* nur Deko auf dunklem Grund (Logo negativ) */
+  --terra-500: #b8644a; /* nur Deko/Logo oder Schrift ab 24 px */
+  --terra-600: #9e4f37; /* Primär-Buttons (Text --sand-50, 5,5:1) */
+  --terra-700: #86412c; /* Primär-Button beim Überfahren */
+
+  --footer-text-soft: #cfc4b6; /* Nebentext im Footer (8,3:1 auf --ink) */
+
+  --platzhalter-hintergrund: #fff1a8; /* Markierung offener Platzhalter (nur Entwicklung) */
+  --platzhalter-rahmen: #d9b300;
+
+  /* ------------------------------------------------------------------
+     2. Bedeutungs-Farben
+     Komponenten verwenden diese Namen statt der Palette. So lässt sich
+     später ein Dark Mode ergänzen, indem man nur diesen Block umstellt.
+     ------------------------------------------------------------------ */
+  --farbe-hintergrund: var(--sand-50);
+  --farbe-flaeche: var(--sand-100);
+  --farbe-flaeche-ruhig: var(--sage-100);
+  --farbe-flaeche-hinweis: var(--terra-100);
+  --farbe-linie: var(--sand-200);
+  --farbe-deko: var(--sand-300);
+
+  --farbe-text: var(--ink);
+  --farbe-text-leise: var(--ink-soft);
+  --farbe-link: var(--sage-700);
+  --farbe-akzent: var(--terra-500);       /* nur Schrift ab 24 px oder Deko */
+  --farbe-akzent-text: var(--terra-600);  /* Akzent für kleinere Schrift */
+  --farbe-fokus: var(--sage-700);
+
+  --farbe-primaer: var(--terra-600);
+  --farbe-primaer-hover: var(--terra-700);
+  --farbe-auf-primaer: var(--sand-50);
+
+  --farbe-bogen-1: var(--sage-500);  /* linker Bogen der Bildmarke */
+  --farbe-bogen-2: var(--terra-500); /* rechter Bogen der Bildmarke */
+  --farbe-punkt: var(--ink);         /* Punkt in der Mitte */
+
+  --farbe-footer-hintergrund: var(--ink);
+  --farbe-footer-text: var(--sand-100);
+  --farbe-footer-text-leise: var(--footer-text-soft);
+
+  /* ------------------------------------------------------------------
+     3. Schriften
+     ------------------------------------------------------------------ */
+  --schrift-serif: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
+  --schrift-sans: "Source Sans 3 Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* Fluide Schriftgrößen: kleinster Wert (Handy) … größter Wert (Desktop) */
+  --text-klein: 0.9375rem;                                          /* 15 px */
+  --text-basis: 1.125rem;                                           /* 18 px */
+  --text-gross: clamp(1.1875rem, 1.1rem + 0.45vw, 1.375rem);        /* 19–22 px, Einleitungen */
+  --text-h3: clamp(1.3125rem, 1.15rem + 0.6vw, 1.625rem);           /* 21–26 px */
+  --text-h2: clamp(1.875rem, 1.45rem + 1.7vw, 2.875rem);            /* 30–46 px */
+  --text-h1: clamp(2.25rem, 1.45rem + 3.5vw, 4rem);                 /* 36–64 px */
+  --text-ziffer: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);            /* Ziffern in Bögen */
+
+  --zeilenhoehe-text: 1.6;
+  --zeilenhoehe-titel: 1.12;
+  --textbreite: 68ch;   /* maximale Zeilenlänge für Fließtext */
+
+  /* ------------------------------------------------------------------
+     4. Abstände (Raster in 4-px-Schritten)
+     ------------------------------------------------------------------ */
+  --raum-3xs: 0.25rem;
+  --raum-2xs: 0.5rem;
+  --raum-xs: 0.75rem;
+  --raum-s: 1rem;
+  --raum-m: 1.5rem;
+  --raum-l: 2rem;
+  --raum-xl: 3rem;
+  --raum-2xl: 4rem;
+  --raum-3xl: 6rem;
+
+  /* Abstand oben und unten in einem Seitenabschnitt */
+  --abschnitt-abstand: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+
+  /* ------------------------------------------------------------------
+     5. Raster und Formen
+     ------------------------------------------------------------------ */
+  --inhalt-max: 1180px;                 /* maximale Inhaltsbreite */
+  --seitenrand: clamp(1.25rem, 4vw, 2.5rem); /* mobil 20 px */
+
+  --radius-karte: 20px;
+  --radius-klein: 10px;
+  --radius-pille: 999px;
+
+  --linie-duenn: 1px;
+  --fokus-breite: 3px;
+
+  --schatten-sanft: 0 1px 2px rgb(47 42 37 / 0.04), 0 8px 24px -12px rgb(47 42 37 / 0.12);
+
+  --beruehrziel: 44px; /* Mindestgröße für Touch-Ziele */
+
+  --header-hoehe: 4.5rem;
+  --mobil-leiste-hoehe: 4.75rem;
+
+  /* ------------------------------------------------------------------
+     6. Bewegung
+     ------------------------------------------------------------------ */
+  --dauer-kurz: 160ms;
+  --dauer-mittel: 280ms;
+  --kurve-sanft: cubic-bezier(0.22, 0.61, 0.36, 1);
+}

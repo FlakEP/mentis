@@ -1,0 +1,76 @@
+---
+// Schmale, ruhige Infoleiste über dem Header mit dem Selbstzahler-Hinweis (Kurztext aus ui.yaml).
+// Verlinkt auf einer Leistungsseite auf deren Kostenabschnitt, sonst auf /#kosten. Benutzt in Basis.astro.
+import { ANKER, seitenUrl, type Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+
+interface Props {
+  sprache: Sprache;
+  /** Hat die aktuelle Seite selbst einen Kostenabschnitt? Dann dorthin springen. */
+  kostenAufDieserSeite?: boolean;
+}
+
+const { sprache, kostenAufDieserSeite = false } = Astro.props;
+const t = await uebersetzer(sprache);
+const ziel = kostenAufDieserSeite ? `#${ANKER.kosten}` : `${seitenUrl('start', sprache)}#${ANKER.kosten}`;
+---
+
+<div class="zahlerleiste">
+  <div class="inhalt zahlerleiste__innen">
+    <a class="zahlerleiste__link" href={ziel}>
+      <span>{t('selbstzahler.kurz')}</span>
+      <Icon name="pfeil-rechts" groesse={16} class="zahlerleiste__icon" />
+    </a>
+  </div>
+</div>
+
+<style>
+  .zahlerleiste {
+    background: var(--farbe-flaeche);
+    border-bottom: var(--linie-duenn) solid var(--farbe-linie);
+    font-size: var(--text-klein);
+    line-height: 1.4;
+  }
+
+  .zahlerleiste__innen {
+    display: flex;
+    justify-content: center;
+  }
+
+  .zahlerleiste__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--raum-2xs);
+    min-height: var(--beruehrziel);
+    padding-block: var(--raum-2xs);
+    color: var(--farbe-text-leise);
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .zahlerleiste__link span {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--sand-300);
+    transition: text-decoration-color var(--dauer-kurz) ease;
+  }
+
+  .zahlerleiste__link:hover {
+    color: var(--farbe-text);
+  }
+
+  .zahlerleiste__link:hover span {
+    text-decoration-color: currentColor;
+  }
+
+  .zahlerleiste__link :global(.zahlerleiste__icon) {
+    flex: none;
+    transition: transform var(--dauer-kurz) var(--kurve-sanft);
+  }
+
+  .zahlerleiste__link:hover :global(.zahlerleiste__icon) {
+    transform: translateX(2px);
+  }
+</style>

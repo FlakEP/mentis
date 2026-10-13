@@ -1,0 +1,344 @@
+---
+// Kopfzeile jeder Seite: Logo, Hauptnavigation, Sprachumschalter und der Button „Termin anfragen“.
+// Bleibt beim Scrollen oben stehen. Auf kleineren Bildschirmen wird die Navigation zum Menü (Burger).
+// Benutzt in src/layouts/Basis.astro.
+import { HAUPTNAVIGATION, kontaktUrl, seitenUrl, type SeitenId, type Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import Sprachumschalter from './Sprachumschalter.astro';
+
+interface Props {
+  sprache: Sprache;
+  seite: SeitenId;
+}
+
+const { sprache, seite } = Astro.props;
+const t = await uebersetzer(sprache);
+---
+
+<header class="kopf" data-kopf>
+  <div class="inhalt kopf__innen">
+    <a class="kopf__logo" href={seitenUrl('start', sprache)}>
+      <Logo sprache={sprache} variante="voll" class="kopf__logo-voll" />
+      <Logo sprache={sprache} variante="kompakt" class="kopf__logo-kompakt" />
+    </a>
+
+    <button
+      class="kopf__burger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="hauptmenue"
+      data-burger
+      data-text-oeffnen={t('navigation.menue_oeffnen')}
+      data-text-schliessen={t('navigation.menue_schliessen')}
+    >
+      <Icon name="menue" groesse={24} class="kopf__burger-auf" />
+      <Icon name="schliessen" groesse={24} class="kopf__burger-zu" />
+      <span class="nur-screenreader" data-burger-text>{t('navigation.menue_oeffnen')}</span>
+    </button>
+
+    <nav class="kopf__nav" id="hauptmenue" aria-label={t('navigation.hauptmenue')} data-menue>
+      <ul class="kopf__liste" role="list">
+        {
+          HAUPTNAVIGATION.map((id) => (
+            <li>
+              <a class="kopf__link" href={seitenUrl(id, sprache)} aria-current={id === seite ? 'page' : undefined}>
+                {t(`navigation.${id}`)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="kopf__menue-fuss">
+        <a class="button button--primaer kopf__menue-cta" href={kontaktUrl(sprache)} data-kontakt-oeffnen>
+          {t('buttons.termin_anfragen')}
+        </a>
+        <Sprachumschalter sprache={sprache} seite={seite} />
+      </div>
+    </nav>
+
+    <div class="kopf__aktionen">
+      <Sprachumschalter sprache={sprache} seite={seite} class="kopf__sprache" />
+      <a class="button button--primaer button--klein kopf__cta" href={kontaktUrl(sprache)} data-kontakt-oeffnen>
+        {t('buttons.termin_anfragen')}
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .kopf {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--farbe-hintergrund);
+    border-bottom: var(--linie-duenn) solid transparent;
+    transition: border-color var(--dauer-mittel) ease;
+  }
+
+  .kopf[data-gescrollt] {
+    border-bottom-color: var(--farbe-linie);
+  }
+
+  .kopf__innen {
+    display: flex;
+    align-items: center;
+    gap: var(--raum-m);
+    min-height: var(--header-hoehe);
+  }
+
+  /* ---------- Logo ---------- */
+  .kopf__logo {
+    display: block;
+    flex: none;
+    margin-right: auto;
+    padding-block: var(--raum-2xs);
+    border-radius: var(--radius-klein);
+  }
+
+  .kopf__logo :global(.kopf__logo-voll) {
+    display: none;
+    width: 13.25rem;
+  }
+
+  .kopf__logo :global(.kopf__logo-kompakt) {
+    width: 9.75rem;
+  }
+
+  @media (min-width: 30em) {
+    .kopf__logo :global(.kopf__logo-voll) {
+      display: block;
+    }
+
+    .kopf__logo :global(.kopf__logo-kompakt) {
+      display: none;
+    }
+  }
+
+  /* ---------- Navigation ---------- */
+  .kopf__liste {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kopf__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--beruehrziel);
+    color: var(--farbe-text);
+    text-decoration: none;
+    font-weight: 400;
+  }
+
+  .kopf__link:hover {
+    color: var(--farbe-link);
+  }
+
+  .kopf__link[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-color: var(--farbe-akzent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.5em;
+  }
+
+  .kopf__menue-fuss {
+    display: none;
+  }
+
+  .kopf__aktionen {
+    display: flex;
+    align-items: center;
+    gap: var(--raum-m);
+  }
+
+  /* Auf Handys sitzt „Termin anfragen“ in der Leiste am unteren Rand */
+  .kopf__cta {
+    display: none;
+  }
+
+  @media (min-width: 40em) {
+    .kopf__cta {
+      display: inline-flex;
+    }
+  }
+
+  /* ---------- Burger-Button (nur mit JavaScript und auf kleineren Bildschirmen) ---------- */
+  .kopf__burger {
+    display: none;
+    order: 3;
+    place-items: center;
+    width: var(--beruehrziel);
+    height: var(--beruehrziel);
+    margin-right: calc(-1 * var(--raum-2xs));
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: var(--radius-pille);
+    color: var(--farbe-text);
+    cursor: pointer;
+  }
+
+  .kopf__burger :global(.kopf__burger-zu),
+  .kopf__burger[aria-expanded='true'] :global(.kopf__burger-auf) {
+    display: none;
+  }
+
+  .kopf__burger[aria-expanded='true'] :global(.kopf__burger-zu) {
+    display: block;
+  }
+
+  /* ---------- Kleinere Bildschirme ---------- */
+  @media (max-width: 71.99em) {
+    /* Ohne JavaScript: Navigation als Zeile unter dem Logo */
+    .kopf__innen {
+      flex-wrap: wrap;
+      column-gap: var(--raum-s);
+    }
+
+    .kopf__nav {
+      order: 4;
+      width: 100%;
+      padding-bottom: var(--raum-2xs);
+    }
+
+    .kopf__liste {
+      column-gap: var(--raum-m);
+    }
+
+    /* Mit JavaScript: Burger-Menü */
+    :global(.js) .kopf__burger {
+      display: grid;
+    }
+
+    :global(.js) .kopf__nav {
+      display: none;
+      position: fixed;
+      inset: var(--kopf-unten, var(--header-hoehe)) 0 0 0;
+      z-index: 40;
+      width: auto;
+      padding: var(--raum-l) var(--seitenrand) var(--raum-xl);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: var(--farbe-hintergrund);
+      border-top: var(--linie-duenn) solid var(--farbe-linie);
+    }
+
+    :global(.js) .kopf__nav[data-offen] {
+      display: flex;
+      flex-direction: column;
+      gap: var(--raum-xl);
+    }
+
+    :global(.js) .kopf__liste {
+      flex-direction: column;
+    }
+
+    :global(.js) .kopf__liste li + li {
+      border-top: var(--linie-duenn) solid var(--farbe-linie);
+    }
+
+    :global(.js) .kopf__link {
+      width: 100%;
+      min-height: 3.5rem;
+      font-family: var(--schrift-serif);
+      font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+      letter-spacing: -0.01em;
+    }
+
+    :global(.js) .kopf__menue-fuss {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--raum-m);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      :global(.js) .kopf__nav[data-offen] {
+        animation: menue-ein var(--dauer-mittel) var(--kurve-sanft);
+      }
+    }
+  }
+
+  /* ---------- Breite Bildschirme: Navigation in einer Zeile ---------- */
+  @media (min-width: 72em) {
+    .kopf__innen {
+      gap: var(--raum-l);
+    }
+
+    .kopf__liste {
+      gap: var(--raum-l);
+    }
+
+    .kopf__link {
+      font-size: 1.0625rem;
+    }
+  }
+
+  @keyframes menue-ein {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+</style>
+
+<script>
+  // Mobilmenü: öffnen/schließen per Button, Esc schließt, Fokus kehrt zum Button zurück.
+  // Solange das Menü offen ist, sind die übrigen Seitenbereiche für Tastatur und Screenreader gesperrt.
+  const kopf = document.querySelector<HTMLElement>('[data-kopf]');
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+  const menue = document.querySelector<HTMLElement>('[data-menue]');
+  const burgerText = document.querySelector<HTMLElement>('[data-burger-text]');
+  const breit = window.matchMedia('(min-width: 72em)');
+
+  function setzeGesperrt(gesperrt: boolean) {
+    document
+      .querySelectorAll<HTMLElement>('[data-sperrbar]')
+      .forEach((bereich) => (gesperrt ? bereich.setAttribute('inert', '') : bereich.removeAttribute('inert')));
+    document.documentElement.style.overflow = gesperrt ? 'hidden' : '';
+  }
+
+  function schliessen({ fokusZurueck = true } = {}) {
+    if (!burger || !menue || burger.getAttribute('aria-expanded') !== 'true') return;
+    burger.setAttribute('aria-expanded', 'false');
+    menue.removeAttribute('data-offen');
+    if (burgerText) burgerText.textContent = burger.dataset.textOeffnen ?? '';
+    setzeGesperrt(false);
+    if (fokusZurueck) burger.focus();
+  }
+
+  function oeffnen() {
+    if (!burger || !menue || !kopf) return;
+    // Menü direkt unter der Kopfzeile beginnen lassen
+    kopf.style.setProperty('--kopf-unten', `${kopf.getBoundingClientRect().bottom}px`);
+    burger.setAttribute('aria-expanded', 'true');
+    menue.setAttribute('data-offen', '');
+    if (burgerText) burgerText.textContent = burger.dataset.textSchliessen ?? '';
+    setzeGesperrt(true);
+  }
+
+  burger?.addEventListener('click', () => {
+    if (burger.getAttribute('aria-expanded') === 'true') schliessen();
+    else oeffnen();
+  });
+
+  document.addEventListener('keydown', (ereignis) => {
+    if (ereignis.key === 'Escape') schliessen();
+  });
+
+  // Klick auf einen Link im Menü schließt es (wichtig bei Sprungmarken auf derselben Seite)
+  menue?.addEventListener('click', (ereignis) => {
+    if ((ereignis.target as HTMLElement).closest('a')) schliessen({ fokusZurueck: false });
+  });
+
+  // Wird das Fenster breit genug, verschwindet das Menü
+  breit.addEventListener('change', () => schliessen({ fokusZurueck: false }));
+
+  // Feine Linie unter der Kopfzeile, sobald gescrollt wurde
+  const aktualisiereLinie = () => kopf?.toggleAttribute('data-gescrollt', window.scrollY > 8);
+  window.addEventListener('scroll', aktualisiereLinie, { passive: true });
+  aktualisiereLinie();
+</script>

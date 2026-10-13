@@ -1,0 +1,113 @@
+---
+// Große, ruhige Bogen-Komposition für den Hero der Startseite: Die zwei Bögen der Bildmarke
+// wiederholen sich in mehreren Ringen um einen Punkt („ein Mensch im Mittelpunkt“).
+// Beim Laden zeichnen sich die Bögen sanft – nur, wenn keine reduzierte Bewegung eingestellt ist.
+import { bogenPaar } from '../lib/bogen';
+
+interface Props {
+  class?: string;
+}
+
+const { class: klasse } = Astro.props;
+
+// ÄNDERN: Ringe der Komposition – Radius, Drehung (Grad), Bogenlänge (1 = wie im Logo),
+// Strichstärke und Deckkraft. Innen kräftiger, nach außen leiser.
+const RINGE = [
+  { r: 46, drehung: 0, laenge: 1, strich: 4.5, deckkraft: 0.95 },
+  { r: 92, drehung: -16, laenge: 0.94, strich: 1.6, deckkraft: 0.7 },
+  { r: 142, drehung: 9, laenge: 0.86, strich: 1.4, deckkraft: 0.5 },
+  { r: 196, drehung: -30, laenge: 0.9, strich: 1.25, deckkraft: 0.36 },
+  { r: 252, drehung: 18, laenge: 0.78, strich: 1.1, deckkraft: 0.24 },
+];
+
+const ringe = RINGE.map((ring, index) => ({
+  ...ring,
+  index,
+  pfade: bogenPaar(300, 300, ring.r, ring.drehung, ring.laenge),
+}));
+---
+
+<svg class:list={['heroboegen', klasse]} viewBox="0 0 600 600" aria-hidden="true" focusable="false">
+  {
+    ringe.map((ring) => (
+      <g class="heroboegen__ring" style={`--i: ${ring.index}; opacity: ${ring.deckkraft}`}>
+        <path
+          d={ring.pfade[0]}
+          pathLength="1"
+          class="heroboegen__bogen heroboegen__bogen--1"
+          style={`stroke-width: ${ring.strich}`}
+        />
+        <path
+          d={ring.pfade[1]}
+          pathLength="1"
+          class="heroboegen__bogen heroboegen__bogen--2"
+          style={`stroke-width: ${ring.strich}`}
+        />
+      </g>
+    ))
+  }
+  <circle class="heroboegen__punkt" cx="300" cy="300" r="9"></circle>
+</svg>
+
+<style>
+  .heroboegen {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .heroboegen__bogen {
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .heroboegen__bogen--1 {
+    stroke: var(--farbe-bogen-1);
+  }
+
+  .heroboegen__bogen--2 {
+    stroke: var(--farbe-bogen-2);
+  }
+
+  .heroboegen__punkt {
+    fill: var(--farbe-punkt);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .heroboegen__bogen {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: bogen-zeichnen 1.9s var(--kurve-sanft) forwards;
+      animation-delay: calc(0.25s + var(--i) * 0.14s);
+    }
+
+    /* Der zweite Bogen eines Rings folgt dem ersten etwas später */
+    .heroboegen__bogen--2 {
+      animation-delay: calc(0.45s + var(--i) * 0.14s);
+    }
+
+    .heroboegen__punkt {
+      opacity: 0;
+      transform-origin: 300px 300px;
+      animation: punkt-ein 0.9s var(--kurve-sanft) 0.1s forwards;
+    }
+  }
+
+  @keyframes bogen-zeichnen {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes punkt-ein {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+// Karte für einen Leistungsbereich (Titel, kurzer Text, „Mehr erfahren“). Die ganze Karte ist klickbar.
+// Benutzt auf der Startseite im Abschnitt „Unsere Schwerpunkte“.
+import Bogen from './Bogen.astro';
+import Icon from './Icon.astro';
+import Text from './Text.astro';
+
+interface Props {
+  titel: string;
+  text: string;
+  href: string;
+  linktext: string;
+}
+
+const { titel, text, href, linktext } = Astro.props;
+---
+
+<article class="karte">
+  <Bogen groesse={44} strich={5} class="karte__bogen" />
+  <h3 class="karte__titel">
+    <a class="karte__link" href={href}><Text text={titel} /></a>
+  </h3>
+  <p class="karte__text"><Text text={text} /></p>
+  <span class="karte__mehr" aria-hidden="true">
+    {linktext}
+    <Icon name="pfeil-rechts" groesse={18} class="karte__pfeil" />
+  </span>
+</article>
+
+<style>
+  .karte {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--raum-s);
+    height: 100%;
+    padding: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+    background: var(--farbe-flaeche);
+    border: var(--linie-duenn) solid var(--farbe-linie);
+    border-radius: var(--radius-karte);
+    transition:
+      transform var(--dauer-mittel) var(--kurve-sanft),
+      border-color var(--dauer-mittel) ease,
+      box-shadow var(--dauer-mittel) ease;
+  }
+
+  .karte:hover {
+    border-color: var(--farbe-bogen-1);
+    box-shadow: var(--schatten-sanft);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .karte:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .karte:has(.karte__link:focus-visible) {
+    outline: var(--fokus-breite) solid var(--farbe-fokus);
+    outline-offset: 3px;
+  }
+
+  .karte :global(.karte__bogen) {
+    margin-bottom: var(--raum-xs);
+  }
+
+  .karte__titel {
+    font-size: var(--text-h3);
+  }
+
+  .karte__link {
+    color: var(--farbe-text);
+    text-decoration: none;
+  }
+
+  /* Macht die ganze Karte klickbar */
+  .karte__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-karte);
+  }
+
+  .karte__link:focus-visible {
+    outline: none;
+  }
+
+  .karte__text {
+    color: var(--farbe-text-leise);
+  }
+
+  .karte__mehr {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--raum-2xs);
+    margin-top: auto;
+    padding-top: var(--raum-xs);
+    color: var(--farbe-link);
+    font-weight: 600;
+  }
+
+  .karte :global(.karte__pfeil) {
+    transition: transform var(--dauer-mittel) var(--kurve-sanft);
+  }
+
+  .karte:hover :global(.karte__pfeil) {
+    transform: translateX(4px);
+  }
+</style>

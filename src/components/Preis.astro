@@ -1,0 +1,58 @@
+---
+// Zeigt einen „ab“-Preis an, z. B. „ab 450 €“ (Deutsch) bzw. „from €450“ (Englisch).
+// Ist noch kein Preis eingetragen, erscheint der markierte Platzhalter. Benutzt in den Kostenabschnitten.
+import type { Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import { enthaeltPlatzhalter } from '../lib/text';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+  preisAb: string;
+  class?: string;
+}
+
+const { sprache, preisAb, class: klasse } = Astro.props;
+const t = await uebersetzer(sprache);
+const offen = enthaeltPlatzhalter(preisAb);
+// Zahlen werden mit Tausenderpunkt geschrieben, z. B. 1.200
+const betrag = offen ? preisAb : new Intl.NumberFormat(sprache === 'de' ? 'de-DE' : 'en-GB').format(Number(preisAb));
+---
+
+<span class:list={['preis', klasse]}>
+  <span class="preis__ab">{t('preise.ab')}</span>
+  {
+    sprache === 'de' ? (
+      <span class="preis__betrag">
+        <Text text={betrag} />
+        {' €'}
+      </span>
+    ) : (
+      <span class="preis__betrag">
+        {'€'}
+        <Text text={betrag} />
+      </span>
+    )
+  }
+</span>
+
+<style>
+  .preis {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35em;
+    color: var(--farbe-text);
+  }
+
+  .preis__ab {
+    font-size: var(--text-klein);
+    color: var(--farbe-text-leise);
+  }
+
+  .preis__betrag {
+    font-family: var(--schrift-serif);
+    font-size: var(--text-h3);
+    font-variant-numeric: lining-nums;
+    letter-spacing: -0.01em;
+  }
+</style>

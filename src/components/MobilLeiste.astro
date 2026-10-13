@@ -1,0 +1,64 @@
+---
+// Feste Leiste am unteren Bildschirmrand (nur Handys) mit dem Button „Termin anfragen“.
+// Erscheint erst, wenn der Hero bzw. Seitenkopf (Element mit data-hero) aus dem Bild gescrollt ist.
+// Ohne JavaScript ist sie immer sichtbar. Benutzt in src/layouts/Basis.astro.
+import { kontaktUrl, type Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
+const t = await uebersetzer(sprache);
+---
+
+<div class="mobilleiste" data-mobilleiste data-sperrbar>
+  <a class="button button--primaer mobilleiste__button" href={kontaktUrl(sprache)} data-kontakt-oeffnen>
+    {t('buttons.termin_anfragen')}
+  </a>
+</div>
+
+<style>
+  .mobilleiste {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 30;
+    padding: var(--raum-xs) var(--seitenrand) calc(var(--raum-xs) + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--farbe-hintergrund) 94%, transparent);
+    border-top: var(--linie-duenn) solid var(--farbe-linie);
+    transition:
+      transform var(--dauer-mittel) var(--kurve-sanft),
+      visibility var(--dauer-mittel);
+  }
+
+  .mobilleiste__button {
+    width: 100%;
+  }
+
+  /* Mit JavaScript zunächst versteckt, bis der Hero vorbei ist */
+  :global(.js) .mobilleiste:not([data-sichtbar]) {
+    transform: translateY(100%);
+    visibility: hidden;
+  }
+
+  @media (min-width: 40em) {
+    .mobilleiste {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Zeigt die Leiste, sobald der Hero (data-hero) nicht mehr zu sehen ist.
+  const leiste = document.querySelector<HTMLElement>('[data-mobilleiste]');
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+
+  if (leiste && hero && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([eintrag]) => {
+      leiste.toggleAttribute('data-sichtbar', !eintrag?.isIntersecting);
+    }).observe(hero);
+  } else {
+    leiste?.setAttribute('data-sichtbar', '');
+  }
+</script>

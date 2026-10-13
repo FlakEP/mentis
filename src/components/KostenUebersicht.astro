@@ -1,0 +1,114 @@
+---
+// Kostenabschnitt der Startseite (Anker #kosten): die drei „ab“-Preise, automatisch aus den
+// Leistungsseiten gelesen (Feld preis_ab), dazu der Selbstzahler-Langtext und der Hinweis auf den Kostenvoranschlag.
+import { ANKER, seitenUrl, type Sprache } from '../config/site';
+import { holePreise, uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import Preis from './Preis.astro';
+import AbschnittsKopf from './AbschnittsKopf.astro';
+
+interface Props {
+  sprache: Sprache;
+  ueberschrift: string;
+}
+
+const { sprache, ueberschrift } = Astro.props;
+const t = await uebersetzer(sprache);
+const preise = await holePreise(sprache);
+---
+
+<section class="abschnitt" id={ANKER.kosten} aria-labelledby="kosten-titel">
+  <div class="inhalt kosten">
+    <div class="kosten__kopf">
+      <AbschnittsKopf id="kosten-titel" ueberschrift={ueberschrift} bogen />
+      <p class="kosten__langtext">{t('selbstzahler.lang')}</p>
+      <p class="kosten__hinweis">{t('preise.hinweis')}</p>
+    </div>
+
+    <ul class="kosten__liste" role="list">
+      {
+        preise.map(({ bereich, preisAb }) => (
+          <li class="kosten__eintrag">
+            <a class="kosten__name" href={`${seitenUrl(bereich, sprache)}#${ANKER.kosten}`}>
+              {t(`navigation.${bereich}`)}
+              <Icon name="pfeil-rechts" groesse={18} class="kosten__pfeil" />
+            </a>
+            <Preis sprache={sprache} preisAb={preisAb} class="kosten__preis" />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .kosten {
+    display: grid;
+    gap: var(--raum-xl) var(--raum-3xl);
+  }
+
+  @media (min-width: 60em) {
+    .kosten {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  .kosten__kopf :global(.abschnittskopf) {
+    margin-bottom: var(--raum-l);
+  }
+
+  .kosten__langtext {
+    max-width: var(--textbreite);
+  }
+
+  .kosten__hinweis {
+    margin-top: var(--raum-s);
+    color: var(--farbe-text-leise);
+  }
+
+  .kosten__liste {
+    padding: 0;
+    list-style: none;
+    border-top: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  @media (min-width: 60em) {
+    .kosten__liste {
+      margin-top: calc(var(--raum-2xl) + var(--raum-s));
+    }
+  }
+
+  .kosten__eintrag {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--raum-2xs) var(--raum-m);
+    padding-block: var(--raum-m);
+    border-bottom: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  .kosten__name {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--raum-2xs);
+    min-height: var(--beruehrziel);
+    color: var(--farbe-text);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .kosten__name:hover {
+    color: var(--farbe-link);
+  }
+
+  .kosten__name :global(.kosten__pfeil) {
+    color: var(--farbe-link);
+    transition: transform var(--dauer-mittel) var(--kurve-sanft);
+  }
+
+  .kosten__name:hover :global(.kosten__pfeil) {
+    transform: translateX(3px);
+  }
+</style>

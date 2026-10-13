@@ -1,0 +1,55 @@
+---
+// Einheitlicher Kopf für Seitenabschnitte: optional ein kurzer Terrakotta-Bogen, die Überschrift (h2)
+// und ein Einleitungstext. Benutzt auf der Startseite und später auf allen Unterseiten.
+import Bogen from './Bogen.astro';
+import Text from './Text.astro';
+
+interface Props {
+  id: string;
+  ueberschrift: string;
+  einleitung?: string;
+  /** kurzen Bogen über der Überschrift zeigen */
+  bogen?: boolean;
+  ausrichtung?: 'links' | 'mitte';
+}
+
+const { id, ueberschrift, einleitung, bogen = false, ausrichtung = 'links' } = Astro.props;
+---
+
+<div class:list={['abschnittskopf', `abschnittskopf--${ausrichtung}`]}>
+  {bogen && <Bogen art="trenner" class="abschnittskopf__bogen" />}
+  <h2 id={id}><Text text={ueberschrift} betonung /></h2>
+  {
+    einleitung && (
+      <p class="abschnittskopf__einleitung">
+        <Text text={einleitung} />
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .abschnittskopf {
+    display: grid;
+    gap: var(--raum-m);
+    max-width: 44rem;
+    margin-bottom: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+  }
+
+  .abschnittskopf--mitte {
+    justify-items: center;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .abschnittskopf :global(.abschnittskopf__bogen) {
+    margin-bottom: var(--raum-2xs);
+  }
+
+  .abschnittskopf__einleitung {
+    max-width: 58ch;
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+</style>
