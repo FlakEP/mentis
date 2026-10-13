@@ -1,0 +1,148 @@
+# =====================================================================
+#  SELBSTTEST: ADHS – Selbsteinschätzung (Erwachsene)
+# ---------------------------------------------------------------------
+#  Diese Datei steuert den Test auf der Seite "ADHS-Diagnostik".
+#  Sie können Texte, Fragen und Schwellenwerte hier direkt ändern.
+#
+#  So funktioniert die Datei:
+#  - Jede Frage hat eine kurze ID (a1, a2 …), einen deutschen (de)
+#    und einen englischen (en) Text.
+#  - Antworten geben 0 bis 3 Punkte (siehe Antwortskalen ganz unten
+#    in dieser Datei). Alle Punkte werden zu einer Summe addiert.
+#  - Die Summe entscheidet über die Ergebnisstufe (gering/mittel/deutlich).
+#
+#  Wichtig beim Bearbeiten:
+#  - Einrückungen (Leerzeichen am Zeilenanfang) und Bindestriche
+#    müssen erhalten bleiben, sonst funktioniert die Datei nicht.
+#  - Texte mit Doppelpunkt bitte in "Anführungszeichen" setzen.
+#  - Die Auswertung findet nur im Browser statt. Nichts wird
+#    gespeichert oder übertragen.
+#
+#  FACHLICHER HINWEIS: Eigene Formulierungen, NICHT validiert.
+#  Schwellenwerte sind Setzungen und vor Veröffentlichung zu prüfen.
+# =====================================================================
+
+id: adhs-selbst            # technischer Name – bitte nicht ändern
+bereich: adhs              # adhs | intelligenz | klinisch
+perspektive: selbst        # selbst = für mich | fremd = für mein Kind
+krisenhinweis: false       # true = Hilfsangebote unter dem Ergebnis anzeigen
+
+titel:
+  de: "ADHS – Selbsteinschätzung"
+  en: "ADHD – self-assessment"
+
+zielgruppe:
+  de: "Für Erwachsene und ältere Jugendliche"
+  en: "For adults and older adolescents"
+
+einleitung:
+  de: >-
+    Die folgenden acht Aussagen beschreiben Erfahrungen, die bei ADHS häufig
+    vorkommen. Bitte geben Sie an, wie gut sie auf Sie zutreffen.
+  en: >-
+    The following eight statements describe experiences that are common in
+    ADHD. Please indicate how well they apply to you.
+
+zeitraum:
+  de: "Bitte denken Sie an die letzten sechs Monate."
+  en: "Please think about the past six months."
+
+standardskala: haeufigkeit   # gilt für alle Fragen ohne eigene "skala"
+
+fragen:
+  - id: a1
+    de: "Bei Aufgaben, die mich wenig interessieren, verliere ich schnell die Konzentration."
+    en: "When a task doesn't interest me much, I quickly lose focus."
+  - id: a2
+    de: "Ich vergesse Termine, Verabredungen oder Aufgaben, oder ich verlege Dinge wie Schlüssel und Handy."
+    en: "I forget appointments, plans or tasks, or misplace things like my keys or phone."
+  - id: a3
+    de: "Es fällt mir schwer, Aufgaben zu planen, zu ordnen und bis zum Ende durchzuziehen."
+    en: "I find it hard to plan and organise tasks and to see them through to the end."
+  - id: a4
+    de: "Ich fühle mich innerlich unruhig oder getrieben, auch wenn ich eigentlich zur Ruhe kommen möchte."
+    en: "I feel restless or driven inside, even when I actually want to wind down."
+  - id: a5
+    de: "Längeres Stillsitzen, etwa in Besprechungen oder Vorlesungen, fällt mir schwer."
+    en: "Sitting still for long periods, for example in meetings or lectures, is hard for me."
+  - id: a6
+    de: "Ich handle oder spreche, bevor ich nachgedacht habe – zum Beispiel unterbreche ich andere oder treffe spontane Entscheidungen, die ich später bereue."
+    en: "I act or speak before thinking – for example, I interrupt others or make spur-of-the-moment decisions I later regret."
+  - id: a7
+    skala: zustimmung
+    de: "Solche Schwierigkeiten begleiten mich schon seit meiner Kindheit."
+    en: "Difficulties like these have been with me since childhood."
+  - id: a8
+    skala: zustimmung
+    de: "Diese Schwierigkeiten beeinträchtigen mich spürbar – etwa in Ausbildung, Beruf, Partnerschaft oder Alltag."
+    en: "These difficulties noticeably affect me – for example in education, work, relationships or everyday life."
+
+# ---------------------------------------------------------------------
+#  AUSWERTUNG
+#  Summe 0–24. "max_summe" ist die Obergrenze der jeweiligen Stufe.
+# ---------------------------------------------------------------------
+auswertung:
+  stufen:
+    - id: gering
+      max_summe: 7
+      titel:
+        de: "Derzeit wenige Hinweise"
+        en: "Few indications at present"
+      text:
+        de: >-
+          Ihre Antworten beschreiben nur wenige Erfahrungen, wie sie bei ADHS
+          typisch sind. Wenn Sie dennoch etwas beschäftigt, sprechen wir gern
+          unverbindlich mit Ihnen.
+        en: >-
+          Your answers describe only a few experiences that are typical of
+          ADHD. If something is still on your mind, we are happy to talk with
+          you without obligation.
+    - id: mittel
+      max_summe: 14
+      titel:
+        de: "Einige Hinweise"
+        en: "Some indications"
+      text:
+        de: >-
+          Einige Ihrer Antworten beschreiben Erfahrungen, die bei ADHS vorkommen
+          können. Solche Erfahrungen können aber auch andere Ursachen haben,
+          zum Beispiel Stress, Schlafmangel oder andere psychische Belastungen.
+          Eine fachliche Abklärung kann helfen, das genauer einzuordnen.
+        en: >-
+          Some of your answers describe experiences that can occur with ADHD.
+          However, such experiences can also have other causes, such as stress,
+          lack of sleep or other psychological strain. A professional
+          assessment can help to clarify this.
+    - id: deutlich
+      max_summe: 24
+      titel:
+        de: "Mehrere Hinweise"
+        en: "Several indications"
+      text:
+        de: >-
+          Ihre Antworten beschreiben mehrere Erfahrungen, die bei ADHS häufig
+          vorkommen. Eine ausführliche Diagnostik könnte sinnvoll sein, um die
+          Ursachen genauer zu verstehen und mögliche nächste Schritte zu
+          besprechen.
+        en: >-
+          Your answers describe several experiences that are common in ADHD.
+          A thorough assessment could be worthwhile to understand the causes
+          more precisely and to discuss possible next steps.
+  # Optional: Einzelne Antworten heben das Ergebnis mindestens auf eine Stufe.
+  # Beispiel:  - { fragen: [a8], ab_wert: 3, mindeststufe: mittel }
+  hochstufen: []
+
+# ---------------------------------------------------------------------
+#  ANTWORTSKALEN (Punkte in "wert")
+# ---------------------------------------------------------------------
+skalen:
+  haeufigkeit:
+    - { wert: 0, de: "nie", en: "never" }
+    - { wert: 1, de: "selten", en: "rarely" }
+    - { wert: 2, de: "oft", en: "often" }
+    - { wert: 3, de: "sehr oft", en: "very often" }
+  zustimmung:
+    - { wert: 0, de: "trifft nicht zu", en: "does not apply" }
+    - { wert: 1, de: "trifft eher nicht zu", en: "mostly does not apply" }
+    - { wert: 2, de: "trifft eher zu", en: "mostly applies" }
+    - { wert: 3, de: "trifft voll zu", en: "fully applies" }

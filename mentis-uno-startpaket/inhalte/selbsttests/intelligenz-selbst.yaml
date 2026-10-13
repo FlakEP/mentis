@@ -1,0 +1,120 @@
+# =====================================================================
+#  SELBSTTEST: Intelligenzdiagnostik – Passt sie zu meinem Anliegen?
+# ---------------------------------------------------------------------
+#  Aufbau und Bearbeitungshinweise: siehe Kopf von adhs-selbst.yaml.
+#  Dieser Fragebogen misst KEINE Intelligenz. Er fragt Anlässe ab,
+#  bei denen eine Intelligenzdiagnostik sinnvoll sein kann.
+#  FACHLICHER HINWEIS: Eigene Formulierungen, NICHT validiert.
+# =====================================================================
+
+id: intelligenz-selbst
+bereich: intelligenz
+perspektive: selbst
+krisenhinweis: false
+
+titel:
+  de: "Passt eine Intelligenzdiagnostik zu meinem Anliegen?"
+  en: "Is an intelligence assessment right for me?"
+
+zielgruppe:
+  de: "Für Erwachsene und ältere Jugendliche"
+  en: "For adults and older adolescents"
+
+einleitung:
+  de: >-
+    Acht Aussagen zu typischen Anlässen für eine Intelligenzdiagnostik. Der
+    Fragebogen misst nicht Ihre Intelligenz – er hilft Ihnen einzuschätzen, ob
+    eine Untersuchung Ihre Fragen beantworten könnte.
+  en: >-
+    Eight statements about common reasons for an intelligence assessment. The
+    questionnaire does not measure your intelligence – it helps you judge
+    whether an assessment could answer your questions.
+
+zeitraum:
+  de: ""
+  en: ""
+
+standardskala: zustimmung
+
+fragen:
+  - id: i1
+    de: "Ich vermute bei mir eine besonders hohe Begabung, oder andere haben mich darauf angesprochen."
+    en: "I suspect I may be highly gifted, or others have suggested this to me."
+  - id: i2
+    de: "In Ausbildung, Studium oder Beruf fühle ich mich häufig unterfordert."
+    en: "I often feel under-challenged in my education, studies or job."
+  - id: i3
+    de: "Meine Leistungen entsprechen nicht dem, was ich mir eigentlich zutraue."
+    en: "My performance does not match what I believe I am capable of."
+  - id: i4
+    de: "Beim Lernen oder Verarbeiten von Informationen habe ich Schwierigkeiten, die ich mir nicht erklären kann."
+    en: "I have difficulties learning or processing information that I can't explain."
+  - id: i5
+    de: "Ich möchte meine geistigen Stärken und Schwächen genauer kennenlernen, zum Beispiel für eine Studien- oder Berufsentscheidung."
+    en: "I would like to understand my cognitive strengths and weaknesses better, for example for a decision about my studies or career."
+  - id: i6
+    de: "Ich benötige einen Nachweis meiner kognitiven Leistungsfähigkeit, etwa für einen Antrag auf Nachteilsausgleich."
+    en: "I need documentation of my cognitive abilities, for example for an application for exam accommodations."
+  - id: i7
+    de: "Mich interessiert, wie mein Denken funktioniert – etwa mein Gedächtnis, meine Konzentration oder mein Arbeitstempo."
+    en: "I'm curious how my thinking works – such as my memory, concentration or processing speed."
+  - id: i8
+    de: "Fachleute, zum Beispiel aus Medizin, Psychotherapie oder Beratung, haben mir eine Leistungs- oder Intelligenzdiagnostik empfohlen."
+    en: "Professionals, for example in medicine, psychotherapy or counselling, have recommended a cognitive or intelligence assessment to me."
+
+auswertung:
+  stufen:
+    - id: gering
+      max_summe: 5
+      titel:
+        de: "Eher kein konkreter Anlass"
+        en: "No clear reason at present"
+      text:
+        de: >-
+          Nach Ihren Antworten steht eine Intelligenzdiagnostik derzeit nicht
+          im Vordergrund. Wenn Sie dennoch Fragen zu Ihren Fähigkeiten haben,
+          beraten wir Sie gern.
+        en: >-
+          Based on your answers, an intelligence assessment does not seem to
+          be a priority at the moment. If you still have questions about your
+          abilities, we are happy to advise you.
+    - id: mittel
+      max_summe: 12
+      titel:
+        de: "Eine Diagnostik könnte hilfreich sein"
+        en: "An assessment could be helpful"
+      text:
+        de: >-
+          Ihr Anliegen enthält Punkte, bei denen eine Intelligenzdiagnostik
+          zusätzliche Klarheit bringen kann. In einem kurzen Vorgespräch klären
+          wir gemeinsam, ob und welche Untersuchung für Sie sinnvoll ist.
+        en: >-
+          Your situation includes points where an intelligence assessment can
+          bring additional clarity. In a short initial conversation we can
+          work out together whether an assessment makes sense for you, and
+          which one.
+    - id: deutlich
+      max_summe: 24
+      titel:
+        de: "Eine Diagnostik passt gut zu Ihrem Anliegen"
+        en: "An assessment fits your needs well"
+      text:
+        de: >-
+          Ihre Antworten sprechen dafür, dass eine Intelligenzdiagnostik Ihre
+          Fragen gut beantworten kann. Gern besprechen wir mit Ihnen, welche
+          Verfahren passen und wie der Ablauf aussieht.
+        en: >-
+          Your answers suggest that an intelligence assessment could answer
+          your questions well. We are happy to discuss which procedures are
+          suitable and what the process looks like.
+  hochstufen:
+    # Wer einen Nachweis braucht oder eine fachliche Empfehlung hat,
+    # bekommt mindestens die Stufe "mittel".
+    - { fragen: [i6, i8], ab_wert: 2, mindeststufe: mittel }
+
+skalen:
+  zustimmung:
+    - { wert: 0, de: "trifft nicht zu", en: "does not apply" }
+    - { wert: 1, de: "trifft eher nicht zu", en: "mostly does not apply" }
+    - { wert: 2, de: "trifft eher zu", en: "mostly applies" }
+    - { wert: 3, de: "trifft voll zu", en: "fully applies" }

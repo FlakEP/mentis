@@ -1,0 +1,142 @@
+# =====================================================================
+#  SELBSTTEST: Klinische Diagnostik – allgemeine psychische Belastung
+# ---------------------------------------------------------------------
+#  Aufbau und Bearbeitungshinweise: siehe Kopf von adhs-selbst.yaml.
+#  Fragt störungsübergreifend Hinweise auf psychische Belastung ab
+#  (kein bestimmtes Störungsbild). 13 Fragen.
+#  Bewusst KEINE Frage zu Suizidgedanken: Ein anonymer Online-Test kann
+#  darauf nicht angemessen reagieren. Stattdessen werden Hilfsangebote
+#  immer angezeigt (krisenhinweis: true).
+#  FACHLICHER HINWEIS: Eigene Formulierungen, NICHT validiert.
+#  Schwellenwerte sind Setzungen und vor Veröffentlichung zu prüfen.
+# =====================================================================
+
+id: klinisch-selbst
+bereich: klinisch
+perspektive: selbst
+krisenhinweis: true
+
+titel:
+  de: "Psychische Belastung – Selbsteinschätzung"
+  en: "Psychological strain – self-assessment"
+
+zielgruppe:
+  de: "Für Erwachsene und ältere Jugendliche"
+  en: "For adults and older adolescents"
+
+einleitung:
+  de: >-
+    Die folgenden 13 Aussagen beschreiben Beschwerden, die bei ganz
+    unterschiedlichen psychischen Belastungen vorkommen können. Bitte geben
+    Sie an, wie oft Sie sie erlebt haben.
+  en: >-
+    The following 13 statements describe difficulties that can occur with
+    many different kinds of psychological strain. Please indicate how often
+    you have experienced them.
+
+zeitraum:
+  de: "Bitte denken Sie an die letzten vier Wochen."
+  en: "Please think about the past four weeks."
+
+standardskala: haeufigkeit
+
+fragen:
+  - id: k1    # gedrückte Stimmung
+    de: "Ich fühlte mich niedergeschlagen, traurig oder hoffnungslos."
+    en: "I felt down, sad or hopeless."
+  - id: k2    # Interessenverlust
+    de: "Ich hatte wenig Interesse oder Freude an Dingen, die mir sonst wichtig sind."
+    en: "I had little interest or pleasure in things that usually matter to me."
+  - id: k3    # Sorgen, Anspannung
+    de: "Ich machte mir viele Sorgen oder fühlte mich nervös und angespannt."
+    en: "I worried a lot or felt nervous and tense."
+  - id: k4    # Panik, Vermeidung
+    de: "Ich hatte plötzliche Angstattacken oder habe Situationen aus Angst gemieden."
+    en: "I had sudden attacks of anxiety or avoided situations because of fear."
+  - id: k5    # Zwang
+    de: "Mir drängten sich Gedanken auf, oder ich musste Handlungen wiederholen, obwohl ich das nicht wollte."
+    en: "Thoughts kept intruding, or I felt I had to repeat actions even though I didn't want to."
+  - id: k6    # Intrusionen
+    de: "Belastende Erinnerungen an frühere Erlebnisse drängten sich mir auf."
+    en: "Distressing memories of past experiences kept coming back."
+  - id: k7    # Schlaf, Erschöpfung
+    de: "Ich schlief schlecht oder fühlte mich trotz ausreichend Schlaf erschöpft."
+    en: "I slept badly or felt exhausted despite getting enough sleep."
+  - id: k8    # Emotionsregulation
+    de: "Meine Gefühle schwankten stark, oder ich konnte sie kaum steuern."
+    en: "My emotions swung strongly, or I could hardly control them."
+  - id: k9    # gehobene Stimmung, Antrieb
+    de: "Ich hatte ungewöhnlich viel Energie oder brauchte kaum Schlaf, sodass es anderen auffiel."
+    en: "I had unusually high energy or needed hardly any sleep, and others noticed."
+  - id: k10   # ungewöhnliche Wahrnehmungen, Misstrauen
+    de: "Ich nahm Dinge wahr, die andere nicht bemerkten, oder hatte den Eindruck, dass andere mir schaden wollen."
+    en: "I perceived things others did not notice, or had the impression that others wanted to harm me."
+  - id: k11   # Essen, Gewicht, Figur
+    de: "Essen, Gewicht oder Figur beschäftigten mich so sehr, dass es meinen Alltag beeinflusste."
+    en: "Food, weight or body shape occupied me so much that it affected my daily life."
+  - id: k12   # Substanzen
+    de: "Ich griff zu Alkohol, Medikamenten oder anderen Substanzen, um mit Belastungen umzugehen."
+    en: "I turned to alcohol, medication or other substances to cope with stress."
+  - id: k13   # Beeinträchtigung
+    de: "Meine Beschwerden beeinträchtigten mich im Alltag, im Beruf oder in meinen Beziehungen."
+    en: "My difficulties affected my everyday life, my work or my relationships."
+
+# Summe 0–39
+auswertung:
+  stufen:
+    - id: gering
+      max_summe: 8
+      titel:
+        de: "Derzeit geringe Belastung"
+        en: "Low strain at present"
+      text:
+        de: >-
+          Ihre Antworten deuten derzeit auf eine eher geringe psychische
+          Belastung hin. Wenn Sie dennoch etwas beschäftigt, können Sie sich
+          jederzeit an uns wenden.
+        en: >-
+          Your answers currently point to relatively low psychological strain.
+          If something is still on your mind, you are welcome to contact us at
+          any time.
+    - id: mittel
+      max_summe: 19
+      titel:
+        de: "Spürbare Belastung"
+        en: "Noticeable strain"
+      text:
+        de: >-
+          Ihre Antworten beschreiben Beschwerden, die Sie spürbar belasten
+          können. Eine fachliche Einschätzung kann helfen, sie einzuordnen und
+          passende nächste Schritte zu finden.
+        en: >-
+          Your answers describe difficulties that may be weighing on you
+          noticeably. A professional assessment can help to make sense of them
+          and find suitable next steps.
+    - id: deutlich
+      max_summe: 39
+      titel:
+        de: "Deutliche Belastung"
+        en: "Considerable strain"
+      text:
+        de: >-
+          Ihre Antworten beschreiben eine deutliche Belastung. Wir empfehlen
+          Ihnen, die Beschwerden fachlich abklären zu lassen – bei uns oder zum
+          Beispiel bei Ihrer Hausärztin oder Ihrem Hausarzt. Wenn es Ihnen
+          gerade sehr schlecht geht, nutzen Sie bitte die unten genannten
+          Hilfsangebote.
+        en: >-
+          Your answers describe considerable strain. We recommend having your
+          difficulties assessed by a professional – by us or, for example, by
+          your GP. If you are feeling very unwell right now, please use the
+          support services listed below.
+  hochstufen:
+    # Hinweise auf gehobene Stimmung, ungewöhnliche Wahrnehmungen,
+    # Essensthemen oder deutliche Beeinträchtigung: mindestens "mittel".
+    - { fragen: [k9, k10, k11, k13], ab_wert: 2, mindeststufe: mittel }
+
+skalen:
+  haeufigkeit:
+    - { wert: 0, de: "nie", en: "never" }
+    - { wert: 1, de: "selten", en: "rarely" }
+    - { wert: 2, de: "oft", en: "often" }
+    - { wert: 3, de: "sehr oft", en: "very often" }

@@ -1,0 +1,123 @@
+# =====================================================================
+#  SELBSTTEST: Intelligenzdiagnostik – Elternfragebogen
+# ---------------------------------------------------------------------
+#  Aufbau und Bearbeitungshinweise: siehe Kopf von adhs-selbst.yaml.
+#  Dieser Fragebogen misst KEINE Intelligenz. Er fragt Anlässe ab,
+#  bei denen eine Intelligenzdiagnostik sinnvoll sein kann.
+#  FACHLICHER HINWEIS: Eigene Formulierungen, NICHT validiert.
+# =====================================================================
+
+id: intelligenz-fremd
+bereich: intelligenz
+perspektive: fremd
+krisenhinweis: false
+
+titel:
+  de: "Intelligenzdiagnostik – Fragebogen für Eltern"
+  en: "Intelligence assessment – questionnaire for parents"
+
+zielgruppe:
+  de: "Für Eltern und Bezugspersonen von Kindern und Jugendlichen (etwa 4 bis 17 Jahre)"
+  en: "For parents and caregivers of children and adolescents (roughly 4 to 17 years)"
+
+einleitung:
+  de: >-
+    Acht Aussagen zu typischen Anlässen für eine Intelligenzdiagnostik bei
+    Kindern und Jugendlichen. Der Fragebogen misst nicht die Intelligenz Ihres
+    Kindes – er hilft Ihnen einzuschätzen, ob eine Untersuchung Ihre Fragen
+    beantworten könnte.
+  en: >-
+    Eight statements about common reasons for an intelligence assessment in
+    children and adolescents. The questionnaire does not measure your child's
+    intelligence – it helps you judge whether an assessment could answer your
+    questions.
+
+zeitraum:
+  de: ""
+  en: ""
+
+standardskala: zustimmung
+
+fragen:
+  - id: j1
+    de: "Mein Kind lernt deutlich schneller als Gleichaltrige oder wirkt in Kita oder Schule unterfordert."
+    en: "My child learns noticeably faster than peers or seems under-challenged at nursery or school."
+  - id: j2
+    de: "Mein Kind zeigt besonders ausgeprägte Interessen oder Fähigkeiten in einzelnen Bereichen."
+    en: "My child shows especially strong interests or abilities in particular areas."
+  - id: j3
+    de: "Die schulischen Leistungen meines Kindes bleiben hinter dem zurück, was ich ihm zutraue."
+    en: "My child's school performance falls short of what I believe they can do."
+  - id: j4
+    de: "Mein Kind hat beim Lernen Schwierigkeiten, die sich nicht durch fehlende Übung erklären lassen."
+    en: "My child has learning difficulties that can't be explained by lack of practice."
+  - id: j5
+    de: "Mein Kind wirkt in der Schule gelangweilt oder lustlos oder fällt durch sein Verhalten auf, ohne dass die Ursache klar ist."
+    en: "My child seems bored or unmotivated at school, or stands out because of their behaviour, without a clear reason."
+  - id: j6
+    de: "Es steht eine schulische Entscheidung an, zum Beispiel Einschulung, Überspringen einer Klasse, Schulwechsel oder Förderbedarf."
+    en: "A school-related decision is coming up, such as school entry, skipping a grade, changing schools or special educational support."
+  - id: j7
+    de: "Schule, Kita oder andere Fachleute haben eine Leistungs- oder Begabungsdiagnostik angeregt."
+    en: "The school, nursery or other professionals have suggested a cognitive or giftedness assessment."
+  - id: j8
+    de: "Ich möchte die Stärken und Schwächen meines Kindes besser verstehen, um es gezielt zu fördern."
+    en: "I would like to understand my child's strengths and weaknesses better in order to support them."
+
+auswertung:
+  stufen:
+    - id: gering
+      max_summe: 5
+      titel:
+        de: "Eher kein konkreter Anlass"
+        en: "No clear reason at present"
+      text:
+        de: >-
+          Nach Ihren Antworten steht eine Intelligenzdiagnostik für Ihr Kind
+          derzeit nicht im Vordergrund. Wenn Sie dennoch Fragen haben, beraten
+          wir Sie gern.
+        en: >-
+          Based on your answers, an intelligence assessment for your child
+          does not seem to be a priority at the moment. If you still have
+          questions, we are happy to advise you.
+    - id: mittel
+      max_summe: 12
+      titel:
+        de: "Eine Diagnostik könnte hilfreich sein"
+        en: "An assessment could be helpful"
+      text:
+        de: >-
+          Ihre Antworten enthalten Punkte, bei denen eine Intelligenzdiagnostik
+          zusätzliche Klarheit bringen kann. In einem kurzen Vorgespräch klären
+          wir gemeinsam, ob und welche Untersuchung für Ihr Kind sinnvoll ist.
+        en: >-
+          Your answers include points where an intelligence assessment can
+          bring additional clarity. In a short initial conversation we can
+          work out together whether an assessment makes sense for your child,
+          and which one.
+    - id: deutlich
+      max_summe: 24
+      titel:
+        de: "Eine Diagnostik passt gut zu Ihrem Anliegen"
+        en: "An assessment fits your needs well"
+      text:
+        de: >-
+          Ihre Antworten sprechen dafür, dass eine Intelligenzdiagnostik Ihre
+          Fragen gut beantworten kann. Gern besprechen wir mit Ihnen, welche
+          Verfahren für das Alter Ihres Kindes passen und wie der Ablauf
+          aussieht.
+        en: >-
+          Your answers suggest that an intelligence assessment could answer
+          your questions well. We are happy to discuss which procedures suit
+          your child's age and what the process looks like.
+  hochstufen:
+    # Anstehende Schulentscheidung oder Empfehlung von Fachleuten
+    # ergeben mindestens die Stufe "mittel".
+    - { fragen: [j6, j7], ab_wert: 2, mindeststufe: mittel }
+
+skalen:
+  zustimmung:
+    - { wert: 0, de: "trifft nicht zu", en: "does not apply" }
+    - { wert: 1, de: "trifft eher nicht zu", en: "mostly does not apply" }
+    - { wert: 2, de: "trifft eher zu", en: "mostly applies" }
+    - { wert: 3, de: "trifft voll zu", en: "fully applies" }

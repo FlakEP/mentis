@@ -1,0 +1,126 @@
+# =====================================================================
+#  SELBSTTEST: ADHS – Elternfragebogen (Fremdeinschätzung)
+# ---------------------------------------------------------------------
+#  Aufbau und Bearbeitungshinweise: siehe Kopf von adhs-selbst.yaml.
+#  FACHLICHER HINWEIS: Eigene Formulierungen, NICHT validiert.
+#  Schwellenwerte sind Setzungen und vor Veröffentlichung zu prüfen.
+# =====================================================================
+
+id: adhs-fremd
+bereich: adhs
+perspektive: fremd
+krisenhinweis: false
+
+titel:
+  de: "ADHS – Fragebogen für Eltern"
+  en: "ADHD – questionnaire for parents"
+
+zielgruppe:
+  de: "Für Eltern und Bezugspersonen von Kindern und Jugendlichen (etwa 6 bis 17 Jahre)"
+  en: "For parents and caregivers of children and adolescents (roughly 6 to 17 years)"
+
+einleitung:
+  de: >-
+    Die folgenden acht Aussagen beschreiben Verhaltensweisen, die bei ADHS
+    häufig vorkommen. Bitte geben Sie an, wie gut sie auf Ihr Kind zutreffen.
+    Wenn Sie nicht Elternteil sind, beziehen Sie die Fragen bitte auf das
+    Kind oder die Jugendliche bzw. den Jugendlichen, den Sie gut kennen.
+  en: >-
+    The following eight statements describe behaviours that are common in
+    ADHD. Please indicate how well they apply to your child. If you are not a
+    parent, please answer for the child or adolescent you know well.
+
+zeitraum:
+  de: "Bitte denken Sie an die letzten sechs Monate."
+  en: "Please think about the past six months."
+
+standardskala: haeufigkeit
+
+fragen:
+  - id: f1
+    de: "Mein Kind lässt sich leicht ablenken, zum Beispiel bei den Hausaufgaben oder beim Zuhören."
+    en: "My child is easily distracted, for example during homework or when listening."
+  - id: f2
+    de: "Mein Kind vergisst oder verliert Dinge, etwa Schulsachen, Kleidung oder Absprachen."
+    en: "My child forgets or loses things, such as school materials, clothing or agreements."
+  - id: f3
+    de: "Mein Kind hat Mühe, Aufgaben zu organisieren und zu Ende zu bringen."
+    en: "My child struggles to organise tasks and finish them."
+  - id: f4
+    de: "Mein Kind zappelt, rutscht auf dem Stuhl herum oder steht auf, wenn eigentlich Sitzenbleiben erwartet wird."
+    en: "My child fidgets, squirms in their seat or gets up when they are expected to stay seated."
+  - id: f5
+    de: "Mein Kind wirkt wie angetrieben und ist kaum zu bremsen."
+    en: "My child seems driven, as if by a motor, and is hard to slow down."
+  - id: f6
+    de: "Mein Kind kann schwer abwarten, bis es an der Reihe ist, oder platzt mit Antworten heraus."
+    en: "My child finds it hard to wait their turn or blurts out answers."
+  - id: f7
+    skala: zustimmung
+    de: "Diese Auffälligkeiten zeigen sich in mehreren Lebensbereichen, zum Beispiel zu Hause und in Kita oder Schule."
+    en: "These behaviours show up in more than one setting, for example at home and at nursery or school."
+  - id: f8
+    skala: zustimmung
+    de: "Die Auffälligkeiten führen zu Schwierigkeiten in der Schule, in der Familie oder mit Gleichaltrigen."
+    en: "These behaviours cause difficulties at school, in the family or with peers."
+
+auswertung:
+  stufen:
+    - id: gering
+      max_summe: 7
+      titel:
+        de: "Derzeit wenige Hinweise"
+        en: "Few indications at present"
+      text:
+        de: >-
+          Ihre Antworten beschreiben nur wenige Verhaltensweisen, wie sie bei
+          ADHS typisch sind. Wenn Sie sich dennoch Sorgen um Ihr Kind machen,
+          sprechen wir gern unverbindlich mit Ihnen.
+        en: >-
+          Your answers describe only a few behaviours that are typical of ADHD.
+          If you are still concerned about your child, we are happy to talk
+          with you without obligation.
+    - id: mittel
+      max_summe: 14
+      titel:
+        de: "Einige Hinweise"
+        en: "Some indications"
+      text:
+        de: >-
+          Einige Ihrer Antworten beschreiben Verhaltensweisen, die bei ADHS
+          vorkommen können. Sie können aber auch andere Ursachen haben, etwa
+          Belastungen in Familie oder Schule, Schlafprobleme oder Ängste. Eine
+          fachliche Abklärung kann helfen, das genauer einzuordnen.
+        en: >-
+          Some of your answers describe behaviours that can occur with ADHD.
+          However, they can also have other causes, such as stress in the
+          family or at school, sleep problems or anxiety. A professional
+          assessment can help to clarify this.
+    - id: deutlich
+      max_summe: 24
+      titel:
+        de: "Mehrere Hinweise"
+        en: "Several indications"
+      text:
+        de: >-
+          Ihre Antworten beschreiben mehrere Verhaltensweisen, die bei ADHS
+          häufig vorkommen. Eine ausführliche Diagnostik könnte sinnvoll sein,
+          um die Ursachen genauer zu verstehen und gemeinsam mit Ihnen nächste
+          Schritte zu besprechen.
+        en: >-
+          Your answers describe several behaviours that are common in ADHD. A
+          thorough assessment could be worthwhile to understand the causes
+          more precisely and to discuss next steps together with you.
+  hochstufen: []
+
+skalen:
+  haeufigkeit:
+    - { wert: 0, de: "nie", en: "never" }
+    - { wert: 1, de: "selten", en: "rarely" }
+    - { wert: 2, de: "oft", en: "often" }
+    - { wert: 3, de: "sehr oft", en: "very often" }
+  zustimmung:
+    - { wert: 0, de: "trifft nicht zu", en: "does not apply" }
+    - { wert: 1, de: "trifft eher nicht zu", en: "mostly does not apply" }
+    - { wert: 2, de: "trifft eher zu", en: "mostly applies" }
+    - { wert: 3, de: "trifft voll zu", en: "fully applies" }

@@ -1,0 +1,136 @@
+# =====================================================================
+#  SELBSTTEST: Klinische Diagnostik – Elternfragebogen
+# ---------------------------------------------------------------------
+#  Aufbau und Bearbeitungshinweise: siehe Kopf von adhs-selbst.yaml.
+#  Fragt störungsübergreifend Hinweise auf psychische Belastung bei
+#  Kindern und Jugendlichen ab (kein bestimmtes Störungsbild). 12 Fragen.
+#  FACHLICHER HINWEIS: Eigene Formulierungen, NICHT validiert.
+#  Schwellenwerte sind Setzungen und vor Veröffentlichung zu prüfen.
+# =====================================================================
+
+id: klinisch-fremd
+bereich: klinisch
+perspektive: fremd
+krisenhinweis: true
+
+titel:
+  de: "Psychische Belastung – Fragebogen für Eltern"
+  en: "Psychological strain – questionnaire for parents"
+
+zielgruppe:
+  de: "Für Eltern und Bezugspersonen von Kindern und Jugendlichen (etwa 6 bis 17 Jahre)"
+  en: "For parents and caregivers of children and adolescents (roughly 6 to 17 years)"
+
+einleitung:
+  de: >-
+    Die folgenden 12 Aussagen beschreiben Auffälligkeiten, die bei ganz
+    unterschiedlichen seelischen Belastungen von Kindern und Jugendlichen
+    vorkommen können. Bitte geben Sie an, wie oft Sie sie bei Ihrem Kind
+    beobachtet haben.
+  en: >-
+    The following 12 statements describe signs that can occur with many
+    different kinds of emotional strain in children and adolescents. Please
+    indicate how often you have noticed them in your child.
+
+zeitraum:
+  de: "Bitte denken Sie an die letzten vier Wochen."
+  en: "Please think about the past four weeks."
+
+standardskala: haeufigkeit
+
+fragen:
+  - id: l1    # Stimmung, Gereiztheit
+    de: "Mein Kind wirkte traurig, bedrückt oder ungewöhnlich gereizt."
+    en: "My child seemed sad, low or unusually irritable."
+  - id: l2    # Interessenverlust, Rückzug
+    de: "Mein Kind hatte wenig Freude an Dingen, die ihm sonst Spaß machen, oder zog sich zurück."
+    en: "My child took little pleasure in things they usually enjoy, or withdrew."
+  - id: l3    # Sorgen, Ängstlichkeit
+    de: "Mein Kind machte sich viele Sorgen oder wirkte ängstlich."
+    en: "My child worried a lot or seemed anxious."
+  - id: l4    # Vermeidung
+    de: "Mein Kind mied Situationen aus Angst, zum Beispiel die Schule, die Trennung von Bezugspersonen oder den Kontakt zu anderen."
+    en: "My child avoided situations out of fear, such as school, being apart from caregivers, or contact with others."
+  - id: l5    # Wut, oppositionelles Verhalten
+    de: "Mein Kind hatte heftige Wutausbrüche oder geriet in starke Konflikte mit Erwachsenen."
+    en: "My child had intense outbursts of anger or got into serious conflicts with adults."
+  - id: l6    # Gleichaltrige
+    de: "Mein Kind hatte Schwierigkeiten mit Gleichaltrigen oder fand schwer Anschluss."
+    en: "My child had difficulties with peers or found it hard to fit in."
+  - id: l7    # körperliche Beschwerden
+    de: "Mein Kind klagte über körperliche Beschwerden wie Bauch- oder Kopfschmerzen, ohne dass eine körperliche Ursache bekannt ist."
+    en: "My child complained of physical symptoms such as stomach aches or headaches with no known physical cause."
+  - id: l8    # Schlaf
+    de: "Mein Kind schlief schlecht oder hatte Albträume."
+    en: "My child slept badly or had nightmares."
+  - id: l9    # Zwang, Rituale
+    de: "Mein Kind zeigte Verhaltensweisen, die es scheinbar nicht lassen konnte, oder bestand auf festen Abläufen und Ritualen."
+    en: "My child showed behaviours they seemed unable to stop, or insisted on fixed routines and rituals."
+  - id: l10   # Essen, Gewicht, Figur
+    de: "Essen, Gewicht oder Figur spielten für mein Kind eine auffällig große Rolle."
+    en: "Food, weight or body shape played a strikingly large role for my child."
+  - id: l11   # belastendes Ereignis
+    de: "Mein Kind wirkte nach einem belastenden Ereignis deutlich verändert."
+    en: "My child seemed clearly changed after a distressing event."
+  - id: l12   # Beeinträchtigung
+    de: "Die Schwierigkeiten beeinträchtigten den Alltag in Familie, Schule oder Freizeit."
+    en: "The difficulties affected everyday life in the family, at school or in leisure time."
+
+# Summe 0–36
+auswertung:
+  stufen:
+    - id: gering
+      max_summe: 8
+      titel:
+        de: "Derzeit geringe Belastung"
+        en: "Low strain at present"
+      text:
+        de: >-
+          Ihre Antworten deuten derzeit auf eine eher geringe seelische
+          Belastung Ihres Kindes hin. Wenn Sie sich dennoch Sorgen machen,
+          sprechen wir gern unverbindlich mit Ihnen.
+        en: >-
+          Your answers currently point to relatively low emotional strain for
+          your child. If you are still concerned, we are happy to talk with you
+          without obligation.
+    - id: mittel
+      max_summe: 18
+      titel:
+        de: "Spürbare Belastung"
+        en: "Noticeable strain"
+      text:
+        de: >-
+          Ihre Antworten beschreiben Auffälligkeiten, die Ihr Kind spürbar
+          belasten können. Eine fachliche Einschätzung kann helfen, sie
+          einzuordnen und gemeinsam passende nächste Schritte zu finden.
+        en: >-
+          Your answers describe signs that may be weighing on your child
+          noticeably. A professional assessment can help to make sense of them
+          and to find suitable next steps together.
+    - id: deutlich
+      max_summe: 36
+      titel:
+        de: "Deutliche Belastung"
+        en: "Considerable strain"
+      text:
+        de: >-
+          Ihre Antworten beschreiben eine deutliche Belastung Ihres Kindes. Wir
+          empfehlen, die Auffälligkeiten fachlich abklären zu lassen – bei uns
+          oder zum Beispiel in der kinderärztlichen Praxis. Wenn Ihr Kind sich
+          gerade in einer akuten Krise befindet, nutzen Sie bitte die unten
+          genannten Hilfsangebote.
+        en: >-
+          Your answers describe considerable strain for your child. We
+          recommend having these signs assessed by a professional – by us or,
+          for example, by your paediatrician. If your child is in an acute
+          crisis right now, please use the support services listed below.
+  hochstufen:
+    # Essensthemen oder deutliche Beeinträchtigung: mindestens "mittel".
+    - { fragen: [l10, l12], ab_wert: 2, mindeststufe: mittel }
+
+skalen:
+  haeufigkeit:
+    - { wert: 0, de: "nie", en: "never" }
+    - { wert: 1, de: "selten", en: "rarely" }
+    - { wert: 2, de: "oft", en: "often" }
+    - { wert: 3, de: "sehr oft", en: "very often" }
