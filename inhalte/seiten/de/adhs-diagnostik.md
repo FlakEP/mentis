@@ -5,8 +5,8 @@
 seitentitel: "ADHS-Diagnostik für Erwachsene, Kinder und Jugendliche in Berlin | Mentis Uno"
 beschreibung: "Fundierte ADHS-Diagnostik in Berlin für Erwachsene, Kinder und Jugendliche. Mit kostenloser Selbsteinschätzung. Für Selbstzahler."
 selbsttests: [adhs-selbst, adhs-fremd]
-preis_ab: "[[PLATZHALTER: Preis ADHS-Diagnostik, z. B. 450]]"   # nur die Zahl in Euro
-dauer: "[[PLATZHALTER: z. B. zwei bis drei Termine]]"
+preis_ab: "450"   # nur die Zahl in Euro
+dauer: "zwei bis drei Termine"
 
 einstieg:
   ueberschrift: "ADHS-Diagnostik"

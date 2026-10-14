@@ -27,13 +27,11 @@ Contact form: on every page of this website
 
 ## Professional title and professional regulations
 
-Professional title: [[PLATZHALTER: z. B. Psychologist (M.Sc.), awarded in Germany]]
+Professional title: Psychologist (M.Sc.), awarded in Germany
 
-[[PLATZHALTER: Nur falls zutreffend – zuständige Kammer, Aufsichtsbehörde und berufsrechtliche Regelungen mit Link. Ohne Approbation bzw. Kammermitgliedschaft entfällt dieser Absatz.]]
+<!-- Nur falls zutreffend ergänzen: zuständige Kammer, Aufsichtsbehörde und berufsrechtliche Regelungen mit Link. -->
 
-## VAT
-
-[[PLATZHALTER: Umsatzsteuer-Identifikationsnummer (VAT ID), falls vorhanden – sonst Absatz löschen]]
+<!-- VAT: Falls eine Umsatzsteuer-Identifikationsnummer vorhanden ist, hier einen Abschnitt „## VAT“ ergänzen. -->
 
 ## Responsible for content pursuant to Section 18 (2) MStV
 

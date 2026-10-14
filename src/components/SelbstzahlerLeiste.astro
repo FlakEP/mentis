@@ -19,15 +19,15 @@ const t = await uebersetzer(sprache);
 const ziel = kostenAufDieserSeite ? `#${ANKER.kosten}` : `${seitenUrl('start', sprache)}#${ANKER.kosten}`;
 ---
 
-<div class="zahlerleiste">
+<aside class="zahlerleiste" aria-labelledby="zahlerleiste-text">
   <div class="inhalt zahlerleiste__innen">
     <a class="zahlerleiste__link" href={ziel}>
-      <span>{t('selbstzahler.kurz')}</span>
+      <span id="zahlerleiste-text">{t('selbstzahler.kurz')}</span>
       <Icon name="pfeil-rechts" groesse={16} class="zahlerleiste__icon" />
     </a>
     <Sprachumschalter sprache={sprache} seite={seite} class="zahlerleiste__sprache" />
   </div>
-</div>
+</aside>
 
 <style>
   .zahlerleiste {

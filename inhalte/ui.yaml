@@ -177,6 +177,15 @@ footer:
   termine: { de: "Termine nach Vereinbarung", en: "Appointments by arrangement" }
   copyright: { de: "© {jahr} Mentis Uno", en: "© {jahr} Mentis Uno" }
 
+# Seite „nicht gefunden“ (404), erscheint bei falschen oder veralteten Adressen
+fehlerseite:
+  seitentitel: { de: "Seite nicht gefunden | Mentis Uno", en: "Page not found | Mentis Uno" }
+  ueberschrift: { de: "Diese Seite gibt es leider nicht.", en: "Sorry, this page does not exist." }
+  text:
+    de: "Vielleicht hat sich die Adresse geändert oder es hat sich ein Tippfehler eingeschlichen. Auf der Startseite finden Sie alle Angebote – oder Sie schreiben uns direkt."
+    en: "The address may have changed, or there may be a typo. You will find all our services on the home page – or you can write to us directly."
+  zur_startseite: { de: "Zur Startseite", en: "Go to the home page" }
+
 rechtstexte:
   stand: { de: "Stand", en: "Last updated" }
 

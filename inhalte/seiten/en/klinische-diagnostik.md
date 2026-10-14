@@ -6,8 +6,8 @@
 seitentitel: "Clinical psychological assessment in Berlin | Mentis Uno"
 beschreibung: "Clinical psychological assessment in Berlin for adults, children and adolescents – a careful evaluation of emotional and psychological difficulties. For self-paying clients."
 selbsttests: [klinisch-selbst, klinisch-fremd]
-preis_ab: "[[PLATZHALTER: Preis klinische Diagnostik, z. B. 400]]"
-dauer: "[[PLATZHALTER: z. B. two to four appointments]]"
+preis_ab: "400"   # nur die Zahl in Euro
+dauer: "two to four appointments"
 krisenhinweis_anzeigen: true
 
 einstieg:

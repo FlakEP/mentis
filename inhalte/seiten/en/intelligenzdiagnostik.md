@@ -6,8 +6,8 @@
 seitentitel: "Intelligence assessment and giftedness testing in Berlin | Mentis Uno"
 beschreibung: "Intelligence assessment in Berlin for adults, children and adolescents – if giftedness is suspected, with learning difficulties or before important decisions. For self-paying clients."
 selbsttests: [intelligenz-selbst, intelligenz-fremd]
-preis_ab: "[[PLATZHALTER: Preis Intelligenzdiagnostik, z. B. 350]]"
-dauer: "[[PLATZHALTER: z. B. one to two appointments]]"
+preis_ab: "350"   # nur die Zahl in Euro
+dauer: "one to two appointments"
 
 einstieg:
   ueberschrift: "Intelligence assessment"
@@ -32,7 +32,7 @@ Modern intelligence tests cover different areas of thinking, for example verbal 
 ## How does the assessment work?
 
 1. **Initial consultation:** We clarify your question and select the appropriate procedures.
-2. **Testing:** Depending on age and procedure, the testing itself takes about [[PLATZHALTER: z. B. 1.5 to 3 hours]] – with breaks.
+2. **Testing:** Depending on age and procedure, the testing itself takes about 1.5 to 3 hours – with breaks.
 3. **Evaluation:** We evaluate the results and place them in the context of your question.
 4. **Report and feedback:** You receive a written report with a performance profile and discuss the results and recommendations with us.
 

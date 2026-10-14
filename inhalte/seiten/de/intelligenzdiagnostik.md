@@ -5,8 +5,8 @@
 seitentitel: "Intelligenzdiagnostik und Hochbegabungstest in Berlin | Mentis Uno"
 beschreibung: "Intelligenzdiagnostik in Berlin für Erwachsene, Kinder und Jugendliche – bei Verdacht auf Hochbegabung, Lernschwierigkeiten oder vor wichtigen Entscheidungen. Für Selbstzahler."
 selbsttests: [intelligenz-selbst, intelligenz-fremd]
-preis_ab: "[[PLATZHALTER: Preis Intelligenzdiagnostik, z. B. 350]]"
-dauer: "[[PLATZHALTER: z. B. ein bis zwei Termine]]"
+preis_ab: "350"   # nur die Zahl in Euro
+dauer: "ein bis zwei Termine"
 
 einstieg:
   ueberschrift: "Intelligenzdiagnostik"
@@ -31,7 +31,7 @@ Moderne Intelligenztests erfassen verschiedene Bereiche des Denkens, zum Beispie
 ## Wie läuft die Untersuchung ab?
 
 1. **Vorgespräch:** Wir klären Ihre Fragestellung und wählen die passenden Verfahren aus.
-2. **Testung:** Die eigentliche Testung dauert je nach Alter und Verfahren etwa [[PLATZHALTER: z. B. 1,5 bis 3 Stunden]] – mit Pausen.
+2. **Testung:** Die eigentliche Testung dauert je nach Alter und Verfahren etwa 1,5 bis 3 Stunden – mit Pausen.
 3. **Auswertung:** Wir werten die Ergebnisse aus und ordnen sie im Zusammenhang Ihrer Fragestellung ein.
 4. **Befund und Rückmeldung:** Sie erhalten einen schriftlichen Befund mit Leistungsprofil und besprechen die Ergebnisse und Empfehlungen mit uns.
 

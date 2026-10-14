@@ -11,10 +11,13 @@ import Sprachumschalter from './Sprachumschalter.astro';
 
 interface Props {
   sprache: Sprache;
+  /** Seite für den Sprachumschalter */
   seite: SeitenId;
+  /** Aktuelle Seite für die Markierung im Menü (fehlt z. B. auf der 404-Seite) */
+  aktuell?: SeitenId;
 }
 
-const { sprache, seite } = Astro.props;
+const { sprache, seite, aktuell } = Astro.props;
 const t = await uebersetzer(sprache);
 ---
 
@@ -44,7 +47,7 @@ const t = await uebersetzer(sprache);
         {
           HAUPTNAVIGATION.map((id) => (
             <li>
-              <a class="kopf__link" href={seitenUrl(id, sprache)} aria-current={id === seite ? 'page' : undefined}>
+              <a class="kopf__link" href={seitenUrl(id, sprache)} aria-current={id === aktuell ? 'page' : undefined}>
                 {t(`navigation.${id}`)}
               </a>
             </li>

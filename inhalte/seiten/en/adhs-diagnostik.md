@@ -6,8 +6,8 @@
 seitentitel: "ADHD assessment for adults, children and adolescents in Berlin | Mentis Uno"
 beschreibung: "Thorough ADHD assessment in Berlin for adults, children and adolescents. With a free self-assessment. For self-paying clients."
 selbsttests: [adhs-selbst, adhs-fremd]
-preis_ab: "[[PLATZHALTER: Preis ADHS-Diagnostik, z. B. 450]]"   # nur die Zahl in Euro
-dauer: "[[PLATZHALTER: z. B. two to three appointments]]"
+preis_ab: "450"   # nur die Zahl in Euro
+dauer: "two to three appointments"
 
 einstieg:
   ueberschrift: "ADHD assessment"

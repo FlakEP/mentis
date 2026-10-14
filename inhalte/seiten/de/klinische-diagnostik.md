@@ -5,8 +5,8 @@
 seitentitel: "Klinisch-psychologische Diagnostik in Berlin | Mentis Uno"
 beschreibung: "Klinisch-psychologische Diagnostik in Berlin für Erwachsene, Kinder und Jugendliche – sorgfältige Einordnung seelischer Beschwerden. Für Selbstzahler."
 selbsttests: [klinisch-selbst, klinisch-fremd]
-preis_ab: "[[PLATZHALTER: Preis klinische Diagnostik, z. B. 400]]"
-dauer: "[[PLATZHALTER: z. B. zwei bis vier Termine]]"
+preis_ab: "400"   # nur die Zahl in Euro
+dauer: "zwei bis vier Termine"
 krisenhinweis_anzeigen: true
 
 einstieg:

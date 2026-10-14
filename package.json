@@ -12,7 +12,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "vitest run",
-    "check": "astro check && vitest run"
+    "check": "astro check && vitest run",
+    "platzhalter": "node scripts/platzhalter.mjs",
+    "check:livegang": "npm run check && node scripts/livegang.mjs",
+    "og-bild": "node scripts/og-bild.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.2",
@@ -25,6 +28,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "playwright-core": "^1.56.1",
     "typescript": "^6.0.3",
     "vitest": "^5.0.4"
   }

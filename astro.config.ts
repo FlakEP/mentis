@@ -8,6 +8,7 @@ import { unified } from '@astrojs/markdown-remark';
 import { fileURLToPath } from 'node:url';
 import { AKTIVE_SPRACHEN, SITE_URL, SEITEN } from './src/config/site';
 import { fehlertext, pruefeInhalte } from './src/lib/inhalte-pruefen';
+import { findePlatzhalter } from './scripts/platzhalter.mjs';
 import { rehypePlatzhalterMarkieren, remarkKommentareEntfernen, remarkZeilenumbrueche } from './src/lib/markdown-plugins';
 
 /** Zu jeder Adresse die Adressen derselben Seite in allen Sprachen (für hreflang in der Sitemap). */
@@ -37,6 +38,15 @@ function inhalteIntegration(): AstroIntegration {
         if (meldungen.length === 0) return;
         if (command === 'dev') logger.error(fehlertext(meldungen));
         else throw new Error(fehlertext(meldungen));
+      },
+      // Nach dem Build: Warnung mit allen offenen Platzhaltern
+      'astro:build:done': ({ logger }) => {
+        const offen: { datei: string; zeile: number; text: string }[] = findePlatzhalter();
+        if (offen.length === 0) return;
+        logger.warn(
+          `${offen.length} offene Platzhalter – vor dem Livegang ersetzen:\n` +
+            offen.map(({ datei, zeile, text }) => `  ${datei}:${zeile}  ${text}`).join('\n'),
+        );
       },
     },
   };

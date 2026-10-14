@@ -17,9 +17,12 @@ const { sprache, ebene = 'h2', id = 'krisenhinweis' } = Astro.props;
 const t = await uebersetzer(sprache);
 const teile = findeTelefonnummern(t('krisenhinweis.text'));
 const Ueberschrift = ebene;
+// Als eigener Abschnitt ein Seitenbereich (aside); innerhalb eines Selbsttest-Ergebnisses ein normaler Block,
+// damit es auf der klinischen Seite keine zwei gleichnamigen Seitenbereiche gibt.
+const Huelle = ebene === 'h4' ? 'div' : 'aside';
 ---
 
-<aside class="krise" aria-labelledby={`${id}-titel`}>
+<Huelle class="krise" aria-labelledby={ebene === 'h4' ? undefined : `${id}-titel`}>
   <Ueberschrift class="krise__titel" id={`${id}-titel`}>{t('krisenhinweis.ueberschrift')}</Ueberschrift>
   <p class="krise__text">
     {
@@ -34,7 +37,7 @@ const Ueberschrift = ebene;
       )
     }
   </p>
-</aside>
+</Huelle>
 
 <style>
   .krise {

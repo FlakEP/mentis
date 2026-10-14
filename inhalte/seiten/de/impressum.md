@@ -28,13 +28,11 @@ Kontaktformular: auf jeder Seite dieser Website
 
 ## Berufsbezeichnung und berufsrechtliche Angaben
 
-Berufsbezeichnung: [[PLATZHALTER: z. B. Psychologe (M.Sc.), verliehen in Deutschland]]
+Berufsbezeichnung: Psychologe (M.Sc.), verliehen in Deutschland
 
-[[PLATZHALTER: Nur falls zutreffend – zuständige Kammer, Aufsichtsbehörde und berufsrechtliche Regelungen mit Link. Ohne Approbation bzw. Kammermitgliedschaft entfällt dieser Absatz.]]
+<!-- Nur falls zutreffend ergänzen: zuständige Kammer, Aufsichtsbehörde und berufsrechtliche Regelungen mit Link (erst mit Approbation bzw. Kammermitgliedschaft). -->
 
-## Umsatzsteuer
-
-[[PLATZHALTER: Umsatzsteuer-Identifikationsnummer, falls vorhanden – sonst Absatz löschen]]
+<!-- Umsatzsteuer: Falls eine Umsatzsteuer-Identifikationsnummer vorhanden ist, hier einen Abschnitt „## Umsatzsteuer“ mit der Nummer ergänzen. -->
 
 ## Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
 
