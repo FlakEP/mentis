@@ -177,6 +177,14 @@ footer:
   termine: { de: "Termine nach Vereinbarung", en: "Appointments by arrangement" }
   copyright: { de: "© {jahr} Mentis Uno", en: "© {jahr} Mentis Uno" }
 
+# Platzhalterseite, solange die Website im Wartungsmodus ist (src/config/site.ts → WARTUNGSMODUS)
+wartung:
+  seitentitel: { de: "Mentis Uno – Website im Aufbau", en: "Mentis Uno – Website under construction" }
+  ueberschrift: { de: "Unsere Website ist *im Aufbau*.", en: "Our website is *under construction*." }
+  text:
+    de: "Hier entsteht eine neue Website. Bitte schauen Sie bald wieder vorbei."
+    en: "A new website is taking shape here. Please check back soon."
+
 # Seite „nicht gefunden“ (404), erscheint bei falschen oder veralteten Adressen
 fehlerseite:
   seitentitel: { de: "Seite nicht gefunden | Mentis Uno", en: "Page not found | Mentis Uno" }

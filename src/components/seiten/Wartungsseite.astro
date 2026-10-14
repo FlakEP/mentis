@@ -1,0 +1,150 @@
+---
+// Platzhalterseite „Website im Aufbau“ (zweisprachig) für den Wartungsmodus (src/config/site.ts → WARTUNGSMODUS).
+// Bewusst schlicht: Logo, Bögen, kurzer Text – keine Navigation, kein Formular, kein JavaScript, nicht für Suchmaschinen.
+// Texte aus inhalte/ui.yaml → wartung. Aufgerufen von src/pages/[...pfad].astro und src/pages/404.astro.
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource-variable/source-sans-3/wght.css';
+import '../../styles/tokens.css';
+import '../../styles/global.css';
+
+import { uebersetzer } from '../../lib/inhalte';
+import HeroBoegen from '../HeroBoegen.astro';
+import Logo from '../Logo.astro';
+import Text from '../Text.astro';
+
+const de = await uebersetzer('de');
+const en = await uebersetzer('en');
+const jahr = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{de('wartung.seitentitel')}</title>
+    <meta name="description" content={de('wartung.text')} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+  <body>
+    <main class="wartung">
+      <div class="wartung__boegen" aria-hidden="true">
+        <HeroBoegen />
+      </div>
+
+      <div class="wartung__inhalt">
+        <Logo sprache="de" class="wartung__logo" />
+
+        <div class="wartung__text">
+          <h1><Text text={de('wartung.ueberschrift')} betonung /></h1>
+          <p>{de('wartung.text')}</p>
+        </div>
+
+        <div class="wartung__text wartung__text--en" lang="en">
+          <p class="wartung__titel-en"><Text text={en('wartung.ueberschrift')} betonung /></p>
+          <p>{en('wartung.text')}</p>
+        </div>
+      </div>
+
+      <p class="wartung__fuss">{de('footer.copyright', { jahr })}</p>
+    </main>
+  </body>
+</html>
+
+<style>
+  .wartung {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    padding: 5rem var(--seitenrand) var(--raum-l);
+  }
+
+  /* Handy: oben rechts in der Ecke, damit nichts den Text überlagert */
+  .wartung__boegen {
+    position: absolute;
+    top: -9rem;
+    right: -11rem;
+    width: 22rem;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Desktop: groß und rechts angeschnitten, mittig in der Höhe */
+  @media (min-width: 60em) {
+    .wartung__boegen {
+      top: 50%;
+      right: clamp(-22rem, -18vw, -6rem);
+      width: clamp(26rem, 55vw, 46rem);
+      transform: translateY(-50%);
+      opacity: 1;
+    }
+  }
+
+  .wartung__inhalt {
+    position: relative;
+    display: grid;
+    align-content: center;
+    gap: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+    width: 100%;
+    max-width: var(--inhalt-max);
+    margin-inline: auto;
+  }
+
+  .wartung__inhalt :global(.wartung__logo) {
+    width: clamp(13rem, 10rem + 10vw, 17rem);
+  }
+
+  .wartung__text {
+    display: grid;
+    gap: var(--raum-m);
+    max-width: 36rem;
+  }
+
+  .wartung__text h1 {
+    max-width: 14ch;
+  }
+
+  .wartung__text p {
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  .wartung__text--en {
+    gap: var(--raum-2xs);
+    padding-top: var(--raum-l);
+    border-top: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  .wartung__text--en p {
+    font-size: var(--text-basis);
+  }
+
+  .wartung .wartung__titel-en {
+    font-family: var(--schrift-serif);
+    font-size: var(--text-h3);
+    line-height: 1.25;
+    color: var(--farbe-text);
+  }
+
+  .wartung__titel-en :global(em) {
+    font-style: italic;
+    color: var(--farbe-akzent-text);
+  }
+
+  .wartung__fuss {
+    position: relative;
+    width: 100%;
+    max-width: var(--inhalt-max);
+    margin: var(--raum-2xl) auto 0;
+    font-size: var(--text-klein);
+    color: var(--farbe-text-leise);
+  }
+</style>
