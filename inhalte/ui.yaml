@@ -125,6 +125,7 @@ kontaktformular:
   email: { de: "E-Mail", en: "Email" }
   telefon: { de: "Telefon (optional)", en: "Phone (optional)" }
   anliegen: { de: "Anliegen", en: "Topic" }
+  anliegen_bitte_waehlen: { de: "Bitte wählen", en: "Please choose" }
   anliegen_optionen:
     adhs: { de: "ADHS-Diagnostik", en: "ADHD assessment" }
     intelligenz: { de: "Intelligenzdiagnostik", en: "Intelligence assessment" }
@@ -162,6 +163,12 @@ kontaktformular:
     de: "Das hat leider nicht geklappt. Bitte versuchen Sie es noch einmal oder schreiben Sie uns direkt an anfragen@mentis.uno."
     en: "Sorry, something went wrong. Please try again or email us directly at anfragen@mentis.uno."
   direkt_email: { de: "Oder per E-Mail:", en: "Or by email:" }
+  # Fehlermeldungen direkt am Feld (erscheinen, wenn etwas fehlt oder nicht stimmt)
+  fehler_name: { de: "Bitte geben Sie Ihren Namen an.", en: "Please enter your name." }
+  fehler_email: { de: "Bitte geben Sie eine gültige E-Mail-Adresse an, z. B. name@beispiel.de.", en: "Please enter a valid email address, e.g. name@example.com." }
+  fehler_anliegen: { de: "Bitte wählen Sie Ihr Anliegen aus.", en: "Please choose your topic." }
+  fehler_nachricht: { de: "Die Nachricht darf höchstens 1000 Zeichen lang sein.", en: "The message can be no longer than 1000 characters." }
+  fehler_einwilligung: { de: "Bitte bestätigen Sie die Einwilligung, damit wir Ihre Anfrage bearbeiten können.", en: "Please confirm your consent so that we can handle your enquiry." }
 
 footer:
   kurzbeschreibung:

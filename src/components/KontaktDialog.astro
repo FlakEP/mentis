@@ -1,0 +1,120 @@
+---
+// Dialog „Termin anfragen“ (natives <dialog>), der sich über jeden Button „Termin anfragen“ öffnet.
+// Ohne JavaScript führen diese Buttons einfach zur Kontaktseite. Eingebunden in src/layouts/Basis.astro
+// (nicht auf der Kontaktseite selbst). Bedienung: starteKontaktDialog() in src/scripts/kontakt.ts.
+import type { Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import KontaktFormular from './KontaktFormular.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
+const t = await uebersetzer(sprache);
+---
+
+<dialog class="kdialog" aria-labelledby="kdialog-titel" data-kontaktdialog>
+  <div class="kdialog__inhalt">
+    <div class="kdialog__kopf">
+      <h2 id="kdialog-titel">{t('kontaktformular.ueberschrift')}</h2>
+      <button type="button" class="kdialog__schliessen" data-dialog-schliessen>
+        <Icon name="schliessen" groesse={24} />
+        <span class="nur-screenreader">{t('buttons.schliessen')}</span>
+      </button>
+    </div>
+    <p class="kdialog__einleitung"><Text text={t('kontaktformular.einleitung')} /></p>
+    <KontaktFormular sprache={sprache} kennung="dialog" />
+  </div>
+</dialog>
+
+<script>
+  import { starteKontaktDialog } from '../scripts/kontakt';
+  starteKontaktDialog();
+</script>
+
+<style>
+  .kdialog {
+    width: min(100% - 2rem, 44rem);
+    max-height: min(100% - 2rem, 56rem);
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: var(--farbe-hintergrund);
+    color: var(--farbe-text);
+    border: 0;
+    border-radius: var(--radius-karte);
+    box-shadow: var(--schatten-sanft);
+  }
+
+  .kdialog::backdrop {
+    background: color-mix(in srgb, var(--ink) 55%, transparent);
+  }
+
+  .kdialog__inhalt {
+    display: grid;
+    gap: var(--raum-m);
+    padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+  }
+
+  .kdialog__kopf {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--raum-m);
+  }
+
+  .kdialog__kopf h2 {
+    font-size: var(--text-h2);
+  }
+
+  .kdialog__schliessen {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--beruehrziel);
+    height: var(--beruehrziel);
+    margin: calc(-1 * var(--raum-2xs)) calc(-1 * var(--raum-2xs)) 0 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: var(--radius-pille);
+    color: var(--farbe-text);
+    cursor: pointer;
+  }
+
+  .kdialog__schliessen:hover {
+    background: var(--farbe-flaeche);
+  }
+
+  .kdialog__einleitung {
+    color: var(--farbe-text-leise);
+  }
+
+  /* Handys: Dialog über die ganze Fläche */
+  @media (max-width: 39.99em) {
+    .kdialog {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      max-height: none;
+      border-radius: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .kdialog[open] {
+      animation: dialog-ein var(--dauer-mittel) var(--kurve-sanft);
+    }
+  }
+
+  @keyframes dialog-ein {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+</style>

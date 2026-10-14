@@ -1,6 +1,6 @@
 ---
 // Grundgerüst jeder Seite: <head> mit Titel, Beschreibung, Favicons und Schriften,
-// dann Sprunglink, Selbstzahler-Leiste, Header, Seiteninhalt, Footer und die Handy-Leiste unten.
+// dann Sprunglink, Selbstzahler-Leiste, Header, Seiteninhalt, Footer, die Handy-Leiste unten und der Kontaktdialog.
 // Benutzt von allen Dateien in src/pages/.
 import '@fontsource-variable/fraunces/opsz.css';
 import '@fontsource-variable/fraunces/opsz-italic.css';
@@ -13,6 +13,7 @@ import sourceSansSchrift from '@fontsource-variable/source-sans-3/files/source-s
 
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import KontaktDialog from '../components/KontaktDialog.astro';
 import MobilLeiste from '../components/MobilLeiste.astro';
 import SelbstzahlerLeiste from '../components/SelbstzahlerLeiste.astro';
 import type { SeitenId, Sprache } from '../config/site';
@@ -74,6 +75,7 @@ const kanonisch = new URL(Astro.url.pathname, Astro.site);
     </main>
     <Footer sprache={sprache} />
     <MobilLeiste sprache={sprache} />
+    {seite !== 'kontakt' && <KontaktDialog sprache={sprache} />}
   </body>
 </html>
 

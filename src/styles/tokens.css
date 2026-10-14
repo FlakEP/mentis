@@ -14,6 +14,7 @@
   --sand-100: #f5efe5;  /* abgesetzte Abschnitte, Karten */
   --sand-200: #eadfce;  /* Linien, Rahmen */
   --sand-300: #d9c9b0;  /* Deko */
+  --sand-600: #8c7f70;  /* Ränder von Eingabefeldern (3,7:1 – Mindestkontrast für Bedienelemente) */
 
   --ink: #2f2a25;       /* Fließtext, Überschriften (13,4:1) */
   --ink-soft: #5e554c;  /* Nebentexte (6,9:1) */
@@ -46,6 +47,7 @@
   --farbe-flaeche-hinweis: var(--terra-100);
   --farbe-linie: var(--sand-200);
   --farbe-deko: var(--sand-300);
+  --farbe-feldrand: var(--sand-600);
 
   --farbe-text: var(--ink);
   --farbe-text-leise: var(--ink-soft);

@@ -4,7 +4,7 @@
 import { render } from 'astro:content';
 import type { Sprache } from '../../config/site';
 import Basis from '../../layouts/Basis.astro';
-import { holeKontaktseite } from '../../lib/inhalte';
+import { holeKontaktseite, uebersetzer } from '../../lib/inhalte';
 import Icon from '../Icon.astro';
 import KontaktFormular from '../KontaktFormular.astro';
 import SeitenKopf from '../SeitenKopf.astro';
@@ -15,6 +15,7 @@ interface Props {
 }
 
 const { sprache } = Astro.props;
+const t = await uebersetzer(sprache);
 const seite = await holeKontaktseite(sprache);
 const { Content } = await render(seite);
 const d = seite.data;
@@ -27,7 +28,9 @@ const k = d.kontaktdaten;
   <section class="abschnitt">
     <div class="inhalt kontakt">
       <div class="kontakt__formular">
-        <KontaktFormular sprache={sprache} />
+        <h2 class="kontakt__titel">{t('kontaktformular.ueberschrift')}</h2>
+        <p class="kontakt__einleitung"><Text text={t('kontaktformular.einleitung')} /></p>
+        <KontaktFormular sprache={sprache} kennung="seite" selbstzahlerHinweis={false} />
       </div>
 
       <div class="kontakt__seite">
@@ -75,6 +78,17 @@ const k = d.kontaktdaten;
       gap: var(--raum-3xl);
       align-items: start;
     }
+  }
+
+  .kontakt__titel {
+    margin-bottom: var(--raum-s);
+  }
+
+  .kontakt__einleitung {
+    margin-bottom: var(--raum-l);
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
   }
 
   .kontakt__formular {
