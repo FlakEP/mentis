@@ -1,7 +1,8 @@
 ---
-// Personenkarte auf „Über uns“: Initialen im Bogen-Motiv, Name, Berufsbezeichnung,
+// Personenkarte auf „Über uns“: Initialen im Bogen-Motiv, Name, Berufsbezeichnung, E-Mail,
 // Zeitleiste der Stationen, Erfahrung und Diagnostik. Daten aus inhalte/seiten/<sprache>/ueber-uns.md (personen).
 import Bogen from './Bogen.astro';
+import Icon from './Icon.astro';
 import Text from './Text.astro';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
     name: string;
     initialen: string;
     berufsbezeichnung: string;
+    email?: string;
     stationen: { zeitraum: string; text: string }[];
     erfahrung: string;
     diagnostik: string;
@@ -27,6 +29,14 @@ const { person, id } = Astro.props;
     <div>
       <h2 class="person__name" id={id}>{person.name}</h2>
       <p class="person__beruf"><Text text={person.berufsbezeichnung} /></p>
+      {
+        person.email && (
+          <a class="person__mail" href={`mailto:${person.email}`}>
+            <Icon name="mail" groesse={18} />
+            {person.email}
+          </a>
+        )
+      }
     </div>
   </header>
 
@@ -83,6 +93,15 @@ const { person, id } = Astro.props;
   .person__beruf {
     margin-top: var(--raum-3xs);
     color: var(--farbe-text-leise);
+  }
+
+  .person__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--raum-2xs);
+    min-height: var(--beruehrziel);
+    font-weight: 600;
+    overflow-wrap: anywhere;
   }
 
   /* Zeitleiste: feine Linie mit Punkten */

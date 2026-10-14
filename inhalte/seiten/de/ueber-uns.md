@@ -24,7 +24,8 @@ einstieg:
 personen:
   - name: "Henrik Voß"
     initialen: "HV"
-    berufsbezeichnung: "[[PLATZHALTER: Berufsbezeichnung, z. B. Psychologe (M.Sc.)]]"
+    berufsbezeichnung: "Psychologe (M.Sc.)"
+    email: "voss@mentis.uno"
     stationen:
       - zeitraum: "seit 2023"
         text: "Promotion (Dr. rer. medic.) an der Charité – Universitätsmedizin Berlin"
@@ -37,7 +38,8 @@ personen:
     diagnostik: "Erfahrung mit einem breiten Spektrum standardisierter Testverfahren in der Leistungs-, Intelligenz- und klinischen Diagnostik."
   - name: "Lennard Telschow"
     initialen: "LT"
-    berufsbezeichnung: "[[PLATZHALTER: Berufsbezeichnung, z. B. Psychologe (M.Sc.)]]"
+    berufsbezeichnung: "Psychologe (M.Sc.)"
+    email: "telschow@mentis.uno"
     stationen:
       - zeitraum: "seit 2023"
         text: "Promotion (Dr. rer. medic.) an der Charité – Universitätsmedizin Berlin"

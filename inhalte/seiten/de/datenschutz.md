@@ -32,9 +32,11 @@ E-Mail: anfragen@mentis.uno
 
 ## 3. Hosting
 
-Diese Website wird bei [[PLATZHALTER: Name, Rechtsform und Anschrift des Hosters, z. B. statichost.eu (Schweden)]] gehostet. Beim Aufruf der Website verarbeitet der Hoster technisch notwendige Daten, damit die Seiten ausgeliefert werden können. Dazu gehört insbesondere Ihre IP-Adresse. [[PLATZHALTER: Angaben des Hosters zu Server-Logs und Speicherdauer übernehmen, z. B. „Der Hoster speichert nach eigenen Angaben keine personenbezogenen Daten in Server-Logs.“]]
+Diese Website wird bei Netlify, Inc., 101 2nd Street, San Francisco, CA 94105, USA, gehostet. Beim Aufruf der Website verarbeitet Netlify technisch notwendige Daten, damit die Seiten ausgeliefert werden können. Dazu gehören insbesondere Ihre IP-Adresse, Datum und Uhrzeit des Aufrufs sowie die aufgerufene Seite. Diese Angaben werden in Server-Logs gespeichert, um einen sicheren und stabilen Betrieb zu gewährleisten. [[PLATZHALTER: Speicherdauer der Server-Logs laut Auftragsverarbeitungsvertrag bzw. Angaben von Netlify eintragen]]
 
-Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und funktionsfähigen Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO). Mit dem Hoster besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO).
+Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und funktionsfähigen Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO). Mit Netlify besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO).
+
+Netlify liefert die Website über ein weltweites Servernetz aus. Dabei können Daten auch in den USA verarbeitet werden. Netlify ist nach dem EU-US Data Privacy Framework zertifiziert. Für Übermittlungen an zertifizierte Unternehmen in den USA besteht ein Angemessenheitsbeschluss der Europäischen Kommission (Art. 45 DSGVO).
 
 ## 4. Selbsteinschätzungen (Fragebögen)
 

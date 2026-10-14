@@ -71,6 +71,7 @@ export const ueberUnsSchema = z.strictObject({
         name: text,
         initialen: text,
         berufsbezeichnung: text,
+        email: z.email().optional(),
         foto: z.string().optional(),
         stationen: z.array(z.strictObject({ zeitraum: text, text })).min(1),
         erfahrung: text,
