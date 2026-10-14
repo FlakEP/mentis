@@ -5,6 +5,7 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { parse as parseYaml, YAMLParseError } from 'yaml';
 import type { z } from 'astro/zod';
+import { pruefeFragebogen } from './auswertung';
 import {
   kontaktSchema,
   leistungsseiteSchema,
@@ -132,7 +133,13 @@ export function pruefeInhalte(projektordner: string): string[] {
   for (const name of readdirSync(testordner).filter((n) => n.endsWith('.yaml'))) {
     const datei = join(testordner, name);
     const test = leseYaml(readFileSync(datei, 'utf8'), 0);
-    melde(datei, test.fehler ? [test.fehler] : pruefeDaten(test.daten, selbsttestSchema));
+    if (test.fehler) {
+      melde(datei, [test.fehler]);
+      continue;
+    }
+    const ergebnis = selbsttestSchema.safeParse(test.daten);
+    // Erst den Aufbau prüfen, dann den Inhalt (Skalen, IDs, Schwellenwerte)
+    melde(datei, ergebnis.success ? pruefeFragebogen(ergebnis.data) : pruefeDaten(test.daten, selbsttestSchema));
   }
 
   return meldungen;

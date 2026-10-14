@@ -1,0 +1,58 @@
+---
+// Dezentes Symbol für die Ergebnisstufe einer Selbsteinschätzung: drei ineinanderliegende Bogenpaare
+// wie in der Bildmarke, davon 1 bis 3 betont (in Sage-Tönen, bewusst nicht rot oder grün). Reine Deko, die Stufe steht als Text daneben.
+// Benutzt in src/components/Selbsttest.astro.
+import { bogenPaar } from '../lib/bogen';
+
+interface Props {
+  /** wie viele Bögen gefüllt sind (1 bis gesamt) */
+  stufe: number;
+  gesamt?: number;
+}
+
+const { stufe, gesamt = 3 } = Astro.props;
+const ringe = Array.from({ length: gesamt }, (_, index) => ({
+  pfade: bogenPaar(32, 32, 11 + index * 9, index * -14),
+  gefuellt: index < stufe,
+}));
+---
+
+<svg class="stufensymbol" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  {
+    ringe.map((ring) =>
+      ring.pfade.map((pfad) => (
+        <path d={pfad} class:list={['stufensymbol__bogen', { 'stufensymbol__bogen--an': ring.gefuellt }]} />
+      )),
+    )
+  }
+  <circle cx="32" cy="32" r="3.5" class="stufensymbol__punkt"></circle>
+</svg>
+
+<style>
+  .stufensymbol {
+    width: 3.5rem;
+    height: 3.5rem;
+    flex: none;
+    overflow: visible;
+  }
+
+  .stufensymbol__bogen {
+    fill: none;
+    stroke: var(--farbe-deko);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .stufensymbol__bogen--an {
+    stroke: var(--farbe-link);
+  }
+
+  /* Der äußere betonte Ring etwas heller, damit die Stufen ruhig ineinander übergehen */
+  .stufensymbol__bogen--an:nth-child(n + 5) {
+    stroke: var(--farbe-bogen-1);
+  }
+
+  .stufensymbol__punkt {
+    fill: var(--farbe-punkt);
+  }
+</style>

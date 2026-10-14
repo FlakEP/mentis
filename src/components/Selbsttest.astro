@@ -1,0 +1,554 @@
+---
+// Abschnitt „Kostenlose Selbsteinschätzung“ (Anker #selbsteinschaetzung) auf einer Leistungsseite:
+// Auswahl „Für mich selbst / Für mein Kind“, dann eine Frage pro Schritt, am Ende das Ergebnis ohne Punktwert.
+// Alle Texte kommen aus inhalte/selbsttests/*.yaml und ui.yaml. Die Bedienung steuert src/scripts/selbsttest.ts.
+// Nichts wird gespeichert oder übertragen: Die Antworten leben nur in einer Variablen im Browser.
+// ÄNDERN: Welche Fragebögen erscheinen, steht im Frontmatter der Leistungsseite (Feld „selbsttests“).
+import { ANKER, kontaktUrl, type Bereich, type Sprache } from '../config/site';
+import { skalaVon } from '../lib/auswertung';
+import { holeSelbsttests, uebersetzer } from '../lib/inhalte';
+import Bogen from './Bogen.astro';
+import Krisenhinweis from './Krisenhinweis.astro';
+import StufenSymbol from './StufenSymbol.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+  bereich: Bereich;
+  tests: string[];
+}
+
+const { sprache, bereich, tests } = Astro.props;
+const t = await uebersetzer(sprache);
+const fragebogen = await holeSelbsttests(tests);
+
+const perspektiveText = (perspektive: 'selbst' | 'fremd') =>
+  t(perspektive === 'selbst' ? 'selbsttest.auswahl_selbst' : 'selbsttest.auswahl_fremd');
+
+// Nur die Angaben, die die Auswertung im Browser braucht (keine Texte)
+const auswertungsDaten = (test: (typeof fragebogen)[number]) =>
+  JSON.stringify({
+    standardskala: test.standardskala,
+    fragen: test.fragen.map(({ id, skala }) => ({ id, skala })),
+    auswertung: {
+      stufen: test.auswertung.stufen.map(({ id, max_summe }) => ({ id, max_summe })),
+      hochstufen: test.auswertung.hochstufen,
+    },
+    skalen: Object.fromEntries(
+      Object.entries(test.skalen).map(([name, antworten]) => [name, antworten.map(({ wert }) => ({ wert }))]),
+    ),
+  });
+---
+
+<section class="abschnitt abschnitt--ruhig" id={ANKER.selbsteinschaetzung} aria-labelledby="selbsttest-titel">
+  <div class="inhalt">
+    <div class="st__kopf">
+      <h2 id="selbsttest-titel">{t('selbsttest.ueberschrift')}</h2>
+      <p class="st__vorab">{t('selbsttest.hinweis_vorab')}</p>
+    </div>
+
+    {/* Ohne JavaScript: nur Übersicht der beiden Fragebögen */}
+    <ul class="st__uebersicht" role="list">
+      {
+        fragebogen.map((test) => (
+          <li class="st__karte">
+            <Bogen groesse={40} strich={5} />
+            <span class="ueberzeile st__fuer">{perspektiveText(test.perspektive)}</span>
+            <h3>
+              <Text text={test.titel[sprache]} />
+            </h3>
+            <p class="st__leise">
+              <Text text={test.zielgruppe[sprache]} />
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    {/* Mit JavaScript: der eigentliche Fragebogen */}
+    <div class="st" data-selbsttest>
+      <fieldset class="st__wahl">
+        <legend class="st__wahl-frage">{t('selbsttest.auswahl_frage')}</legend>
+        <div class="st__segmente">
+          {
+            fragebogen.map((test) => (
+              <label class="st__segment">
+                <input type="radio" name={`wahl-${bereich}`} value={test.id} data-wahl />
+                <span>{perspektiveText(test.perspektive)}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      {
+        fragebogen.map((test) => {
+          const anzahl = test.fragen.length;
+          return (
+            <div class="st__test" data-test={test.id} hidden>
+              <script type="application/json" data-auswertung set:html={auswertungsDaten(test)} />
+
+              <header class="st__intro">
+                <h3 class="st__titel">
+                  <Text text={test.titel[sprache]} />
+                </h3>
+                <p class="st__leise">
+                  <Text text={test.zielgruppe[sprache]} />
+                </p>
+                <p>
+                  <Text text={test.einleitung[sprache]} />
+                </p>
+                {test.zeitraum[sprache] && (
+                  <p class="st__zeitraum">
+                    <Text text={test.zeitraum[sprache]} />
+                  </p>
+                )}
+              </header>
+
+              <div class="st__ablauf" data-ablauf>
+                <div class="st__fortschritt" aria-hidden="true">
+                  <span data-fortschritt-text />
+                  <span class="st__balken">
+                    <span class="st__balken-fuellung" data-fortschritt-balken />
+                  </span>
+                </div>
+
+                {test.fragen.map((frage, index) => (
+                  <fieldset class="st__frage" data-frage={frage.id} data-index={index} tabindex="-1" hidden>
+                    <legend class="st__frage-text">
+                      <span class="nur-screenreader">
+                        {t('selbsttest.fortschritt', { aktuell: index + 1, gesamt: anzahl })}:
+                      </span>
+                      <Text text={frage[sprache]} />
+                    </legend>
+                    <div class="st__antworten">
+                      {test.skalen[skalaVon(test, frage)]!.map((antwort) => (
+                        <label class="st__antwort">
+                          <input type="radio" name={`${test.id}-${frage.id}`} value={antwort.wert} />
+                          <span class="st__kreis" aria-hidden="true" />
+                          <span>
+                            <Text text={antwort[sprache]} />
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                ))}
+
+                <div class="st__steuerung">
+                  <button type="button" class="button button--sekundaer button--klein" data-zurueck>
+                    {t('buttons.zurueck')}
+                  </button>
+                  <button type="button" class="button button--primaer button--klein" data-weiter>
+                    {t('buttons.weiter')}
+                  </button>
+                  <button type="button" class="button button--primaer button--klein" data-auswerten hidden>
+                    {t('buttons.auswerten')}
+                  </button>
+                </div>
+              </div>
+
+              <div class="st__ergebnis" data-ergebnis hidden>
+                <h3 class="st__ergebnis-titel" tabindex="-1" data-ergebnis-titel>
+                  {t('selbsttest.ergebnis_ueberschrift')}
+                </h3>
+                {test.auswertung.stufen.map((stufe, index) => (
+                  <div class="st__stufe" data-stufe={stufe.id} hidden>
+                    <StufenSymbol stufe={index + 1} gesamt={test.auswertung.stufen.length} />
+                    <div>
+                      <h4 class="st__stufe-titel">
+                        <Text text={stufe.titel[sprache]} />
+                      </h4>
+                      <p>
+                        <Text text={stufe.text[sprache]} />
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                <p class="st__hinweis">{t('selbsttest.hinweis_ergebnis')}</p>
+                <div class="st__cta">
+                  <p>{t('selbsttest.cta_text')}</p>
+                  <div class="st__cta-knoepfe">
+                    <a
+                      class="button button--primaer"
+                      href={kontaktUrl(sprache, test.bereich)}
+                      data-kontakt-oeffnen
+                      data-anliegen={test.bereich}
+                    >
+                      {t('buttons.termin_anfragen')}
+                    </a>
+                    <button type="button" class="button button--sekundaer" data-neustart>
+                      {t('buttons.neu_starten')}
+                    </button>
+                  </div>
+                </div>
+                {test.krisenhinweis && <Krisenhinweis sprache={sprache} ebene="h4" id={`krise-${test.id}`} />}
+              </div>
+            </div>
+          );
+        })
+      }
+
+      <p class="nur-screenreader" aria-live="polite" data-ansage></p>
+      <template data-vorlage-fortschritt>{t('selbsttest.fortschritt')}</template>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { starteSelbsttests } from '../scripts/selbsttest';
+  starteSelbsttests();
+</script>
+
+<style>
+  .st__kopf {
+    display: grid;
+    gap: var(--raum-m);
+    max-width: 44rem;
+    margin-bottom: var(--raum-xl);
+  }
+
+  .st__vorab {
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  .st__leise {
+    color: var(--farbe-text-leise);
+  }
+
+  /* ---------- Ohne JavaScript: Übersicht ---------- */
+  .st__uebersicht {
+    display: grid;
+    gap: var(--raum-m);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 52em) {
+    .st__uebersicht {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .st__karte {
+    display: grid;
+    align-content: start;
+    gap: var(--raum-s);
+    padding: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+    background: var(--farbe-hintergrund);
+    border-radius: var(--radius-karte);
+  }
+
+  .st__fuer {
+    margin: var(--raum-2xs) 0 0;
+  }
+
+  :global(.js) .st__uebersicht {
+    display: none;
+  }
+
+  .st {
+    display: none;
+  }
+
+  :global(.js) .st {
+    display: block;
+    max-width: 52rem;
+  }
+
+  /* ---------- Auswahl: für mich / für mein Kind ---------- */
+  .st__wahl {
+    margin: 0 0 var(--raum-l);
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  .st__wahl-frage {
+    margin-bottom: var(--raum-s);
+    padding: 0;
+    font-weight: 600;
+  }
+
+  .st__segmente {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--raum-3xs);
+    padding: var(--raum-3xs);
+    background: var(--farbe-hintergrund);
+    border: var(--linie-duenn) solid var(--farbe-linie);
+    border-radius: var(--radius-pille);
+  }
+
+  .st__segment {
+    position: relative;
+  }
+
+  .st__segment input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .st__segment span {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--beruehrziel);
+    padding: 0 1.25rem;
+    border-radius: var(--radius-pille);
+    font-weight: 600;
+    color: var(--farbe-text-leise);
+    transition:
+      background-color var(--dauer-kurz) ease,
+      color var(--dauer-kurz) ease;
+  }
+
+  .st__segment:hover span {
+    color: var(--farbe-text);
+  }
+
+  .st__segment input:checked + span {
+    background: var(--farbe-link);
+    color: var(--farbe-auf-primaer);
+  }
+
+  .st__segment input:focus-visible + span {
+    outline: var(--fokus-breite) solid var(--farbe-fokus);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Fragebogen-Karte ---------- */
+  .st__test {
+    display: grid;
+    gap: var(--raum-l);
+    padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+    background: var(--farbe-hintergrund);
+    border-radius: var(--radius-karte);
+  }
+
+  .st__test[hidden] {
+    display: none;
+  }
+
+  .st__intro {
+    display: grid;
+    gap: var(--raum-xs);
+    padding-bottom: var(--raum-l);
+    border-bottom: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  .st__titel {
+    margin-bottom: var(--raum-3xs);
+  }
+
+  .st__zeitraum {
+    font-style: italic;
+    color: var(--farbe-text-leise);
+  }
+
+  /* ---------- Fortschritt ---------- */
+  .st__fortschritt {
+    display: grid;
+    gap: var(--raum-2xs);
+    margin-bottom: var(--raum-m);
+    font-size: var(--text-klein);
+    font-weight: 600;
+    color: var(--farbe-link);
+  }
+
+  .st__balken {
+    display: block;
+    height: 4px;
+    overflow: hidden;
+    background: var(--farbe-linie);
+    border-radius: var(--radius-pille);
+  }
+
+  .st__balken-fuellung {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: var(--farbe-link);
+    border-radius: inherit;
+    transition: width var(--dauer-mittel) var(--kurve-sanft);
+  }
+
+  /* ---------- Frage und Antworten ---------- */
+  .st__frage {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-klein);
+  }
+
+  .st__frage:focus {
+    outline: none;
+  }
+
+  .st__frage:focus-visible .st__frage-text {
+    outline: var(--fokus-breite) solid var(--farbe-fokus);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .st__frage-text {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--raum-m);
+    padding: 0;
+    font-family: var(--schrift-serif);
+    font-size: var(--text-h3);
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+
+  .st__antworten {
+    display: grid;
+    gap: var(--raum-xs);
+  }
+
+  @media (min-width: 40em) {
+    .st__antworten {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .st__antwort {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--raum-s);
+    min-height: 3.5rem;
+    padding: var(--raum-xs) var(--raum-m);
+    background: var(--farbe-flaeche);
+    border: 1.5px solid var(--farbe-linie);
+    border-radius: var(--radius-klein);
+    cursor: pointer;
+    transition:
+      border-color var(--dauer-kurz) ease,
+      background-color var(--dauer-kurz) ease;
+  }
+
+  .st__antwort:hover {
+    border-color: var(--farbe-bogen-1);
+  }
+
+  .st__antwort input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .st__kreis {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1.5px solid var(--farbe-text-leise);
+    border-radius: 50%;
+    transition:
+      border-color var(--dauer-kurz) ease,
+      box-shadow var(--dauer-kurz) ease;
+  }
+
+  .st__antwort:has(input:checked) {
+    background: var(--farbe-flaeche-ruhig);
+    border-color: var(--farbe-link);
+  }
+
+  .st__antwort input:checked + .st__kreis {
+    border-color: var(--farbe-link);
+    box-shadow: inset 0 0 0 4px var(--farbe-hintergrund);
+    background: var(--farbe-link);
+  }
+
+  .st__antwort:has(input:focus-visible) {
+    outline: var(--fokus-breite) solid var(--farbe-fokus);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Knöpfe ---------- */
+  .st__steuerung {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--raum-s);
+    margin-top: var(--raum-l);
+  }
+
+  .st__steuerung button[hidden] {
+    display: none;
+  }
+
+  .st__steuerung button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ---------- Ergebnis ---------- */
+  .st__ergebnis {
+    display: grid;
+    gap: var(--raum-m);
+  }
+
+  .st__ergebnis[hidden],
+  .st__stufe[hidden],
+  .st__ablauf[hidden] {
+    display: none;
+  }
+
+  .st__ergebnis-titel {
+    font-size: var(--text-klein);
+    font-family: var(--schrift-sans);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--farbe-link);
+  }
+
+  .st__ergebnis-titel:focus {
+    outline: none;
+  }
+
+  .st__ergebnis-titel:focus-visible {
+    outline: var(--fokus-breite) solid var(--farbe-fokus);
+    outline-offset: 4px;
+  }
+
+  .st__stufe {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--raum-m);
+  }
+
+  .st__stufe-titel {
+    margin-bottom: var(--raum-2xs);
+    font-size: var(--text-h3);
+  }
+
+  .st__hinweis {
+    padding: var(--raum-s) var(--raum-m);
+    background: var(--farbe-flaeche);
+    border-radius: var(--radius-klein);
+    font-size: var(--text-klein);
+    color: var(--farbe-text-leise);
+  }
+
+  .st__cta {
+    display: grid;
+    gap: var(--raum-s);
+    padding-top: var(--raum-m);
+    border-top: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  .st__cta-knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--raum-s);
+  }
+</style>

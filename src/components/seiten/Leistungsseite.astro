@@ -11,7 +11,7 @@ import KontaktBlock from '../KontaktBlock.astro';
 import KostenAbschnitt from '../KostenAbschnitt.astro';
 import Krisenhinweis from '../Krisenhinweis.astro';
 import SeitenKopf from '../SeitenKopf.astro';
-import SelbsttestAbschnitt from '../SelbsttestAbschnitt.astro';
+import Selbsttest from '../Selbsttest.astro';
 
 interface Props {
   bereich: Bereich;
@@ -52,7 +52,7 @@ const sprungmarken = [
     </div>
   </section>
 
-  <SelbsttestAbschnitt sprache={sprache} tests={d.selbsttests} />
+  <Selbsttest sprache={sprache} bereich={bereich} tests={d.selbsttests} />
 
   <KostenAbschnitt sprache={sprache} preisAb={d.preis_ab} dauer={d.dauer} />
 
