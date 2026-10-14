@@ -12,3 +12,7 @@ Thumbs.db
 .env.*
 !.env.example
 npm-debug.log*
+
+# Editor-Einstellungen
+.vscode/
+.idea/

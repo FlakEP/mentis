@@ -167,9 +167,45 @@ Erst wenn alles grün ist **und** `PRUEFLISTE-VOR-LIVEGANG.md` abgehakt ist, die
 
 ---
 
-## Veröffentlichen
+## Veröffentlichen bei statichost.eu
 
-Die Website ist für **statichost.eu** vorbereitet (Build-Befehl `npm run build`, Ausgabeordner `dist`), läuft aber auf jedem Hoster für statische Seiten. Die Schritt-für-Schritt-Anleitung steht in `ANLEITUNG.md`, Schritt 6. Jede Änderung, die ins Repository hochgeladen wird, veröffentlicht die Website danach automatisch neu.
+Die Bau-Einstellungen stehen in **`statichost.yml`** im Hauptordner (Node.js 22, `npm ci && npm run build`, veröffentlicht wird `dist/`). Im Dashboard von statichost.eu muss deshalb nichts weiter eingestellt werden. Die Website läuft aber auch auf jedem anderen Hoster für statische Seiten (Build-Befehl `npm run build`, Ausgabeordner `dist`).
+
+### Einmalig einrichten
+
+1. **Stand in den Hauptzweig übernehmen.** statichost.eu baut den Zweig, den ihr beim Anlegen auswählt – üblicherweise `main`. Arbeitet Claude Code auf einem eigenen Zweig, diesen per Pull Request auf GitHub in `main` übernehmen.
+2. **Repository öffentlich?** Im kostenlosen Tarif „Hobby“ muss das GitHub-Repository öffentlich sein. Vorher kurz prüfen, dass keine privaten Notizen oder Passwörter im Projekt liegen.
+3. **Site anlegen:** Auf https://www.statichost.eu registrieren, eine neue Site anlegen, das GitHub-Repository verbinden und den Zweig `main` wählen. statichost.eu findet `statichost.yml` automatisch.
+4. **Vorschau testen:** Die Website ist zuerst unter `<sitename>.statichost.page` erreichbar. Diese Adresse vorübergehend in Forminit bei den erlaubten Domains eintragen und dort prüfen:
+   - alle Seiten auf Deutsch und Englisch, auch eine falsche Adresse (soll die 404-Seite zeigen),
+   - eine **Testanfrage** über das Formular – kommt sie bei `anfragen@mentis.uno` an?
+   - alle sechs Selbsteinschätzungen einmal bis zum Ergebnis,
+   - auf dem Smartphone, inklusive der Leiste „Termin anfragen“ unten,
+   - Browser-Entwicklertools → Netzwerk: Beim Seitenaufruf darf nichts von fremden Servern geladen werden.
+5. **Domain verbinden:** Beim Domainanbieter von `mentis.uno` die DNS-Einträge setzen, die statichost.eu im Dashboard anzeigt (siehe auch `ANLEITUNG.md`, Schritt 6):
+   ```
+   www.mentis.uno.   CNAME   <sitename>.statichost.page.
+   mentis.uno.       ALIAS   <sitename>.statichost.page.
+   ```
+   Hauptadresse der Website ist `https://mentis.uno` (ohne „www“, so steht es in `src/config/site.ts`). `www.mentis.uno` sollte darauf weiterleiten. Das HTTPS-Zertifikat erstellt statichost.eu automatisch.
+6. **Forminit anpassen:** Bei den erlaubten Domains `mentis.uno` eintragen und die Vorschau-Adresse wieder entfernen.
+7. **Vor dem Umstellen:** `npm run check:livegang` muss fehlerfrei laufen und `PRUEFLISTE-VOR-LIVEGANG.md` abgehakt sein.
+
+### Änderungen veröffentlichen
+
+Jede Änderung, die in den Zweig `main` hochgeladen wird, baut und veröffentlicht die Website automatisch neu – meist innerhalb weniger Minuten. Schlägt der Bau fehl (z. B. wegen eines Tippfehlers in einer Inhaltsdatei), bleibt die bisherige Fassung online; die Fehlermeldung steht im Build-Protokoll bei statichost.eu.
+
+**Tipp:** Vor dem Hochladen lokal `npm run build` ausführen. Was dort durchläuft, läuft auch bei statichost.eu.
+
+### Astro-Nutzungsstatistik abschalten
+
+Astro sendet beim Arbeiten auf dem eigenen Rechner anonyme Nutzungsdaten an die Astro-Entwickler (nicht von der Website, nur vom Werkzeug). Einmalig abschalten mit:
+
+```
+npx astro telemetry disable
+```
+
+Beim Bauen auf statichost.eu ist das bereits abgeschaltet (siehe `statichost.yml`).
 
 ---
 
