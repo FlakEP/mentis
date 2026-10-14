@@ -1,0 +1,194 @@
+# =====================================================================
+#  GLOBALE TEXTE (Deutsch / Englisch)
+# ---------------------------------------------------------------------
+#  Kurze Texte, die auf mehreren Seiten vorkommen: Menü, Buttons,
+#  Hinweise, Kontaktformular, Footer, Hilfsangebote.
+#  Platzhalter stehen in doppelten eckigen Klammern, beginnen mit dem
+#  Wort PLATZHALTER und müssen vor dem Livegang ersetzt werden (npm run platzhalter listet alle auf).
+#  Texte mit Doppelpunkt bitte in "Anführungszeichen" lassen.
+# =====================================================================
+
+marke:
+  name: "Mentis Uno"
+  unterzeile:
+    de: "Psychologische Diagnostik"
+    en: "Psychological assessment"
+  leitsatz:
+    de: "Zwei Perspektiven. Ein Mensch im Mittelpunkt."
+    en: "Two perspectives. One person at the centre."
+
+navigation:
+  start: { de: "Start", en: "Home" }
+  adhs: { de: "ADHS-Diagnostik", en: "ADHD assessment" }
+  intelligenz: { de: "Intelligenzdiagnostik", en: "Intelligence assessment" }
+  klinisch: { de: "Klinische Diagnostik", en: "Clinical assessment" }
+  ueber_uns: { de: "Über uns", en: "About us" }
+  kontakt: { de: "Kontakt", en: "Contact" }
+  impressum: { de: "Impressum", en: "Legal notice" }
+  datenschutz: { de: "Datenschutz", en: "Privacy" }
+  sprache_wechseln: { de: "English", en: "Deutsch" }
+  menue_oeffnen: { de: "Menü öffnen", en: "Open menu" }
+  menue_schliessen: { de: "Menü schließen", en: "Close menu" }
+  hauptmenue: { de: "Hauptmenü", en: "Main menu" }
+  zum_inhalt: { de: "Zum Inhalt springen", en: "Skip to content" }
+  auf_dieser_seite: { de: "Auf dieser Seite", en: "On this page" }
+
+buttons:
+  termin_anfragen: { de: "Termin anfragen", en: "Request an appointment" }
+  selbsttest_starten: { de: "Kostenlose Selbsteinschätzung", en: "Free self-assessment" }
+  mehr_erfahren: { de: "Mehr erfahren", en: "Learn more" }
+  weiter: { de: "Weiter", en: "Next" }
+  zurueck: { de: "Zurück", en: "Back" }
+  auswerten: { de: "Ergebnis anzeigen", en: "Show result" }
+  neu_starten: { de: "Neu starten", en: "Start again" }
+  schliessen: { de: "Schließen", en: "Close" }
+
+# Der Selbstzahler-Hinweis erscheint an mehreren Stellen (siehe CLAUDE.md).
+selbstzahler:
+  kurz:
+    de: "Unser Angebot richtet sich an Selbstzahlerinnen und Selbstzahler."
+    en: "Our services are for self-paying clients."
+  lang:
+    de: >-
+      Unser Angebot richtet sich an Selbstzahlerinnen und Selbstzahler. Eine
+      Abrechnung über die gesetzliche Krankenversicherung ist nicht möglich.
+      Wir rechnen nach der Gebührenordnung für Psychotherapeuten (GOP) ab. Ob
+      und in welchem Umfang eine private Krankenversicherung oder die Beihilfe
+      die Kosten erstattet, hängt von Ihrem Tarif ab – eine Erstattung können
+      wir nicht garantieren. Bitte klären Sie dies vorab mit Ihrer Versicherung.
+    en: >-
+      Our services are for self-paying clients. Billing via German statutory
+      health insurance is not possible. We charge according to the German fee
+      schedule for psychotherapists (GOP). Whether and to what extent private
+      health insurance or state allowance (Beihilfe) reimburses the costs
+      depends on your plan – we cannot guarantee reimbursement. Please check
+      with your insurer in advance.
+
+preise:
+  ueberschrift: { de: "Kosten", en: "Fees" }
+  ab: { de: "ab", en: "from" }
+  hinweis:
+    de: "Der genaue Betrag richtet sich nach Umfang und Fragestellung. Sie erhalten vorab einen Kostenvoranschlag."
+    en: "The exact amount depends on the scope and the question. You will receive a cost estimate in advance."
+
+selbsttest:
+  ueberschrift: { de: "Kostenlose Selbsteinschätzung", en: "Free self-assessment" }
+  auswahl_frage: { de: "Für wen möchten Sie den Fragebogen ausfüllen?", en: "Who are you filling in the questionnaire for?" }
+  auswahl_selbst: { de: "Für mich selbst", en: "For myself" }
+  auswahl_fremd: { de: "Für mein Kind", en: "For my child" }
+  hinweis_vorab:
+    de: >-
+      Unverbindlich und kostenlos. Ihre Antworten werden nur in Ihrem Browser
+      ausgewertet – sie werden weder gespeichert noch an uns übertragen.
+    en: >-
+      Free and without obligation. Your answers are evaluated only in your
+      browser – they are neither stored nor sent to us.
+  fortschritt: { de: "Frage {aktuell} von {gesamt}", en: "Question {aktuell} of {gesamt}" }
+  ergebnis_ueberschrift: { de: "Ihre Einschätzung", en: "Your result" }
+  hinweis_ergebnis:
+    de: >-
+      Bitte beachten Sie: Dieser kurze Fragebogen ist nicht wissenschaftlich
+      überprüft (nicht validiert) und kann keine Diagnose stellen. Er soll
+      Ihnen nur eine erste Orientierung geben.
+    en: >-
+      Please note: this short questionnaire has not been scientifically
+      validated and cannot provide a diagnosis. It is only meant as a first
+      orientation.
+  cta_text:
+    de: "Möchten Sie das genauer klären? Schreiben Sie uns – das Anliegen ist schon vorausgefüllt."
+    en: "Would you like to look into this further? Write to us – your topic is already filled in."
+
+krisenhinweis:
+  ueberschrift: { de: "Sie brauchen sofort Hilfe?", en: "Do you need help right now?" }
+  text:
+    de: >-
+      Wir bieten keine Krisenhilfe an und können Anfragen nicht sofort
+      beantworten. In einer akuten Krise wählen Sie bitte den Notruf 112 oder
+      wenden sich an die Rettungsstelle des nächsten Krankenhauses. Die
+      TelefonSeelsorge ist rund um die Uhr kostenfrei erreichbar: 0800 111 0 111,
+      0800 111 0 222 oder 116 123. Kinder und Jugendliche erreichen die Nummer
+      gegen Kummer unter 116 111, Eltern das Elterntelefon unter 0800 111 0 550.
+    en: >-
+      We do not offer crisis support and cannot reply to enquiries immediately.
+      In an acute crisis, please call the emergency number 112 or go to the
+      emergency department of the nearest hospital. The German TelefonSeelsorge
+      helpline is free and available around the clock: 0800 111 0 111,
+      0800 111 0 222 or 116 123. Children and young people can call the Nummer
+      gegen Kummer on 116 111; parents can call 0800 111 0 550.
+
+kontaktformular:
+  ueberschrift: { de: "Termin anfragen", en: "Request an appointment" }
+  einleitung:
+    de: "Schreiben Sie uns kurz, worum es geht. Wir melden uns in der Regel innerhalb von drei Werktagen."
+    en: "Tell us briefly what it is about. We usually reply within three working days."
+  name: { de: "Name", en: "Name" }
+  email: { de: "E-Mail", en: "Email" }
+  telefon: { de: "Telefon (optional)", en: "Phone (optional)" }
+  anliegen: { de: "Anliegen", en: "Topic" }
+  anliegen_bitte_waehlen: { de: "Bitte wählen", en: "Please choose" }
+  anliegen_optionen:
+    adhs: { de: "ADHS-Diagnostik", en: "ADHD assessment" }
+    intelligenz: { de: "Intelligenzdiagnostik", en: "Intelligence assessment" }
+    klinisch: { de: "Klinische Diagnostik", en: "Clinical assessment" }
+    gutachten: { de: "Gutachten / Zusammenarbeit", en: "Expert reports / cooperation" }
+    sonstiges: { de: "Sonstiges", en: "Other" }
+  rueckruf: { de: "Wann sind Sie gut erreichbar? (optional)", en: "When is a good time to reach you? (optional)" }
+  rueckruf_optionen:
+    egal: { de: "egal", en: "any time" }
+    vormittags: { de: "vormittags", en: "mornings" }
+    nachmittags: { de: "nachmittags", en: "afternoons" }
+    abends: { de: "abends", en: "evenings" }
+  nachricht: { de: "Nachricht (optional)", en: "Message (optional)" }
+  nachricht_hinweis:
+    de: "Bitte schreiben Sie hier keine ausführlichen Angaben zu Ihrer Gesundheit – das besprechen wir persönlich."
+    en: "Please do not include detailed health information here – we will discuss that in person."
+  einwilligung:
+    de: >-
+      Ich willige ein, dass meine Angaben – einschließlich der Angabe zu meinem
+      Anliegen, die Rückschlüsse auf meine Gesundheit zulassen kann – zur
+      Bearbeitung meiner Anfrage verarbeitet werden. Ich kann diese Einwilligung
+      jederzeit widerrufen. Mehr dazu in der {datenschutz_link}.
+    en: >-
+      I consent to my details – including my topic, which may allow conclusions
+      about my health – being processed in order to handle my enquiry. I can
+      withdraw this consent at any time. More information in the {datenschutz_link}.
+  datenschutz_linktext: { de: "Datenschutzerklärung", en: "privacy policy" }
+  pflichtfeld: { de: "Pflichtfeld", en: "Required" }
+  absenden: { de: "Anfrage senden", en: "Send enquiry" }
+  sendet: { de: "Wird gesendet …", en: "Sending …" }
+  erfolg:
+    de: "Vielen Dank! Ihre Anfrage ist bei uns angekommen. Wir melden uns bald bei Ihnen."
+    en: "Thank you! We have received your enquiry and will get back to you soon."
+  fehler:
+    de: "Das hat leider nicht geklappt. Bitte versuchen Sie es noch einmal oder schreiben Sie uns direkt an anfragen@mentis.uno."
+    en: "Sorry, something went wrong. Please try again or email us directly at anfragen@mentis.uno."
+  direkt_email: { de: "Oder per E-Mail:", en: "Or by email:" }
+  # Fehlermeldungen direkt am Feld (erscheinen, wenn etwas fehlt oder nicht stimmt)
+  fehler_name: { de: "Bitte geben Sie Ihren Namen an.", en: "Please enter your name." }
+  fehler_email: { de: "Bitte geben Sie eine gültige E-Mail-Adresse an, z. B. name@beispiel.de.", en: "Please enter a valid email address, e.g. name@example.com." }
+  fehler_anliegen: { de: "Bitte wählen Sie Ihr Anliegen aus.", en: "Please choose your topic." }
+  fehler_nachricht: { de: "Die Nachricht darf höchstens 1000 Zeichen lang sein.", en: "The message can be no longer than 1000 characters." }
+  fehler_einwilligung: { de: "Bitte bestätigen Sie die Einwilligung, damit wir Ihre Anfrage bearbeiten können.", en: "Please confirm your consent so that we can handle your enquiry." }
+
+footer:
+  kurzbeschreibung:
+    de: "Psychologische Diagnostik in Berlin – ADHS, Intelligenz und psychische Gesundheit. Für Erwachsene, Kinder und Jugendliche."
+    en: "Psychological assessment in Berlin – ADHD, intelligence and mental health. For adults, children and adolescents."
+  termine: { de: "Termine nach Vereinbarung", en: "Appointments by arrangement" }
+  copyright: { de: "© {jahr} Mentis Uno", en: "© {jahr} Mentis Uno" }
+
+# Seite „nicht gefunden“ (404), erscheint bei falschen oder veralteten Adressen
+fehlerseite:
+  seitentitel: { de: "Seite nicht gefunden | Mentis Uno", en: "Page not found | Mentis Uno" }
+  ueberschrift: { de: "Diese Seite gibt es leider nicht.", en: "Sorry, this page does not exist." }
+  text:
+    de: "Vielleicht hat sich die Adresse geändert oder es hat sich ein Tippfehler eingeschlichen. Auf der Startseite finden Sie alle Angebote – oder Sie schreiben uns direkt."
+    en: "The address may have changed, or there may be a typo. You will find all our services on the home page – or you can write to us directly."
+  zur_startseite: { de: "Zur Startseite", en: "Go to the home page" }
+
+rechtstexte:
+  stand: { de: "Stand", en: "Last updated" }
+
+hinweis_englisch:
+  # Wird auf englischen Rechtstexten angezeigt
+  en: "This English version is provided for convenience. The German version is legally binding."

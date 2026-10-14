@@ -1,0 +1,42 @@
+---
+// Link zur selben Seite in der anderen Sprache (z. B. /adhs-diagnostik/ ↔ /en/adhd-assessment/).
+// Erscheint erst, wenn ENGLISCH_AKTIV in src/config/site.ts eingeschaltet ist. Benutzt im Header.
+import { ENGLISCH_AKTIV, seitenUrl, type SeitenId, type Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+
+interface Props {
+  sprache: Sprache;
+  seite: SeitenId;
+  class?: string;
+}
+
+const { sprache, seite, class: klasse } = Astro.props;
+const t = await uebersetzer(sprache);
+const andere: Sprache = sprache === 'de' ? 'en' : 'de';
+---
+
+{
+  ENGLISCH_AKTIV && (
+    <a class:list={['sprache', klasse]} href={seitenUrl(seite, andere)} hreflang={andere} lang={andere}>
+      {t('navigation.sprache_wechseln')}
+    </a>
+  )
+}
+
+<style>
+  .sprache {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--beruehrziel);
+    font-size: var(--text-klein);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--farbe-text-leise);
+    text-decoration: none;
+  }
+
+  .sprache:hover {
+    color: var(--farbe-link);
+    text-decoration: underline;
+  }
+</style>

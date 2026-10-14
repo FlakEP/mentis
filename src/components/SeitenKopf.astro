@@ -1,0 +1,106 @@
+---
+// Kopfbereich der Unterseiten: Überschrift (h1), Unterzeile und ein ruhiges, angeschnittenes Bogenpaar.
+// Gilt für die Handy-Leiste als „Hero“ (data-hero). Benutzt in allen Vorlagen in src/components/seiten/ außer der Startseite.
+import { bogenPaar } from '../lib/bogen';
+import Text from './Text.astro';
+
+interface Props {
+  ueberschrift: string;
+  unterzeile?: string;
+}
+
+const { ueberschrift, unterzeile } = Astro.props;
+const ringInnen = bogenPaar(200, 200, 74, -8);
+const ringAussen = bogenPaar(200, 200, 132, 14, 0.88);
+---
+
+<section class="seitenkopf" data-hero aria-labelledby="seitenkopf-titel">
+  <svg class="seitenkopf__deko" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <path d={ringAussen[0]} class="seitenkopf__bogen seitenkopf__bogen--1 seitenkopf__bogen--aussen"></path>
+    <path d={ringAussen[1]} class="seitenkopf__bogen seitenkopf__bogen--2 seitenkopf__bogen--aussen"></path>
+    <path d={ringInnen[0]} class="seitenkopf__bogen seitenkopf__bogen--1"></path>
+    <path d={ringInnen[1]} class="seitenkopf__bogen seitenkopf__bogen--2"></path>
+    <circle cx="200" cy="200" r="6" class="seitenkopf__punkt"></circle>
+  </svg>
+
+  <div class="inhalt seitenkopf__inhalt">
+    <h1 id="seitenkopf-titel"><Text text={ueberschrift} betonung /></h1>
+    {
+      unterzeile && (
+        <p class="seitenkopf__unterzeile">
+          <Text text={unterzeile} />
+        </p>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .seitenkopf {
+    position: relative;
+    overflow: hidden;
+    background: var(--farbe-flaeche);
+    padding-block: clamp(3rem, 2rem + 5vw, 6.5rem) clamp(3rem, 2rem + 4vw, 5.5rem);
+  }
+
+  .seitenkopf__inhalt {
+    position: relative;
+    display: grid;
+    gap: var(--raum-m);
+  }
+
+  .seitenkopf h1 {
+    max-width: 18ch;
+  }
+
+  .seitenkopf__unterzeile {
+    max-width: 44rem;
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  /* Bögen rechts, teilweise angeschnitten; auf Handys sehr zurückhaltend */
+  .seitenkopf__deko {
+    position: absolute;
+    top: -7rem;
+    right: -12rem;
+    width: 20rem;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  @media (min-width: 48em) {
+    .seitenkopf__deko {
+      top: 50%;
+      right: max(-6rem, calc((100vw - var(--inhalt-max)) / 2 - 8rem));
+      width: clamp(22rem, 32vw, 30rem);
+      transform: translateY(-50%);
+      opacity: 0.9;
+    }
+  }
+
+  .seitenkopf__bogen {
+    fill: none;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+  }
+
+  .seitenkopf__bogen--aussen {
+    stroke-width: 1.3;
+    opacity: 0.55;
+  }
+
+  .seitenkopf__bogen--1 {
+    stroke: var(--farbe-bogen-1);
+  }
+
+  .seitenkopf__bogen--2 {
+    stroke: var(--farbe-bogen-2);
+  }
+
+  .seitenkopf__punkt {
+    fill: var(--farbe-punkt);
+  }
+</style>

@@ -1,0 +1,18 @@
+# Abhängigkeiten und Build-Ergebnisse (werden automatisch erzeugt)
+node_modules/
+dist/
+.astro/
+
+# Systemdateien
+.DS_Store
+Thumbs.db
+
+# Lokale Einstellungen und Geheimnisse
+.env
+.env.*
+!.env.example
+npm-debug.log*
+
+# Editor-Einstellungen
+.vscode/
+.idea/

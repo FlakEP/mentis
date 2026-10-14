@@ -1,0 +1,393 @@
+/*
+  Globale Grundstile: Zurücksetzen der Browser-Vorgaben, Typografie, Links, Fokus,
+  Buttons und Hilfsklassen. Wird in src/layouts/Basis.astro geladen.
+  Farben und Größen kommen ausschließlich aus tokens.css.
+*/
+
+/* ---------- Zurücksetzen ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Sprungziele nicht unter dem festen Header verstecken */
+  scroll-padding-top: calc(var(--header-hoehe) + var(--raum-m));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background: var(--farbe-hintergrund);
+  color: var(--farbe-text);
+  font-family: var(--schrift-sans);
+  font-size: var(--text-basis);
+  line-height: var(--zeilenhoehe-text);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- Typografie ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--schrift-serif);
+  font-weight: 400;
+  line-height: var(--zeilenhoehe-titel);
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  /* Fraunces: weichere Formen und optische Größe passend zur Schriftgröße */
+  font-variation-settings: "SOFT" 50, "WONK" 0;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  letter-spacing: -0.022em;
+  line-height: 1.06;
+}
+
+h2 {
+  font-size: var(--text-h2);
+}
+
+h3 {
+  font-size: var(--text-h3);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.25;
+}
+
+/* Akzentwort, z. B. *sorgfältigen* in der Hero-Überschrift (wie „uno“ im Logo) */
+h1 em,
+h2 em {
+  font-style: italic;
+  color: var(--farbe-akzent);
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+strong {
+  font-weight: 600;
+}
+
+/* ---------- Links ---------- */
+a {
+  color: var(--farbe-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: text-decoration-color var(--dauer-kurz) ease;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ---------- Fokus: gut sichtbar, aber nur bei Tastaturbedienung ---------- */
+:focus-visible {
+  outline: var(--fokus-breite) solid var(--farbe-fokus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Layout-Hilfen ---------- */
+.inhalt {
+  width: 100%;
+  max-width: calc(var(--inhalt-max) + 2 * var(--seitenrand));
+  margin-inline: auto;
+  padding-inline: var(--seitenrand);
+}
+
+.abschnitt {
+  padding-block: var(--abschnitt-abstand);
+}
+
+.abschnitt--flaeche {
+  background: var(--farbe-flaeche);
+}
+
+.abschnitt--ruhig {
+  background: var(--farbe-flaeche-ruhig);
+}
+
+/* Kleine Überzeile über Abschnittsüberschriften */
+.ueberzeile {
+  display: block;
+  font-family: var(--schrift-sans);
+  font-size: var(--text-klein);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--farbe-link);
+  margin-bottom: var(--raum-s);
+}
+
+/* Größerer Einleitungstext */
+.einleitung {
+  font-size: var(--text-gross);
+  line-height: 1.55;
+  color: var(--farbe-text-leise);
+  max-width: 40ch;
+}
+
+/* Nur für Screenreader sichtbar */
+.nur-screenreader {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Buttons (Pillenform) ---------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--raum-2xs);
+  min-height: var(--beruehrziel);
+  padding: 0.7em 1.45em;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pille);
+  font-family: var(--schrift-sans);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.005em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dauer-kurz) ease,
+    border-color var(--dauer-kurz) ease,
+    color var(--dauer-kurz) ease,
+    transform var(--dauer-kurz) var(--kurve-sanft);
+}
+
+.button:focus-visible {
+  border-radius: var(--radius-pille);
+}
+
+.button--primaer {
+  background: var(--farbe-primaer);
+  color: var(--farbe-auf-primaer);
+}
+
+.button--primaer:hover {
+  background: var(--farbe-primaer-hover);
+}
+
+.button--sekundaer {
+  background: transparent;
+  border-color: var(--farbe-text);
+  color: var(--farbe-text);
+}
+
+.button--sekundaer:hover {
+  background: var(--farbe-text);
+  color: var(--farbe-hintergrund);
+}
+
+.button--klein {
+  padding: 0.55em 1.15em;
+  font-size: 1rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .button:active {
+    transform: translateY(1px);
+  }
+}
+
+/* ---------- Platzhalter: nur im Entwicklungsmodus gelb markiert, im Build normaler Text ---------- */
+[data-entwicklung] .platzhalter {
+  background: var(--platzhalter-hintergrund);
+  color: var(--ink);
+  outline: 1px dashed var(--platzhalter-rahmen);
+  border-radius: 3px;
+  padding: 0 0.2em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  font-family: var(--schrift-sans);
+  font-style: normal;
+  font-weight: 600;
+  font-size: max(0.8em, 0.9375rem);
+  letter-spacing: 0;
+}
+
+/* ---------- Bewegung reduzieren, wenn gewünscht ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Kürzerer Abschnitt, z. B. für einen einzelnen Hinweis */
+.abschnitt--eng {
+  padding-block: clamp(3rem, 2rem + 3vw, 4.5rem);
+}
+
+/* ---------- Fließtext aus Markdown (inhalte/seiten/…) ---------- */
+.prosa {
+  max-width: var(--textbreite);
+  overflow-wrap: break-word;
+}
+
+/* Auf schmalen Bildschirmen lange deutsche Wörter trennen (z. B. „Hyperaktivitätsstörung“) */
+@media (max-width: 39.99em) {
+  .prosa,
+  h1,
+  h2 {
+    hyphens: auto;
+  }
+}
+
+.prosa > * + * {
+  margin-top: 1.1em;
+}
+
+.prosa h2 {
+  font-size: var(--text-h2);
+  margin-top: 2.2em;
+  margin-bottom: 0.2em;
+}
+
+.prosa h3 {
+  margin-top: 1.8em;
+}
+
+.prosa > :first-child {
+  margin-top: 0;
+}
+
+.prosa ul,
+.prosa ol {
+  padding-left: 0;
+  list-style: none;
+}
+
+.prosa li + li {
+  margin-top: 0.55em;
+}
+
+/* Aufzählungen: kurzer, ruhiger Strich statt Punkt */
+.prosa ul > li {
+  position: relative;
+  padding-left: 1.6em;
+}
+
+.prosa ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0.15em;
+  top: 0.8em;
+  width: 0.75em;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--farbe-bogen-1);
+}
+
+/* Nummerierte Listen: Ziffern in Fraunces */
+.prosa ol {
+  counter-reset: schritt;
+}
+
+.prosa ol > li {
+  position: relative;
+  padding-left: 2.4em;
+  counter-increment: schritt;
+}
+
+.prosa ol > li::before {
+  content: counter(schritt);
+  position: absolute;
+  left: 0;
+  top: -0.05em;
+  font-family: var(--schrift-serif);
+  font-size: 1.2em;
+  color: var(--farbe-akzent-text);
+  font-variant-numeric: lining-nums;
+}
+
+/* Zweispaltig: Überschrift links, Text rechts (z. B. „Willkommen“, „Wie wir arbeiten“) */
+.prosa--zweispaltig {
+  max-width: none;
+}
+
+.prosa--zweispaltig > h2 {
+  margin-bottom: var(--raum-m);
+}
+
+.prosa--zweispaltig > p {
+  max-width: var(--textbreite);
+}
+
+.prosa--zweispaltig > h2 + p {
+  font-size: var(--text-gross);
+  line-height: 1.55;
+}
+
+@media (min-width: 60em) {
+  .prosa--zweispaltig {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--raum-3xl);
+  }
+
+  .prosa--zweispaltig > * {
+    grid-column: 2;
+  }
+
+  .prosa--zweispaltig > h2 {
+    grid-column: 1;
+    grid-row: 1 / span 20;
+    align-self: start;
+    margin: 0;
+  }
+
+  .prosa--zweispaltig > h2 + p {
+    margin-top: 0;
+  }
+}

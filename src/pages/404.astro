@@ -1,0 +1,113 @@
+---
+// Seite „nicht gefunden“ (404). Statische Hoster zeigen sie bei unbekannten Adressen an.
+// Zweisprachig auf einer Seite, weil der Hoster nicht weiß, welche Sprache gemeint war. Texte aus ui.yaml → fehlerseite.
+import HeroBoegen from '../components/HeroBoegen.astro';
+import { kontaktUrl, seitenUrl, type Sprache } from '../config/site';
+import Basis from '../layouts/Basis.astro';
+import { uebersetzer } from '../lib/inhalte';
+
+const de = await uebersetzer('de');
+const en = await uebersetzer('en');
+const fassungen: { sprache: Sprache; t: typeof de }[] = [
+  { sprache: 'de', t: de },
+  { sprache: 'en', t: en },
+];
+---
+
+<Basis sprache="de" titel={de('fehlerseite.seitentitel')} beschreibung={de('fehlerseite.text')} noindex>
+  <section class="nichtgefunden" data-hero>
+    <div class="inhalt nichtgefunden__raster">
+      <div class="nichtgefunden__texte">
+        {
+          fassungen.map(({ sprache, t }, index) => (
+            <div class="nichtgefunden__fassung" lang={sprache}>
+              {index === 0 ? <h1>{t('fehlerseite.ueberschrift')}</h1> : <h2>{t('fehlerseite.ueberschrift')}</h2>}
+              <p>{t('fehlerseite.text')}</p>
+              <div class="nichtgefunden__knoepfe">
+                <a class="button button--primaer" href={seitenUrl('start', sprache)}>
+                  {t('fehlerseite.zur_startseite')}
+                </a>
+                {/* Der Dialog ist deutsch – die englische Fassung führt direkt zur englischen Kontaktseite */}
+                <a class="button button--sekundaer" href={kontaktUrl(sprache)} data-kontakt-oeffnen={sprache === 'de' ? '' : undefined}>
+                  {t('buttons.termin_anfragen')}
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="nichtgefunden__grafik">
+        <HeroBoegen />
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .nichtgefunden {
+    overflow: hidden;
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7rem);
+  }
+
+  .nichtgefunden__raster {
+    display: grid;
+    gap: var(--raum-xl);
+    align-items: center;
+  }
+
+  @media (min-width: 60em) {
+    .nichtgefunden__raster {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
+
+  .nichtgefunden__texte {
+    display: grid;
+    gap: var(--raum-2xl);
+  }
+
+  .nichtgefunden__fassung {
+    display: grid;
+    gap: var(--raum-m);
+    max-width: 38rem;
+  }
+
+  .nichtgefunden__fassung + .nichtgefunden__fassung {
+    padding-top: var(--raum-xl);
+    border-top: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  .nichtgefunden h1 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  }
+
+  .nichtgefunden h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.125rem);
+  }
+
+  .nichtgefunden p {
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  .nichtgefunden__knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--raum-s);
+    margin-top: var(--raum-2xs);
+  }
+
+  .nichtgefunden__grafik {
+    display: none;
+    max-width: 30rem;
+    justify-self: center;
+    width: 100%;
+  }
+
+  @media (min-width: 60em) {
+    .nichtgefunden__grafik {
+      display: block;
+    }
+  }
+</style>

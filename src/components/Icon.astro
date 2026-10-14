@@ -1,0 +1,38 @@
+---
+// Schlichte Linien-Icons aus dem npm-Paket lucide-static, beim Bauen als Inline-SVG eingesetzt (kein Icon-CDN).
+// Icons sind reine Deko (aria-hidden); die Bedeutung steht immer zusätzlich als Text daneben.
+import { ArrowRight, ArrowUpRight, CalendarDays, Mail, MapPin, Menu, X } from 'lucide-static';
+
+// ÄNDERN: Weitere Icons hier aus lucide-static importieren und in die Liste aufnehmen.
+const ICONS = {
+  'pfeil-rechts': ArrowRight,
+  'pfeil-schraeg': ArrowUpRight,
+  kalender: CalendarDays,
+  mail: Mail,
+  ort: MapPin,
+  menue: Menu,
+  schliessen: X,
+} as const;
+
+export type IconName = keyof typeof ICONS;
+
+interface Props {
+  name: IconName;
+  groesse?: number;
+  class?: string;
+}
+
+const { name, groesse = 20, class: klasse } = Astro.props;
+// Nur die Angaben im <svg>-Tag selbst ersetzen (Größe, Klasse), nicht die der Formen darin
+const svg = ICONS[name].replace(/<svg[^>]*>/, (tag) =>
+  tag
+    .replace(/\s(width|height|class)="[^"]*"/g, '')
+    .replace('stroke-width="2"', 'stroke-width="1.75"')
+    .replace(
+      '<svg',
+      `<svg width="${groesse}" height="${groesse}" class="icon${klasse ? ` ${klasse}` : ''}" aria-hidden="true" focusable="false"`,
+    ),
+);
+---
+
+<Fragment set:html={svg} />

@@ -1,0 +1,5 @@
+# Suchmaschinen dürfen alle Seiten lesen. Impressum und Datenschutz sind per „noindex“ ausgenommen.
+User-agent: *
+Allow: /
+
+Sitemap: https://mentis.uno/sitemap-index.xml

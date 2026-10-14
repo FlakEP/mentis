@@ -1,0 +1,104 @@
+---
+// Vorlage für die drei Leistungsseiten (ADHS, Intelligenz, Klinisch). Texte aus inhalte/seiten/<sprache>/<datei>.md.
+// Reihenfolge: Seitenkopf → Fließtext (mit „Auf dieser Seite“) → Selbsteinschätzung → Kosten
+// → (nur klinisch) Krisenhinweis → Kontaktblock mit vorausgewähltem Anliegen. Aufgerufen von src/pages/[...pfad].astro.
+import { render } from 'astro:content';
+import { ANKER, type Bereich, type Sprache } from '../../config/site';
+import Basis from '../../layouts/Basis.astro';
+import { holeLeistungsseite, uebersetzer } from '../../lib/inhalte';
+import AufDieserSeite from '../AufDieserSeite.astro';
+import KontaktBlock from '../KontaktBlock.astro';
+import KostenAbschnitt from '../KostenAbschnitt.astro';
+import Krisenhinweis from '../Krisenhinweis.astro';
+import SeitenKopf from '../SeitenKopf.astro';
+import Selbsttest from '../Selbsttest.astro';
+
+interface Props {
+  bereich: Bereich;
+  sprache: Sprache;
+}
+
+const { bereich, sprache } = Astro.props;
+const t = await uebersetzer(sprache);
+const seite = await holeLeistungsseite(bereich, sprache);
+const { Content, headings } = await render(seite);
+const d = seite.data;
+
+const sprungmarken = [
+  ...headings.filter((h) => h.depth === 2).map((h) => ({ ziel: h.slug, text: h.text })),
+  { ziel: ANKER.selbsteinschaetzung, text: t('selbsttest.ueberschrift') },
+  { ziel: ANKER.kosten, text: t('preise.ueberschrift') },
+];
+---
+
+<Basis
+  sprache={sprache}
+  seite={bereich}
+  titel={d.seitentitel}
+  beschreibung={d.beschreibung}
+  noindex={d.noindex}
+  kostenAufDieserSeite
+>
+  <SeitenKopf ueberschrift={d.einstieg.ueberschrift} unterzeile={d.einstieg.unterzeile} />
+
+  <section class="abschnitt">
+    <div class="inhalt leistung">
+      <aside class="leistung__rand">
+        <AufDieserSeite sprache={sprache} eintraege={sprungmarken} />
+      </aside>
+      <div class="prosa leistung__text">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <Selbsttest sprache={sprache} bereich={bereich} tests={d.selbsttests} />
+
+  <KostenAbschnitt sprache={sprache} preisAb={d.preis_ab} dauer={d.dauer} />
+
+  {
+    d.krisenhinweis_anzeigen && (
+      <section class="abschnitt abschnitt--eng">
+        <div class="inhalt">
+          <Krisenhinweis sprache={sprache} />
+        </div>
+      </section>
+    )
+  }
+
+  <KontaktBlock sprache={sprache} anliegen={bereich} />
+</Basis>
+
+<style>
+  .leistung {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--raum-xl);
+  }
+
+  @media (min-width: 64em) {
+    .leistung {
+      grid-template-columns: 14rem minmax(0, 1fr);
+      gap: var(--raum-3xl);
+    }
+  }
+
+  .leistung__rand {
+    display: none;
+  }
+
+  @media (min-width: 64em) {
+    .leistung__rand {
+      display: block;
+    }
+  }
+
+  /* Zwischenüberschriften im Fließtext etwas ruhiger als Abschnittstitel */
+  .leistung__text :global(h2) {
+    font-size: clamp(1.625rem, 1.35rem + 1.1vw, 2.25rem);
+  }
+
+  .leistung__text :global(h2:first-child) {
+    margin-top: 0;
+  }
+</style>

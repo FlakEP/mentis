@@ -1,0 +1,48 @@
+---
+# ===================================================================
+#  IMPRESSUM (Englisch) – ENTWURF, vor Livegang prüfen lassen
+#  Übersetzung aus dem Deutschen – bitte prüfen.
+#  Rechtlich verbindlich ist die deutsche Fassung (Hinweis aus ui.yaml).
+#  Diese Seite soll nicht von Suchmaschinen indexiert werden (noindex).
+# ===================================================================
+seitentitel: "Legal notice | Mentis Uno"
+beschreibung: "Legal notice (Impressum) of Mentis Uno – psychological assessment."
+noindex: true
+---
+
+## Information pursuant to Section 5 DDG
+
+(German Digital Services Act, Digitale-Dienste-Gesetz)
+
+Henrik Voß
+Mentis Uno – psychological assessment
+Johannisberger Straße 22
+14197 Berlin
+Germany
+
+## Contact
+
+Email: anfragen@mentis.uno
+Contact form: on every page of this website
+
+## Professional title and professional regulations
+
+Professional title: Psychologist (M.Sc.), awarded in Germany
+
+<!-- Nur falls zutreffend ergänzen: zuständige Kammer, Aufsichtsbehörde und berufsrechtliche Regelungen mit Link. -->
+
+<!-- VAT: Falls eine Umsatzsteuer-Identifikationsnummer vorhanden ist, hier einen Abschnitt „## VAT“ ergänzen. -->
+
+## Responsible for content pursuant to Section 18 (2) MStV
+
+(German Interstate Media Treaty, Medienstaatsvertrag)
+
+Henrik Voß, address as above
+
+## Consumer dispute resolution
+
+We are neither willing nor obliged to take part in dispute resolution proceedings before a consumer arbitration board.
+
+## Design
+
+Logo and website: own design. Fonts: Fraunces and Source Sans 3 (SIL Open Font License), served locally.

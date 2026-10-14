@@ -1,0 +1,102 @@
+---
+// Schmale, ruhige Infoleiste über dem Header mit dem Selbstzahler-Hinweis (Kurztext aus ui.yaml)
+// und – ab Tablet-Breite – rechts dem Sprachumschalter.
+// Verlinkt auf einer Leistungsseite auf deren Kostenabschnitt, sonst auf /#kosten. Benutzt in Basis.astro.
+import { ANKER, seitenUrl, type SeitenId, type Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import Sprachumschalter from './Sprachumschalter.astro';
+
+interface Props {
+  sprache: Sprache;
+  seite: SeitenId;
+  /** Hat die aktuelle Seite selbst einen Kostenabschnitt? Dann dorthin springen. */
+  kostenAufDieserSeite?: boolean;
+}
+
+const { sprache, seite, kostenAufDieserSeite = false } = Astro.props;
+const t = await uebersetzer(sprache);
+const ziel = kostenAufDieserSeite ? `#${ANKER.kosten}` : `${seitenUrl('start', sprache)}#${ANKER.kosten}`;
+---
+
+<aside class="zahlerleiste" aria-labelledby="zahlerleiste-text">
+  <div class="inhalt zahlerleiste__innen">
+    <a class="zahlerleiste__link" href={ziel}>
+      <span id="zahlerleiste-text">{t('selbstzahler.kurz')}</span>
+      <Icon name="pfeil-rechts" groesse={16} class="zahlerleiste__icon" />
+    </a>
+    <Sprachumschalter sprache={sprache} seite={seite} class="zahlerleiste__sprache" />
+  </div>
+</aside>
+
+<style>
+  .zahlerleiste {
+    background: var(--farbe-flaeche);
+    border-bottom: var(--linie-duenn) solid var(--farbe-linie);
+    font-size: var(--text-klein);
+    line-height: 1.4;
+  }
+
+  .zahlerleiste__innen {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .zahlerleiste__innen :global(.zahlerleiste__sprache) {
+    display: none;
+  }
+
+  /* Ab Tablet-Breite: Hinweis mittig, Sprachumschalter rechts */
+  @media (min-width: 40em) {
+    .zahlerleiste__innen {
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    .zahlerleiste__link {
+      grid-column: 2;
+    }
+
+    .zahlerleiste__innen :global(.zahlerleiste__sprache) {
+      display: inline-flex;
+      justify-self: end;
+      min-height: var(--beruehrziel);
+    }
+  }
+
+  .zahlerleiste__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--raum-2xs);
+    min-height: var(--beruehrziel);
+    padding-block: var(--raum-2xs);
+    color: var(--farbe-text-leise);
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .zahlerleiste__link span {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--sand-300);
+    transition: text-decoration-color var(--dauer-kurz) ease;
+  }
+
+  .zahlerleiste__link:hover {
+    color: var(--farbe-text);
+  }
+
+  .zahlerleiste__link:hover span {
+    text-decoration-color: currentColor;
+  }
+
+  .zahlerleiste__link :global(.zahlerleiste__icon) {
+    flex: none;
+    transition: transform var(--dauer-kurz) var(--kurve-sanft);
+  }
+
+  .zahlerleiste__link:hover :global(.zahlerleiste__icon) {
+    transform: translateX(2px);
+  }
+</style>

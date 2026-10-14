@@ -1,0 +1,365 @@
+---
+// Kontaktformular für Terminanfragen (Felder und Texte aus ui.yaml → kontaktformular).
+// Versand an den Formulardienst (src/config/kontaktformular.ts), mit JavaScript per fetch, ohne JavaScript als normales Formular.
+// Benutzt auf der Kontaktseite, im Kontaktblock und im Kontaktdialog. Bedienung: src/scripts/kontakt.ts.
+import {
+  ANLIEGEN,
+  ERREICHBARKEIT,
+  FELDNAMEN,
+  FORMULAR_ENDPUNKT,
+  HONEYPOT_NAME,
+  NACHRICHT_MAX_ZEICHEN,
+} from '../config/kontaktformular';
+import { seitenUrl, type Sprache } from '../config/site';
+import { holeKontaktdaten, uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+  /** Eindeutiges Kürzel, damit mehrere Formulare auf einer Seite eigene IDs haben */
+  kennung: string;
+  /** Vorausgewähltes Anliegen, z. B. „adhs“ */
+  anliegen?: string;
+  /** Selbstzahler-Kurztext über dem Absende-Button zeigen (auf der Kontaktseite steht er schon im Text) */
+  selbstzahlerHinweis?: boolean;
+}
+
+const { sprache, kennung, anliegen, selbstzahlerHinweis = true } = Astro.props;
+const t = await uebersetzer(sprache);
+const kontakt = await holeKontaktdaten(sprache);
+const id = (feld: string) => `${kennung}-${feld}`;
+const [einwilligungVor, einwilligungNach] = t('kontaktformular.einwilligung').split('{datenschutz_link}');
+const ohneEndpunkt = FORMULAR_ENDPUNKT.trim() === '';
+---
+
+{
+  ohneEndpunkt && !import.meta.env.DEV ? (
+    <div class="formular__ersatz">
+      <p>{t('kontaktformular.direkt_email')}</p>
+      <a class="button button--primaer" href={`mailto:${kontakt.email}`}>
+        <Icon name="mail" groesse={20} />
+        {kontakt.email}
+      </a>
+    </div>
+  ) : (
+    <form
+      class="formular"
+      action={FORMULAR_ENDPUNKT || undefined}
+      method="post"
+      accept-charset="UTF-8"
+      data-kontaktformular
+      data-text-senden={t('kontaktformular.absenden')}
+      data-text-sendet={t('kontaktformular.sendet')}
+    >
+      {ohneEndpunkt && (
+        <p class="formular__entwicklung" role="note">
+          Entwicklungshinweis: Formular-Endpunkt noch nicht eingetragen (src/config/kontaktformular.ts).
+        </p>
+      )}
+
+      <div class="formular__raster">
+        <div class="feld">
+          <label for={id('name')}>{t('kontaktformular.name')}</label>
+          <input
+            id={id('name')}
+            name={FELDNAMEN.name}
+            type="text"
+            autocomplete="name"
+            required
+            aria-describedby={id('name-fehler')}
+            data-fehler={t('kontaktformular.fehler_name')}
+          />
+          <p class="feld__fehler" id={id('name-fehler')} hidden />
+        </div>
+
+        <div class="feld">
+          <label for={id('email')}>{t('kontaktformular.email')}</label>
+          <input
+            id={id('email')}
+            name={FELDNAMEN.email}
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            spellcheck="false"
+            required
+            aria-describedby={id('email-fehler')}
+            data-fehler={t('kontaktformular.fehler_email')}
+          />
+          <p class="feld__fehler" id={id('email-fehler')} hidden />
+        </div>
+
+        <div class="feld">
+          <label for={id('telefon')}>{t('kontaktformular.telefon')}</label>
+          <input id={id('telefon')} name={FELDNAMEN.telefon} type="tel" autocomplete="tel" inputmode="tel" />
+        </div>
+
+        <div class="feld">
+          <label for={id('erreichbarkeit')}>{t('kontaktformular.rueckruf')}</label>
+          <select id={id('erreichbarkeit')} name={FELDNAMEN.erreichbarkeit}>
+            {ERREICHBARKEIT.map((wert) => (
+              <option value={t(`kontaktformular.rueckruf_optionen.${wert}`)}>
+                {t(`kontaktformular.rueckruf_optionen.${wert}`)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div class="feld feld--breit">
+          <label for={id('anliegen')}>{t('kontaktformular.anliegen')}</label>
+          <select
+            id={id('anliegen')}
+            name={FELDNAMEN.anliegen}
+            required
+            aria-describedby={id('anliegen-fehler')}
+            data-fehler={t('kontaktformular.fehler_anliegen')}
+            data-anliegen-auswahl
+          >
+            <option value="" selected={!anliegen}>
+              {t('kontaktformular.anliegen_bitte_waehlen')}
+            </option>
+            {ANLIEGEN.map((wert) => (
+              <option value={t(`kontaktformular.anliegen_optionen.${wert}`)} data-wert={wert} selected={wert === anliegen}>
+                {t(`kontaktformular.anliegen_optionen.${wert}`)}
+              </option>
+            ))}
+          </select>
+          <p class="feld__fehler" id={id('anliegen-fehler')} hidden />
+        </div>
+
+        <div class="feld feld--breit">
+          <label for={id('nachricht')}>{t('kontaktformular.nachricht')}</label>
+          <p class="feld__hinweis" id={id('nachricht-hinweis')}>
+            {t('kontaktformular.nachricht_hinweis')}
+          </p>
+          <textarea
+            id={id('nachricht')}
+            name={FELDNAMEN.nachricht}
+            rows="5"
+            maxlength={NACHRICHT_MAX_ZEICHEN}
+            aria-describedby={`${id('nachricht-hinweis')} ${id('nachricht-fehler')}`}
+            data-fehler={t('kontaktformular.fehler_nachricht')}
+          />
+          <p class="feld__fehler" id={id('nachricht-fehler')} hidden />
+        </div>
+
+        <div class="feld feld--breit feld--auswahl">
+          <input
+            id={id('einwilligung')}
+            name={FELDNAMEN.einwilligung}
+            type="checkbox"
+            value="ja"
+            required
+            aria-describedby={id('einwilligung-fehler')}
+            data-fehler={t('kontaktformular.fehler_einwilligung')}
+          />
+          <label for={id('einwilligung')}>
+            {einwilligungVor}
+            <a href={seitenUrl('datenschutz', sprache)}>{t('kontaktformular.datenschutz_linktext')}</a>
+            {einwilligungNach}
+          </label>
+          <p class="feld__fehler" id={id('einwilligung-fehler')} hidden />
+        </div>
+      </div>
+
+      {/* Fangfeld gegen Spam-Programme: für Menschen unsichtbar und nicht erreichbar */}
+      <div class="formular__falle" aria-hidden="true">
+        <input type="text" name={HONEYPOT_NAME} tabindex="-1" autocomplete="off" value="" />
+      </div>
+
+      {selbstzahlerHinweis && <p class="formular__zahler">{t('selbstzahler.kurz')}</p>}
+
+      <div class="formular__senden">
+        <button type="submit" class="button button--primaer" data-senden>
+          {t('kontaktformular.absenden')}
+        </button>
+        <p class="formular__mail">
+          {t('kontaktformular.direkt_email')} <a href={`mailto:${kontakt.email}`}>{kontakt.email}</a>
+        </p>
+      </div>
+
+      <div class="formular__meldung formular__meldung--erfolg" role="status" data-erfolg hidden>
+        <Text text={t('kontaktformular.erfolg')} />
+      </div>
+      <div class="formular__meldung formular__meldung--fehler" role="alert" data-fehlschlag hidden>
+        <Text text={t('kontaktformular.fehler')} />
+      </div>
+    </form>
+  )
+}
+
+<style>
+  .formular {
+    display: grid;
+    gap: var(--raum-l);
+  }
+
+  .formular__raster {
+    display: grid;
+    gap: var(--raum-m);
+  }
+
+  @media (min-width: 40em) {
+    .formular__raster {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--raum-m) var(--raum-l);
+    }
+
+    .feld--breit {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .feld {
+    display: grid;
+    align-content: start;
+    gap: var(--raum-2xs);
+  }
+
+  .feld label {
+    font-weight: 600;
+  }
+
+  .feld input:not([type='checkbox']),
+  .feld select,
+  .feld textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--farbe-hintergrund);
+    border: 1.5px solid var(--farbe-feldrand);
+    border-radius: var(--radius-klein);
+    color: var(--farbe-text);
+    line-height: 1.4;
+    transition: border-color var(--dauer-kurz) ease;
+  }
+
+  .feld textarea {
+    min-height: 8rem;
+    resize: vertical;
+  }
+
+  .feld input:hover,
+  .feld select:hover,
+  .feld textarea:hover {
+    border-color: var(--farbe-text);
+  }
+
+  .feld input:focus-visible,
+  .feld select:focus-visible,
+  .feld textarea:focus-visible {
+    border-color: var(--farbe-fokus);
+    outline-offset: 1px;
+  }
+
+  .feld [aria-invalid='true'] {
+    border-color: var(--farbe-primaer);
+  }
+
+  .feld__hinweis {
+    font-size: var(--text-klein);
+    color: var(--farbe-text-leise);
+  }
+
+  .feld__fehler {
+    font-size: var(--text-klein);
+    font-weight: 600;
+    color: var(--farbe-primaer);
+  }
+
+  /* Einwilligung: Kästchen links, Text rechts */
+  .feld--auswahl {
+    grid-template-columns: auto 1fr;
+    column-gap: var(--raum-s);
+    align-items: start;
+  }
+
+  .feld--auswahl input {
+    width: 1.375rem;
+    height: 1.375rem;
+    margin-top: 0.15rem;
+    accent-color: var(--farbe-link);
+    cursor: pointer;
+  }
+
+  .feld--auswahl label {
+    font-weight: 400;
+    font-size: 1rem;
+    color: var(--farbe-text-leise);
+  }
+
+  .feld--auswahl .feld__fehler {
+    grid-column: 2;
+  }
+
+  .formular__falle {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .formular__zahler {
+    font-size: var(--text-klein);
+    color: var(--farbe-text-leise);
+  }
+
+  .formular__senden {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--raum-s) var(--raum-l);
+    margin-top: calc(-1 * var(--raum-s));
+  }
+
+  .formular__mail {
+    font-size: var(--text-klein);
+    color: var(--farbe-text-leise);
+  }
+
+  .formular__meldung {
+    padding: var(--raum-s) var(--raum-m);
+    border-radius: var(--radius-klein);
+    font-weight: 600;
+  }
+
+  .formular__meldung--erfolg {
+    background: var(--farbe-flaeche-ruhig);
+    border-left: 3px solid var(--farbe-link);
+  }
+
+  .formular__meldung--fehler {
+    background: var(--farbe-flaeche-hinweis);
+    border-left: 3px solid var(--farbe-primaer);
+  }
+
+  .formular__entwicklung {
+    padding: var(--raum-s) var(--raum-m);
+    background: var(--platzhalter-hintergrund);
+    border: 1px dashed var(--platzhalter-rahmen);
+    border-radius: var(--radius-klein);
+    font-weight: 600;
+  }
+
+  .formular__ersatz {
+    display: grid;
+    justify-items: start;
+    gap: var(--raum-s);
+  }
+
+  .formular__ersatz .button {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  button[data-senden][aria-disabled='true'] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+</style>
+
+<script>
+  import { starteKontaktformulare } from '../scripts/kontakt';
+  starteKontaktformulare();
+</script>

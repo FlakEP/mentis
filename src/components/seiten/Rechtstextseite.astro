@@ -1,0 +1,68 @@
+---
+// Vorlage für Impressum und Datenschutz: schlichtes, gut lesbares Textlayout mit Stand-Datum.
+// Werden nicht von Suchmaschinen erfasst (noindex). Auf Englisch mit dem Hinweis, dass die deutsche Fassung gilt.
+// Texte aus inhalte/seiten/<sprache>/impressum.md bzw. datenschutz.md. Aufgerufen von src/pages/[...pfad].astro.
+import { render } from 'astro:content';
+import type { Sprache } from '../../config/site';
+import Basis from '../../layouts/Basis.astro';
+import { holeRechtstext, uebersetzer } from '../../lib/inhalte';
+import SeitenKopf from '../SeitenKopf.astro';
+import Text from '../Text.astro';
+
+interface Props {
+  art: 'impressum' | 'datenschutz';
+  sprache: Sprache;
+}
+
+const { art, sprache } = Astro.props;
+const t = await uebersetzer(sprache);
+const seite = await holeRechtstext(art, sprache);
+const { Content } = await render(seite);
+const d = seite.data;
+---
+
+<Basis sprache={sprache} seite={art} titel={d.seitentitel} beschreibung={d.beschreibung} noindex={d.noindex}>
+  <SeitenKopf ueberschrift={t(`navigation.${art}`)}>
+    {
+      d.stand && (
+        <p class="rechtstext__stand">
+          {t('rechtstexte.stand')}: <Text text={d.stand} />
+        </p>
+      )
+    }
+  </SeitenKopf>
+
+  <section class="abschnitt">
+    <div class="inhalt">
+      {sprache === 'en' && <p class="rechtstext__hinweis">{t('hinweis_englisch')}</p>}
+      <div class="prosa rechtstext">
+        <Content />
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .rechtstext__stand {
+    color: var(--farbe-text-leise);
+  }
+
+  .rechtstext__hinweis {
+    max-width: var(--textbreite);
+    margin-bottom: var(--raum-xl);
+    padding: var(--raum-s) var(--raum-m);
+    background: var(--farbe-flaeche-hinweis);
+    border-radius: var(--radius-klein);
+  }
+
+  /* Rechtstexte: kleinere Zwischenüberschriften, damit der Text ruhig bleibt */
+  .rechtstext :global(h2) {
+    font-size: var(--text-h3);
+    font-weight: 500;
+    margin-top: 2.4em;
+  }
+
+  .rechtstext :global(h2:first-child) {
+    margin-top: 0;
+  }
+</style>

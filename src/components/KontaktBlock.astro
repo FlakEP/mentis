@@ -1,0 +1,107 @@
+---
+// Kontaktblock am Ende jeder Seite (außer Kontakt, Impressum, Datenschutz): Einladungstext links,
+// das Formular direkt daneben. Auf Leistungsseiten ist das passende Anliegen schon ausgewählt.
+// Benutzt auf der Startseite und den Unterseiten.
+import { ANKER, type Sprache } from '../config/site';
+import { bogenPaar } from '../lib/bogen';
+import { uebersetzer } from '../lib/inhalte';
+import KontaktFormular from './KontaktFormular.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+  /** Vorausgewähltes Anliegen, z. B. „adhs“ auf der ADHS-Seite */
+  anliegen?: string;
+}
+
+const { sprache, anliegen } = Astro.props;
+const t = await uebersetzer(sprache);
+const [deko1, deko2] = bogenPaar(200, 200, 150, 12, 0.92);
+---
+
+<section class="abschnitt kontaktblock" id={ANKER.kontakt} aria-labelledby="kontaktblock-titel">
+  <div class="inhalt">
+    <div class="kontaktblock__karte">
+      <div class="kontaktblock__text">
+        <h2 id="kontaktblock-titel">{t('kontaktformular.ueberschrift')}</h2>
+        <p class="kontaktblock__einleitung"><Text text={t('kontaktformular.einleitung')} /></p>
+        <svg class="kontaktblock__deko" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+          <path d={deko1} class="kontaktblock__bogen kontaktblock__bogen--1"></path>
+          <path d={deko2} class="kontaktblock__bogen kontaktblock__bogen--2"></path>
+          <circle cx="200" cy="200" r="7" class="kontaktblock__punkt"></circle>
+        </svg>
+      </div>
+      <div class="kontaktblock__formular">
+        <KontaktFormular sprache={sprache} kennung="block" anliegen={anliegen} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kontaktblock__karte {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: var(--raum-xl) var(--raum-3xl);
+    padding: clamp(1.75rem, 1rem + 4vw, 4.5rem);
+    background: var(--farbe-flaeche);
+    border: var(--linie-duenn) solid var(--farbe-linie);
+    border-radius: calc(var(--radius-karte) * 1.4);
+  }
+
+  @media (min-width: 60em) {
+    .kontaktblock__karte {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+
+  .kontaktblock__text {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--raum-m);
+  }
+
+  .kontaktblock__einleitung {
+    max-width: 30rem;
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  /* Bögen unter dem Einladungstext; auf Handys ausgeblendet */
+  .kontaktblock__deko {
+    display: none;
+    width: clamp(14rem, 22vw, 20rem);
+    margin-top: var(--raum-xl);
+    margin-left: -2rem;
+    pointer-events: none;
+  }
+
+  @media (min-width: 60em) {
+    .kontaktblock__deko {
+      display: block;
+    }
+  }
+
+  .kontaktblock__bogen {
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+
+  .kontaktblock__bogen--1 {
+    stroke: var(--farbe-bogen-1);
+  }
+
+  .kontaktblock__bogen--2 {
+    stroke: var(--farbe-bogen-2);
+  }
+
+  .kontaktblock__punkt {
+    fill: var(--farbe-punkt);
+    opacity: 0.8;
+  }
+</style>

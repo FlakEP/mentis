@@ -1,0 +1,124 @@
+---
+// Grundgerüst jeder Seite: <head> mit Titel, Beschreibung, Favicons und Schriften,
+// dann Sprunglink, Selbstzahler-Leiste, Header, Seiteninhalt, Footer, die Handy-Leiste unten und der Kontaktdialog.
+// Benutzt von allen Dateien in src/pages/.
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource-variable/source-sans-3/wght.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+import frauncesSchrift from '@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url';
+import sourceSansSchrift from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url';
+
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import KontaktDialog from '../components/KontaktDialog.astro';
+import MobilLeiste from '../components/MobilLeiste.astro';
+import SelbstzahlerLeiste from '../components/SelbstzahlerLeiste.astro';
+import { AKTIVE_SPRACHEN, SEITEN, SITE_URL, type SeitenId, type Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import { ohneBetonung } from '../lib/text';
+
+interface Props {
+  sprache: Sprache;
+  /** Welche Seite das ist. Fehlt bei der 404-Seite (dann ohne kanonische Adresse und Sprachverweise). */
+  seite?: SeitenId;
+  titel: string;
+  beschreibung: string;
+  noindex?: boolean;
+  /** Hat die Seite einen eigenen Kostenabschnitt (#kosten)? */
+  kostenAufDieserSeite?: boolean;
+}
+
+const { sprache, seite, titel, beschreibung, noindex = false, kostenAufDieserSeite = false } = Astro.props;
+const t = await uebersetzer(sprache);
+const kanonisch = seite ? new URL(Astro.url.pathname, Astro.site) : undefined;
+// Für Header und Sprachumschalter: Ohne eigene Seite (404) gilt die Startseite
+const seiteFuerNavigation: SeitenId = seite ?? 'start';
+---
+
+<!doctype html>
+<html lang={sprache} data-entwicklung={import.meta.env.DEV ? '' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{ohneBetonung(titel)}</title>
+    <meta name="description" content={beschreibung} />
+    {kanonisch && <link rel="canonical" href={kanonisch} />}
+    {
+      seite &&
+        AKTIVE_SPRACHEN.length > 1 &&
+        AKTIVE_SPRACHEN.map((andere) => (
+          <link rel="alternate" hreflang={andere} href={new URL(SEITEN[seite][andere], SITE_URL)} />
+        ))
+    }
+    {
+      seite && AKTIVE_SPRACHEN.length > 1 && (
+        <link rel="alternate" hreflang="x-default" href={new URL(SEITEN[seite].de, SITE_URL)} />
+      )
+    }
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={t('marke.name')} />
+    <meta property="og:title" content={ohneBetonung(titel)} />
+    <meta property="og:description" content={beschreibung} />
+    {kanonisch && <meta property="og:url" content={kanonisch} />}
+    <meta property="og:locale" content={sprache === 'de' ? 'de_DE' : 'en_GB'} />
+    <meta property="og:image" content={new URL(sprache === 'de' ? '/og-image.png' : '/og-image-en.png', SITE_URL)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${t('marke.name')} – ${t('marke.leitsatz')}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preload" href={frauncesSchrift} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sourceSansSchrift} as="font" type="font/woff2" crossorigin />
+
+    <script is:inline>
+      // Kennzeichnet, dass JavaScript läuft (für Menü und Handy-Leiste)
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="sprunglink" href="#inhalt">{t('navigation.zum_inhalt')}</a>
+    <div data-sperrbar>
+      <SelbstzahlerLeiste sprache={sprache} seite={seiteFuerNavigation} kostenAufDieserSeite={kostenAufDieserSeite} />
+    </div>
+    <Header sprache={sprache} seite={seiteFuerNavigation} aktuell={seite} />
+    <main id="inhalt" tabindex="-1" data-sperrbar>
+      <slot />
+    </main>
+    <Footer sprache={sprache} />
+    <MobilLeiste sprache={sprache} />
+    {seite !== 'kontakt' && <KontaktDialog sprache={sprache} />}
+  </body>
+</html>
+
+<style>
+  .sprunglink {
+    position: absolute;
+    top: var(--raum-s);
+    left: var(--raum-s);
+    z-index: 100;
+    padding: var(--raum-xs) var(--raum-m);
+    background: var(--farbe-text);
+    color: var(--farbe-hintergrund);
+    border-radius: var(--radius-pille);
+    font-weight: 600;
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+
+  .sprunglink:focus {
+    transform: none;
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>

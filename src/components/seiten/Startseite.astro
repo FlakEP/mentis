@@ -1,0 +1,369 @@
+---
+// Vorlage der Startseite (Adresse „/“ bzw. „/en/“). Texte aus inhalte/seiten/<sprache>/startseite.md und ui.yaml.
+// Reihenfolge: Hero → Willkommen → Schwerpunkte → Ablauf → Selbsteinschätzung → Kosten → Gutachten → Kontakt.
+// Wird von src/pages/[...pfad].astro aufgerufen.
+import { render } from 'astro:content';
+import Ablauf from '../Ablauf.astro';
+import AbschnittsKopf from '../AbschnittsKopf.astro';
+import Bogen from '../Bogen.astro';
+import HeroBoegen from '../HeroBoegen.astro';
+import Icon from '../Icon.astro';
+import KontaktBlock from '../KontaktBlock.astro';
+import KostenUebersicht from '../KostenUebersicht.astro';
+import Leistungskarte from '../Leistungskarte.astro';
+import Text from '../Text.astro';
+import { ANKER, BEREICHE, kontaktUrl, seitenUrl, type Sprache } from '../../config/site';
+import Basis from '../../layouts/Basis.astro';
+import { holeStartseite, uebersetzer } from '../../lib/inhalte';
+
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
+const t = await uebersetzer(sprache);
+const seite = await holeStartseite(sprache);
+const { Content: Willkommen } = await render(seite);
+const d = seite.data;
+---
+
+<Basis sprache={sprache} seite="start" titel={d.seitentitel} beschreibung={d.beschreibung}>
+  <!-- Hero -->
+  <section class="hero" data-hero aria-labelledby="hero-titel">
+    <div class="inhalt hero__raster">
+      <div class="hero__text">
+        <h1 id="hero-titel"><Text text={d.hero.ueberschrift} betonung /></h1>
+        <p class="hero__unterzeile"><Text text={d.hero.unterzeile} /></p>
+        <div class="hero__aktionen">
+          <a class="button button--primaer" href={kontaktUrl(sprache)} data-kontakt-oeffnen>
+            {t('buttons.termin_anfragen')}
+          </a>
+          <a class="button button--sekundaer" href={`#${ANKER.selbsteinschaetzung}`}>
+            {t('buttons.selbsttest_starten')}
+          </a>
+        </div>
+      </div>
+      <div class="hero__grafik">
+        <HeroBoegen />
+      </div>
+      <p class="hero__leitsatz">{t('marke.leitsatz')}</p>
+    </div>
+  </section>
+
+  <!-- Willkommen (Fließtext aus dem Markdown) -->
+  <section class="abschnitt abschnitt--flaeche willkommen">
+    <div class="inhalt">
+      <div class="prosa prosa--zweispaltig">
+        <Willkommen />
+      </div>
+    </div>
+  </section>
+
+  <!-- Schwerpunkte -->
+  <section class="abschnitt" aria-labelledby="leistungen-titel">
+    <div class="inhalt">
+      <AbschnittsKopf id="leistungen-titel" ueberschrift={d.leistungen.ueberschrift} bogen />
+      <ul class="karten" role="list">
+        {
+          d.leistungen.karten.map((karte) => (
+            <li>
+              <Leistungskarte
+                titel={karte.titel}
+                text={karte.text}
+                href={seitenUrl(karte.link, sprache)}
+                linktext={t('buttons.mehr_erfahren')}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Ablauf -->
+  <section class="abschnitt abschnitt--flaeche" aria-labelledby="ablauf-titel">
+    <div class="inhalt">
+      <AbschnittsKopf id="ablauf-titel" ueberschrift={d.ablauf.ueberschrift} bogen />
+      <Ablauf schritte={d.ablauf.schritte} />
+    </div>
+  </section>
+
+  <!-- Selbsteinschätzung (Teaser) -->
+  <section class="abschnitt abschnitt--ruhig" id={ANKER.selbsteinschaetzung} aria-labelledby="teaser-titel">
+    <div class="inhalt teaser">
+      <AbschnittsKopf id="teaser-titel" ueberschrift={d.selbsttests_teaser.ueberschrift} einleitung={d.selbsttests_teaser.text} />
+      <ul class="teaser__liste" role="list">
+        {
+          BEREICHE.map((bereich) => (
+            <li>
+              <a class="teaser__link" href={`${seitenUrl(bereich, sprache)}#${ANKER.selbsteinschaetzung}`}>
+                <span class="teaser__titel">{t(`navigation.${bereich}`)}</span>
+                <span class="teaser__fuer">
+                  {t('selbsttest.auswahl_selbst')}
+                  <span aria-hidden="true">{' · '}</span>
+                  {t('selbsttest.auswahl_fremd')}
+                </span>
+                <Bogen groesse={40} strich={5} class="teaser__bogen" />
+                <Icon name="pfeil-rechts" groesse={22} class="teaser__pfeil" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Kosten -->
+  <KostenUebersicht sprache={sprache} ueberschrift={d.kosten.ueberschrift} />
+
+  <!-- Gutachten -->
+  <section class="abschnitt abschnitt--flaeche" aria-labelledby="gutachten-titel">
+    <div class="inhalt gutachten">
+      <div class="gutachten__inhalt">
+        <h2 id="gutachten-titel"><Text text={d.gutachten.ueberschrift} betonung /></h2>
+        <p><Text text={d.gutachten.text} /></p>
+        <a class="button button--sekundaer" href={kontaktUrl(sprache, 'gutachten')} data-kontakt-oeffnen data-anliegen="gutachten">
+          {d.gutachten.button}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kontakt -->
+  <KontaktBlock sprache={sprache} />
+</Basis>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3.5rem, 2rem + 5vw, 6.5rem) clamp(4rem, 2rem + 7vw, 8rem);
+  }
+
+  .hero__raster {
+    position: relative;
+    display: grid;
+    grid-template-areas:
+      'text'
+      'leitsatz';
+    gap: var(--raum-xl);
+  }
+
+  .hero__text {
+    grid-area: text;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--raum-m);
+    max-width: 40rem;
+  }
+
+  .hero__text h1 {
+    max-width: 14ch;
+  }
+
+  .hero__unterzeile {
+    max-width: 34rem;
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  .hero__aktionen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--raum-s);
+    margin-top: var(--raum-s);
+  }
+
+  /* Handy: Bögen ruhig im Hintergrund oben rechts, teils angeschnitten */
+  .hero__grafik {
+    position: absolute;
+    top: -9rem;
+    right: -11rem;
+    width: 26rem;
+    opacity: 0.32;
+    pointer-events: none;
+  }
+
+  .hero__leitsatz {
+    grid-area: leitsatz;
+    font-family: var(--schrift-serif);
+    font-style: italic;
+    font-size: 1.1875rem;
+    color: var(--farbe-text-leise);
+  }
+
+  @media (min-width: 40em) {
+    .hero__grafik {
+      top: -6rem;
+      right: -9rem;
+      width: 30rem;
+      opacity: 0.55;
+    }
+  }
+
+  /* Desktop: Text links, Bögen rechts */
+  @media (min-width: 60em) {
+    .hero__raster {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      grid-template-areas:
+        'text grafik'
+        'text leitsatz';
+      grid-template-rows: 1fr auto;
+      align-items: center;
+      gap: var(--raum-m) var(--raum-xl);
+    }
+
+    .hero__grafik {
+      grid-area: grafik;
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 118%;
+      max-width: 36rem;
+      justify-self: center;
+      opacity: 1;
+    }
+
+    .hero__leitsatz {
+      justify-self: center;
+      text-align: center;
+    }
+  }
+
+  /* ---------- Schwerpunkte ---------- */
+  .karten {
+    display: grid;
+    gap: var(--raum-m);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 52em) {
+    .karten {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* ---------- Selbsteinschätzung ---------- */
+  .teaser__liste {
+    display: grid;
+    gap: var(--raum-s);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 52em) {
+    .teaser__liste {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--raum-m);
+    }
+  }
+
+  .teaser__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'bogen titel pfeil'
+      'bogen fuer pfeil';
+    align-items: center;
+    column-gap: var(--raum-m);
+    row-gap: var(--raum-3xs);
+    height: 100%;
+    padding: var(--raum-m) var(--raum-m);
+    background: var(--farbe-hintergrund);
+    border: var(--linie-duenn) solid transparent;
+    border-radius: var(--radius-karte);
+    color: var(--farbe-text);
+    text-decoration: none;
+    transition:
+      border-color var(--dauer-mittel) ease,
+      transform var(--dauer-mittel) var(--kurve-sanft);
+  }
+
+  .teaser__link:hover {
+    border-color: var(--farbe-bogen-1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .teaser__link:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .teaser__link:focus-visible {
+    border-radius: var(--radius-karte);
+  }
+
+  .teaser__link :global(.teaser__bogen) {
+    grid-area: bogen;
+  }
+
+  .teaser__titel {
+    grid-area: titel;
+    font-family: var(--schrift-serif);
+    font-size: 1.3125rem;
+    font-weight: 500;
+    line-height: 1.25;
+    hyphens: auto;
+  }
+
+  /* Sehr schmale Handys: ohne Bogen, damit lange Wörter wie „Intelligenzdiagnostik“ passen */
+  @media (max-width: 25.99em) {
+    .teaser__link {
+      grid-template-areas:
+        'titel pfeil'
+        'fuer pfeil';
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: var(--raum-s);
+      padding-inline: var(--raum-s);
+    }
+
+    .teaser__link :global(.teaser__bogen) {
+      display: none;
+    }
+
+    .teaser__titel {
+      font-size: 1.1875rem;
+    }
+  }
+
+  .teaser__fuer {
+    grid-area: fuer;
+    font-size: var(--text-klein);
+    color: var(--farbe-text-leise);
+  }
+
+  .teaser__link :global(.teaser__pfeil) {
+    grid-area: pfeil;
+    color: var(--farbe-link);
+    transition: transform var(--dauer-mittel) var(--kurve-sanft);
+  }
+
+  .teaser__link:hover :global(.teaser__pfeil) {
+    transform: translateX(4px);
+  }
+
+  /* ---------- Gutachten ---------- */
+  .gutachten__inhalt {
+    display: grid;
+    justify-items: start;
+    gap: var(--raum-m);
+    max-width: 44rem;
+    padding-left: clamp(1.25rem, 1rem + 2vw, 2.5rem);
+    border-left: 2px solid var(--farbe-akzent);
+  }
+
+  .gutachten__inhalt p {
+    color: var(--farbe-text-leise);
+    font-size: var(--text-gross);
+    line-height: 1.55;
+  }
+
+  .gutachten__inhalt .button {
+    margin-top: var(--raum-2xs);
+  }
+</style>

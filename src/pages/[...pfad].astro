@@ -1,0 +1,33 @@
+---
+// Erzeugt alle Seiten der Website aus der Liste in src/config/site.ts (Adresse → Vorlage).
+// Die eigentlichen Seiten stehen in src/components/seiten/. Neue Sprache: in site.ts freischalten.
+import type { GetStaticPaths } from 'astro';
+import Kontaktseite from '../components/seiten/Kontaktseite.astro';
+import Leistungsseite from '../components/seiten/Leistungsseite.astro';
+import Rechtstextseite from '../components/seiten/Rechtstextseite.astro';
+import Startseite from '../components/seiten/Startseite.astro';
+import UeberUnsSeite from '../components/seiten/UeberUnsSeite.astro';
+import { AKTIVE_SPRACHEN, SEITEN, type SeitenId, type Sprache } from '../config/site';
+
+export const getStaticPaths = (() =>
+  AKTIVE_SPRACHEN.flatMap((sprache) =>
+    (Object.keys(SEITEN) as SeitenId[]).map((id) => ({
+      // „/adhs-diagnostik/“ → „adhs-diagnostik“, „/“ → undefined (Startseite)
+      params: { pfad: SEITEN[id][sprache].replace(/^\/|\/$/g, '') || undefined },
+      props: { id, sprache },
+    })),
+  )) satisfies GetStaticPaths;
+
+interface Props {
+  id: SeitenId;
+  sprache: Sprache;
+}
+
+const { id, sprache } = Astro.props;
+---
+
+{id === 'start' && <Startseite sprache={sprache} />}
+{(id === 'adhs' || id === 'intelligenz' || id === 'klinisch') && <Leistungsseite bereich={id} sprache={sprache} />}
+{id === 'ueber_uns' && <UeberUnsSeite sprache={sprache} />}
+{id === 'kontakt' && <Kontaktseite sprache={sprache} />}
+{(id === 'impressum' || id === 'datenschutz') && <Rechtstextseite art={id} sprache={sprache} />}

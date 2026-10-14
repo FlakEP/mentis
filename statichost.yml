@@ -1,0 +1,6 @@
+# Bau-Einstellungen für statichost.eu (wird bei jedem Hochladen ins Repository automatisch gelesen).
+# image: Node.js 22 (Astro 7 braucht mindestens 22.12). command: Abhängigkeiten genau nach package-lock.json
+# installieren und die Website bauen (ohne anonyme Nutzungsstatistik von Astro). public: Ordner, der veröffentlicht wird.
+image: node:22
+command: npm ci && ASTRO_TELEMETRY_DISABLED=1 npm run build
+public: dist

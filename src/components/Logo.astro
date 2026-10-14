@@ -1,0 +1,107 @@
+---
+// Logo „mentis uno“ als Inline-SVG, aufgebaut aus den Original-Dateien in logo/.
+// Varianten: „voll“ (mit Unterzeile) und „kompakt“ (Bildmarke + Wortmarke, für kleine Bildschirme);
+// Ton „hell“ für helle Flächen, „negativ“ für den dunklen Footer. Benutzt in Header und Footer.
+import type { Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+
+interface Props {
+  sprache: Sprache;
+  variante?: 'voll' | 'kompakt';
+  ton?: 'hell' | 'negativ';
+  class?: string;
+}
+
+const { sprache, variante = 'voll', ton = 'hell', class: klasse } = Astro.props;
+const t = await uebersetzer(sprache);
+
+// ÄNDERN: Wird das Logo ersetzt, einfach die Dateien in logo/ austauschen (gleicher Aufbau:
+// zwei Bögen, Punkt, Wortmarke „mentis“, Wortmarke „uno“, Unterzeile).
+const dateien = import.meta.glob<string>('../../logo/logo-mentis-uno-{de,en}.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+const svg = dateien[`../../logo/logo-mentis-uno-${sprache}.svg`];
+if (!svg) throw new Error(`Logo-Datei logo/logo-mentis-uno-${sprache}.svg fehlt.`);
+
+const pfade = [...svg.matchAll(/<path d="([^"]+)"/g)].map((treffer) => treffer[1]);
+const [bogen1, bogen2, wortMentis, wortUno, unterzeile] = pfade;
+if (!unterzeile) throw new Error('Die Logo-Datei hat nicht den erwarteten Aufbau (5 Pfade).');
+
+const kompakt = variante === 'kompakt';
+// Ohne Unterzeile rückt die Wortmarke etwas nach unten, damit sie mittig zur Bildmarke steht.
+const viewBox = kompakt ? '6 6 400 88' : '6 6 400 88';
+const versatzWortmarke = kompakt ? 'translate(0 8)' : undefined;
+const titel = `${t('marke.name')} – ${t('marke.unterzeile')}`;
+---
+
+<svg
+  class:list={['logo', `logo--${ton}`, klasse]}
+  viewBox={viewBox}
+  role="img"
+  aria-label={titel}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path class="logo__bogen logo__bogen--1" d={bogen1}></path>
+  <path class="logo__bogen logo__bogen--2" d={bogen2}></path>
+  <circle class="logo__punkt" cx="50" cy="50" r="8"></circle>
+  <g transform={versatzWortmarke}>
+    <path class="logo__wort" d={wortMentis}></path>
+    <path class="logo__uno" d={wortUno}></path>
+  </g>
+  {!kompakt && <path class="logo__unterzeile" d={unterzeile} />}
+</svg>
+
+<style>
+  .logo {
+    --logo-bogen-1: var(--farbe-bogen-1);
+    --logo-bogen-2: var(--farbe-bogen-2);
+    --logo-punkt: var(--farbe-punkt);
+    --logo-wort: var(--ink);
+    --logo-uno: var(--terra-500);
+    --logo-unterzeile: var(--ink-muted);
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  .logo--negativ {
+    --logo-bogen-1: var(--sage-300);
+    --logo-bogen-2: var(--terra-300);
+    --logo-punkt: var(--sand-100);
+    --logo-wort: var(--sand-100);
+    --logo-uno: var(--terra-300);
+    --logo-unterzeile: var(--footer-text-soft);
+  }
+
+  .logo__bogen {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+  }
+
+  .logo__bogen--1 {
+    stroke: var(--logo-bogen-1);
+  }
+
+  .logo__bogen--2 {
+    stroke: var(--logo-bogen-2);
+  }
+
+  .logo__punkt {
+    fill: var(--logo-punkt);
+  }
+
+  .logo__wort {
+    fill: var(--logo-wort);
+  }
+
+  .logo__uno {
+    fill: var(--logo-uno);
+  }
+
+  .logo__unterzeile {
+    fill: var(--logo-unterzeile);
+  }
+</style>

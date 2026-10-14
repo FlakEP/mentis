@@ -1,0 +1,26 @@
+---
+// Gibt einen Inhaltstext aus. Platzhalter [[PLATZHALTER: …]] bekommen ein <span class="platzhalter"> (im Entwicklungsmodus gelb),
+// *Sternchen-Wörter* werden auf Wunsch betont (Akzentwort). Benutzt in fast allen Komponenten.
+import { zerlegeText } from '../lib/text';
+
+interface Props {
+  text: string;
+  /** *Wörter in Sternchen* als Akzent setzen (z. B. in Überschriften) */
+  betonung?: boolean;
+}
+
+const { text, betonung = false } = Astro.props;
+const teile = zerlegeText(text, { betonung });
+---
+
+{
+  teile.map((teil) =>
+    teil.art === 'betont' ? (
+      <em>{teil.text}</em>
+    ) : teil.art === 'platzhalter' ? (
+      <span class="platzhalter">{teil.text}</span>
+    ) : (
+      teil.text
+    ),
+  )
+}
