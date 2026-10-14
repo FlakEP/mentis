@@ -14,6 +14,13 @@ export const STANDARD_SPRACHE: Sprache = 'de';
  */
 export const ENGLISCH_AKTIV = true;
 
+/**
+ * Wartungsmodus: Solange `true`, wird statt der Website nur eine Platzhalterseite „Website im Aufbau“
+ * veröffentlicht (Texte in inhalte/ui.yaml → wartung). Alle Inhalte und Seiten bleiben im Projekt erhalten.
+ * ÄNDERN: auf `false` setzen und hochladen – dann ist die vollständige Website wieder online.
+ */
+export const WARTUNGSMODUS = true;
+
 /** Sprachen, für die Seiten gebaut werden. */
 export const AKTIVE_SPRACHEN: Sprache[] = ENGLISCH_AKTIV ? ['de', 'en'] : ['de'];
 

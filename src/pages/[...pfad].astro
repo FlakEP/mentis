@@ -1,16 +1,20 @@
 ---
 // Erzeugt alle Seiten der Website aus der Liste in src/config/site.ts (Adresse → Vorlage).
 // Die eigentlichen Seiten stehen in src/components/seiten/. Neue Sprache: in site.ts freischalten.
+// Im Wartungsmodus (site.ts → WARTUNGSMODUS) entsteht nur die Startadresse mit der Platzhalterseite.
 import type { GetStaticPaths } from 'astro';
 import Kontaktseite from '../components/seiten/Kontaktseite.astro';
 import Leistungsseite from '../components/seiten/Leistungsseite.astro';
 import Rechtstextseite from '../components/seiten/Rechtstextseite.astro';
 import Startseite from '../components/seiten/Startseite.astro';
 import UeberUnsSeite from '../components/seiten/UeberUnsSeite.astro';
-import { AKTIVE_SPRACHEN, SEITEN, type SeitenId, type Sprache } from '../config/site';
+import Wartungsseite from '../components/seiten/Wartungsseite.astro';
+import { AKTIVE_SPRACHEN, SEITEN, WARTUNGSMODUS, type SeitenId, type Sprache } from '../config/site';
 
 export const getStaticPaths = (() =>
-  AKTIVE_SPRACHEN.flatMap((sprache) =>
+  WARTUNGSMODUS
+    ? [{ params: { pfad: undefined }, props: { id: 'start' as SeitenId, sprache: 'de' as Sprache } }]
+    : AKTIVE_SPRACHEN.flatMap((sprache) =>
     (Object.keys(SEITEN) as SeitenId[]).map((id) => ({
       // „/adhs-diagnostik/“ → „adhs-diagnostik“, „/“ → undefined (Startseite)
       params: { pfad: SEITEN[id][sprache].replace(/^\/|\/$/g, '') || undefined },
@@ -26,7 +30,8 @@ interface Props {
 const { id, sprache } = Astro.props;
 ---
 
-{id === 'start' && <Startseite sprache={sprache} />}
+{WARTUNGSMODUS && <Wartungsseite />}
+{!WARTUNGSMODUS && id === 'start' && <Startseite sprache={sprache} />}
 {(id === 'adhs' || id === 'intelligenz' || id === 'klinisch') && <Leistungsseite bereich={id} sprache={sprache} />}
 {id === 'ueber_uns' && <UeberUnsSeite sprache={sprache} />}
 {id === 'kontakt' && <Kontaktseite sprache={sprache} />}

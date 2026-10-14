@@ -180,6 +180,7 @@ export const uiSchema = z.strictObject({
     fehler_einwilligung: zweisprachig,
   }),
   footer: z.strictObject({ kurzbeschreibung: zweisprachig, termine: zweisprachig, copyright: zweisprachig }),
+  wartung: z.strictObject({ seitentitel: zweisprachig, ueberschrift: zweisprachig, text: zweisprachig }),
   fehlerseite: z.strictObject({
     seitentitel: zweisprachig,
     ueberschrift: zweisprachig,

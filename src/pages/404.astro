@@ -2,7 +2,8 @@
 // Seite „nicht gefunden“ (404). Statische Hoster zeigen sie bei unbekannten Adressen an.
 // Zweisprachig auf einer Seite, weil der Hoster nicht weiß, welche Sprache gemeint war. Texte aus ui.yaml → fehlerseite.
 import HeroBoegen from '../components/HeroBoegen.astro';
-import { kontaktUrl, seitenUrl, type Sprache } from '../config/site';
+import Wartungsseite from '../components/seiten/Wartungsseite.astro';
+import { kontaktUrl, seitenUrl, WARTUNGSMODUS, type Sprache } from '../config/site';
 import Basis from '../layouts/Basis.astro';
 import { uebersetzer } from '../lib/inhalte';
 
@@ -14,6 +15,9 @@ const fassungen: { sprache: Sprache; t: typeof de }[] = [
 ];
 ---
 
+{/* Im Wartungsmodus zeigt jede unbekannte Adresse die Platzhalterseite */}
+{WARTUNGSMODUS && <Wartungsseite />}
+{!WARTUNGSMODUS && (
 <Basis sprache="de" titel={de('fehlerseite.seitentitel')} beschreibung={de('fehlerseite.text')} noindex>
   <section class="nichtgefunden" data-hero>
     <div class="inhalt nichtgefunden__raster">
@@ -42,6 +46,7 @@ const fassungen: { sprache: Sprache; t: typeof de }[] = [
     </div>
   </section>
 </Basis>
+)}
 
 <style>
   .nichtgefunden {

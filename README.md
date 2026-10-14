@@ -167,6 +167,21 @@ Erst wenn alles grün ist **und** `PRUEFLISTE-VOR-LIVEGANG.md` abgehakt ist, die
 
 ---
 
+## Website vorübergehend offline nehmen (Wartungsmodus)
+
+Solange der Wartungsmodus eingeschaltet ist, wird statt der Website nur eine schlichte Platzhalterseite „Unsere Website ist im Aufbau“ (Deutsch/Englisch) veröffentlicht. Jede andere Adresse zeigt ebenfalls diese Seite. Alle Inhalte, Seiten, Selbsttests und das Formular bleiben vollständig im Projekt erhalten.
+
+**Umschalten** in `src/config/site.ts`:
+
+```ts
+export const WARTUNGSMODUS = true;   // Platzhalterseite online
+export const WARTUNGSMODUS = false;  // vollständige Website online
+```
+
+Danach speichern und in den Zweig `main` hochladen – statichost.eu veröffentlicht den neuen Stand automatisch. Die Texte der Platzhalterseite stehen in `inhalte/ui.yaml` unter `wartung`. `npm run check:livegang` meldet einen Fehler, solange der Wartungsmodus an ist.
+
+---
+
 ## Veröffentlichen bei statichost.eu
 
 Die Bau-Einstellungen stehen in **`statichost.yml`** im Hauptordner (Node.js 22, `npm ci && npm run build`, veröffentlicht wird `dist/`). Im Dashboard von statichost.eu muss deshalb nichts weiter eingestellt werden. Die Website läuft aber auch auf jedem anderen Hoster für statische Seiten (Build-Befehl `npm run build`, Ausgabeordner `dist`).

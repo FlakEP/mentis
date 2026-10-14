@@ -14,6 +14,14 @@ if (platzhalter.length > 0) {
   console.log('✔ Keine offenen Platzhalter.');
 }
 
+const seiteneinstellungen = readFileSync('src/config/site.ts', 'utf8');
+if (/WARTUNGSMODUS\s*=\s*true/.test(seiteneinstellungen)) {
+  console.error('✘ Der Wartungsmodus ist eingeschaltet – online ist nur die Platzhalterseite (src/config/site.ts → WARTUNGSMODUS).');
+  fehler++;
+} else {
+  console.log('✔ Wartungsmodus aus – die vollständige Website wird veröffentlicht.');
+}
+
 const konfiguration = readFileSync('src/config/kontaktformular.ts', 'utf8');
 const endpunkt = konfiguration.match(/FORMULAR_ENDPUNKT\s*=\s*['"`]([^'"`]*)['"`]/)?.[1]?.trim() ?? '';
 if (!endpunkt) {

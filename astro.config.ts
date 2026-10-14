@@ -6,7 +6,7 @@ import type { AstroIntegration } from 'astro';
 import sitemap from '@astrojs/sitemap';
 import { unified } from '@astrojs/markdown-remark';
 import { fileURLToPath } from 'node:url';
-import { AKTIVE_SPRACHEN, SITE_URL, SEITEN } from './src/config/site';
+import { AKTIVE_SPRACHEN, SITE_URL, SEITEN, WARTUNGSMODUS } from './src/config/site';
 import { fehlertext, pruefeInhalte } from './src/lib/inhalte-pruefen';
 import { findePlatzhalter } from './scripts/platzhalter.mjs';
 import { rehypePlatzhalterMarkieren, remarkKommentareEntfernen, remarkZeilenumbrueche } from './src/lib/markdown-plugins';
@@ -72,15 +72,20 @@ export default defineConfig({
   },
   integrations: [
     inhalteIntegration(),
-    sitemap({
-      filter: (seite) => !NICHT_IN_SITEMAP.some((pfad) => new URL(seite).pathname === pfad),
-      // Deutsche und englische Fassung einer Seite haben unterschiedliche Adressen,
-      // deshalb werden die Sprachverweise (hreflang) aus src/config/site.ts gesetzt.
-      serialize: (eintrag) => {
-        const links = SPRACHVERSIONEN.get(new URL(eintrag.url).pathname);
-        return links && links.length > 1 ? { ...eintrag, links } : eintrag;
-      },
-    }),
+    // Im Wartungsmodus keine Sitemap (die Platzhalterseite soll nicht in Suchmaschinen)
+    ...(WARTUNGSMODUS
+      ? []
+      : [
+        sitemap({
+          filter: (seite) => !NICHT_IN_SITEMAP.some((pfad) => new URL(seite).pathname === pfad),
+          // Deutsche und englische Fassung einer Seite haben unterschiedliche Adressen,
+          // deshalb werden die Sprachverweise (hreflang) aus src/config/site.ts gesetzt.
+          serialize: (eintrag) => {
+            const links = SPRACHVERSIONEN.get(new URL(eintrag.url).pathname);
+            return links && links.length > 1 ? { ...eintrag, links } : eintrag;
+          },
+        }),
+      ]),
   ],
   // Keine Telemetrie-Hinweise, keine Vorab-Ladeskripte von außen
   prefetch: false,
