@@ -6,9 +6,19 @@ import type { AstroIntegration } from 'astro';
 import sitemap from '@astrojs/sitemap';
 import { unified } from '@astrojs/markdown-remark';
 import { fileURLToPath } from 'node:url';
-import { SITE_URL, SEITEN } from './src/config/site';
+import { AKTIVE_SPRACHEN, SITE_URL, SEITEN } from './src/config/site';
 import { fehlertext, pruefeInhalte } from './src/lib/inhalte-pruefen';
 import { rehypePlatzhalterMarkieren, remarkKommentareEntfernen, remarkZeilenumbrueche } from './src/lib/markdown-plugins';
+
+/** Zu jeder Adresse die Adressen derselben Seite in allen Sprachen (für hreflang in der Sitemap). */
+const SPRACHVERSIONEN = new Map(
+  Object.values(SEITEN).flatMap((seite) =>
+    AKTIVE_SPRACHEN.map((sprache) => [
+      seite[sprache],
+      AKTIVE_SPRACHEN.map((andere) => ({ lang: andere, url: new URL(seite[andere], SITE_URL).href })),
+    ]),
+  ),
+);
 
 /** Seiten, die nicht in der Sitemap stehen sollen (sie haben außerdem „noindex“). */
 const NICHT_IN_SITEMAP = [SEITEN.impressum, SEITEN.datenschutz].flatMap((seite) => [seite.de, seite.en]);
@@ -53,8 +63,13 @@ export default defineConfig({
   integrations: [
     inhalteIntegration(),
     sitemap({
-      i18n: { defaultLocale: 'de', locales: { de: 'de-DE', en: 'en' } },
       filter: (seite) => !NICHT_IN_SITEMAP.some((pfad) => new URL(seite).pathname === pfad),
+      // Deutsche und englische Fassung einer Seite haben unterschiedliche Adressen,
+      // deshalb werden die Sprachverweise (hreflang) aus src/config/site.ts gesetzt.
+      serialize: (eintrag) => {
+        const links = SPRACHVERSIONEN.get(new URL(eintrag.url).pathname);
+        return links && links.length > 1 ? { ...eintrag, links } : eintrag;
+      },
     }),
   ],
   // Keine Telemetrie-Hinweise, keine Vorab-Ladeskripte von außen

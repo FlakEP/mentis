@@ -12,7 +12,7 @@ export const STANDARD_SPRACHE: Sprache = 'de';
  * Sprachumschalter ausgeblendet (die englischen Seiten entstehen in Phase 5).
  * ÄNDERN: auf `true` setzen, sobald die englischen Seiten veröffentlicht werden.
  */
-export const ENGLISCH_AKTIV = false;
+export const ENGLISCH_AKTIV = true;
 
 /** Sprachen, für die Seiten gebaut werden. */
 export const AKTIVE_SPRACHEN: Sprache[] = ENGLISCH_AKTIV ? ['de', 'en'] : ['de'];

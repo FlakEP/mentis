@@ -1,5 +1,6 @@
 ---
-// Kopfzeile jeder Seite: Logo, Hauptnavigation, Sprachumschalter und der Button „Termin anfragen“.
+// Kopfzeile jeder Seite: Logo, Hauptnavigation und der Button „Termin anfragen“ (Sprachumschalter: oben in der
+// Selbstzahler-Leiste, auf Handys im Menü).
 // Bleibt beim Scrollen oben stehen. Auf kleineren Bildschirmen wird die Navigation zum Menü (Burger).
 // Benutzt in src/layouts/Basis.astro.
 import { HAUPTNAVIGATION, kontaktUrl, seitenUrl, type SeitenId, type Sprache } from '../config/site';
@@ -59,7 +60,6 @@ const t = await uebersetzer(sprache);
     </nav>
 
     <div class="kopf__aktionen">
-      <Sprachumschalter sprache={sprache} seite={seite} class="kopf__sprache" />
       <a class="button button--primaer button--klein kopf__cta" href={kontaktUrl(sprache)} data-kontakt-oeffnen>
         {t('buttons.termin_anfragen')}
       </a>
@@ -128,6 +128,7 @@ const t = await uebersetzer(sprache);
     display: inline-flex;
     align-items: center;
     min-height: var(--beruehrziel);
+    white-space: nowrap;
     color: var(--farbe-text);
     text-decoration: none;
     font-weight: 400;
@@ -191,7 +192,7 @@ const t = await uebersetzer(sprache);
   }
 
   /* ---------- Kleinere Bildschirme ---------- */
-  @media (max-width: 71.99em) {
+  @media (max-width: 74.99em) {
     /* Ohne JavaScript: Navigation als Zeile unter dem Logo */
     .kopf__innen {
       flex-wrap: wrap;
@@ -263,13 +264,17 @@ const t = await uebersetzer(sprache);
   }
 
   /* ---------- Breite Bildschirme: Navigation in einer Zeile ---------- */
-  @media (min-width: 72em) {
+  @media (min-width: 75em) {
     .kopf__innen {
       gap: var(--raum-l);
     }
 
     .kopf__liste {
-      gap: var(--raum-l);
+      gap: var(--raum-m);
+    }
+
+    .kopf__cta {
+      white-space: nowrap;
     }
 
     .kopf__link {
@@ -292,7 +297,7 @@ const t = await uebersetzer(sprache);
   const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
   const menue = document.querySelector<HTMLElement>('[data-menue]');
   const burgerText = document.querySelector<HTMLElement>('[data-burger-text]');
-  const breit = window.matchMedia('(min-width: 72em)');
+  const breit = window.matchMedia('(min-width: 75em)');
 
   function setzeGesperrt(gesperrt: boolean) {
     document

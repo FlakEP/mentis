@@ -119,8 +119,8 @@ krisenhinweis:
 kontaktformular:
   ueberschrift: { de: "Termin anfragen", en: "Request an appointment" }
   einleitung:
-    de: "Schreiben Sie uns kurz, worum es geht. Wir melden uns in der Regel innerhalb von [[PLATZHALTER: z. B. zwei Werktagen]]."
-    en: "Tell us briefly what it is about. We usually reply within [[PLATZHALTER: e.g. two working days]]."
+    de: "Schreiben Sie uns kurz, worum es geht. Wir melden uns in der Regel innerhalb von drei Werktagen."
+    en: "Tell us briefly what it is about. We usually reply within three working days."
   name: { de: "Name", en: "Name" }
   email: { de: "E-Mail", en: "Email" }
   telefon: { de: "Telefon (optional)", en: "Phone (optional)" }

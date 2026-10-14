@@ -16,7 +16,7 @@ import Header from '../components/Header.astro';
 import KontaktDialog from '../components/KontaktDialog.astro';
 import MobilLeiste from '../components/MobilLeiste.astro';
 import SelbstzahlerLeiste from '../components/SelbstzahlerLeiste.astro';
-import type { SeitenId, Sprache } from '../config/site';
+import { AKTIVE_SPRACHEN, SEITEN, SITE_URL, type SeitenId, type Sprache } from '../config/site';
 import { uebersetzer } from '../lib/inhalte';
 import { ohneBetonung } from '../lib/text';
 
@@ -43,6 +43,13 @@ const kanonisch = new URL(Astro.url.pathname, Astro.site);
     <title>{ohneBetonung(titel)}</title>
     <meta name="description" content={beschreibung} />
     <link rel="canonical" href={kanonisch} />
+    {
+      AKTIVE_SPRACHEN.length > 1 &&
+        AKTIVE_SPRACHEN.map((andere) => (
+          <link rel="alternate" hreflang={andere} href={new URL(SEITEN[seite][andere], SITE_URL)} />
+        ))
+    }
+    {AKTIVE_SPRACHEN.length > 1 && <link rel="alternate" hreflang="x-default" href={new URL(SEITEN[seite].de, SITE_URL)} />}
     {noindex && <meta name="robots" content="noindex" />}
 
     <meta property="og:type" content="website" />
@@ -67,7 +74,7 @@ const kanonisch = new URL(Astro.url.pathname, Astro.site);
   <body>
     <a class="sprunglink" href="#inhalt">{t('navigation.zum_inhalt')}</a>
     <div data-sperrbar>
-      <SelbstzahlerLeiste sprache={sprache} kostenAufDieserSeite={kostenAufDieserSeite} />
+      <SelbstzahlerLeiste sprache={sprache} seite={seite} kostenAufDieserSeite={kostenAufDieserSeite} />
     </div>
     <Header sprache={sprache} seite={seite} />
     <main id="inhalt" tabindex="-1" data-sperrbar>

@@ -1,17 +1,20 @@
 ---
-// Schmale, ruhige Infoleiste über dem Header mit dem Selbstzahler-Hinweis (Kurztext aus ui.yaml).
+// Schmale, ruhige Infoleiste über dem Header mit dem Selbstzahler-Hinweis (Kurztext aus ui.yaml)
+// und – ab Tablet-Breite – rechts dem Sprachumschalter.
 // Verlinkt auf einer Leistungsseite auf deren Kostenabschnitt, sonst auf /#kosten. Benutzt in Basis.astro.
-import { ANKER, seitenUrl, type Sprache } from '../config/site';
+import { ANKER, seitenUrl, type SeitenId, type Sprache } from '../config/site';
 import { uebersetzer } from '../lib/inhalte';
 import Icon from './Icon.astro';
+import Sprachumschalter from './Sprachumschalter.astro';
 
 interface Props {
   sprache: Sprache;
+  seite: SeitenId;
   /** Hat die aktuelle Seite selbst einen Kostenabschnitt? Dann dorthin springen. */
   kostenAufDieserSeite?: boolean;
 }
 
-const { sprache, kostenAufDieserSeite = false } = Astro.props;
+const { sprache, seite, kostenAufDieserSeite = false } = Astro.props;
 const t = await uebersetzer(sprache);
 const ziel = kostenAufDieserSeite ? `#${ANKER.kosten}` : `${seitenUrl('start', sprache)}#${ANKER.kosten}`;
 ---
@@ -22,6 +25,7 @@ const ziel = kostenAufDieserSeite ? `#${ANKER.kosten}` : `${seitenUrl('start', s
       <span>{t('selbstzahler.kurz')}</span>
       <Icon name="pfeil-rechts" groesse={16} class="zahlerleiste__icon" />
     </a>
+    <Sprachumschalter sprache={sprache} seite={seite} class="zahlerleiste__sprache" />
   </div>
 </div>
 
@@ -34,8 +38,30 @@ const ziel = kostenAufDieserSeite ? `#${ANKER.kosten}` : `${seitenUrl('start', s
   }
 
   .zahlerleiste__innen {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .zahlerleiste__innen :global(.zahlerleiste__sprache) {
+    display: none;
+  }
+
+  /* Ab Tablet-Breite: Hinweis mittig, Sprachumschalter rechts */
+  @media (min-width: 40em) {
+    .zahlerleiste__innen {
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    .zahlerleiste__link {
+      grid-column: 2;
+    }
+
+    .zahlerleiste__innen :global(.zahlerleiste__sprache) {
+      display: inline-flex;
+      justify-self: end;
+      min-height: var(--beruehrziel);
+    }
   }
 
   .zahlerleiste__link {
