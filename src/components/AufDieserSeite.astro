@@ -1,0 +1,73 @@
+---
+// Seitennavigation „Auf dieser Seite“ mit Sprungmarken zu den Zwischenüberschriften.
+// Nur auf breiten Bildschirmen sichtbar, bleibt beim Scrollen stehen. Benutzt auf den Leistungsseiten.
+import type { Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+
+interface Props {
+  sprache: Sprache;
+  eintraege: { ziel: string; text: string }[];
+}
+
+const { sprache, eintraege } = Astro.props;
+const t = await uebersetzer(sprache);
+---
+
+<nav class="seitennav" aria-label={t('navigation.auf_dieser_seite')}>
+  <p class="seitennav__titel" aria-hidden="true">{t('navigation.auf_dieser_seite')}</p>
+  <ul class="seitennav__liste" role="list">
+    {
+      eintraege.map((eintrag) => (
+        <li>
+          <a href={`#${eintrag.ziel}`}>{eintrag.text}</a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .seitennav {
+    display: none;
+  }
+
+  @media (min-width: 64em) {
+    .seitennav {
+      display: block;
+      position: sticky;
+      top: calc(var(--header-hoehe) + var(--raum-l));
+    }
+  }
+
+  .seitennav__titel {
+    margin-bottom: var(--raum-s);
+    font-size: var(--text-klein);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--farbe-link);
+  }
+
+  .seitennav__liste {
+    display: grid;
+    padding: 0;
+    list-style: none;
+    border-left: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  .seitennav a {
+    display: block;
+    padding: 0.4rem 0 0.4rem var(--raum-s);
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    color: var(--farbe-text-leise);
+    font-size: 1rem;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .seitennav a:hover {
+    color: var(--farbe-text);
+    border-left-color: var(--farbe-bogen-1);
+  }
+</style>

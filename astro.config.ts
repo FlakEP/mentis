@@ -8,7 +8,7 @@ import { unified } from '@astrojs/markdown-remark';
 import { fileURLToPath } from 'node:url';
 import { SITE_URL, SEITEN } from './src/config/site';
 import { fehlertext, pruefeInhalte } from './src/lib/inhalte-pruefen';
-import { rehypePlatzhalterMarkieren, remarkKommentareEntfernen } from './src/lib/markdown-plugins';
+import { rehypePlatzhalterMarkieren, remarkKommentareEntfernen, remarkZeilenumbrueche } from './src/lib/markdown-plugins';
 
 /** Seiten, die nicht in der Sitemap stehen sollen (sie haben außerdem „noindex“). */
 const NICHT_IN_SITEMAP = [SEITEN.impressum, SEITEN.datenschutz].flatMap((seite) => [seite.de, seite.en]);
@@ -44,7 +44,7 @@ export default defineConfig({
   },
   markdown: {
     processor: unified({
-      remarkPlugins: [remarkKommentareEntfernen],
+      remarkPlugins: [remarkKommentareEntfernen, remarkZeilenumbrueche],
       rehypePlugins: [rehypePlatzhalterMarkieren],
       // Keine automatischen englischen Anführungszeichen in deutschen Texten
       smartypants: false,

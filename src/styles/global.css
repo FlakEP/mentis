@@ -264,9 +264,24 @@ a:hover {
   }
 }
 
+/* Kürzerer Abschnitt, z. B. für einen einzelnen Hinweis */
+.abschnitt--eng {
+  padding-block: clamp(3rem, 2rem + 3vw, 4.5rem);
+}
+
 /* ---------- Fließtext aus Markdown (inhalte/seiten/…) ---------- */
 .prosa {
   max-width: var(--textbreite);
+  overflow-wrap: break-word;
+}
+
+/* Auf schmalen Bildschirmen lange deutsche Wörter trennen (z. B. „Hyperaktivitätsstörung“) */
+@media (max-width: 39.99em) {
+  .prosa,
+  h1,
+  h2 {
+    hyphens: auto;
+  }
 }
 
 .prosa > * + * {
@@ -334,4 +349,45 @@ a:hover {
   font-size: 1.2em;
   color: var(--farbe-akzent-text);
   font-variant-numeric: lining-nums;
+}
+
+/* Zweispaltig: Überschrift links, Text rechts (z. B. „Willkommen“, „Wie wir arbeiten“) */
+.prosa--zweispaltig {
+  max-width: none;
+}
+
+.prosa--zweispaltig > h2 {
+  margin-bottom: var(--raum-m);
+}
+
+.prosa--zweispaltig > p {
+  max-width: var(--textbreite);
+}
+
+.prosa--zweispaltig > h2 + p {
+  font-size: var(--text-gross);
+  line-height: 1.55;
+}
+
+@media (min-width: 60em) {
+  .prosa--zweispaltig {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--raum-3xl);
+  }
+
+  .prosa--zweispaltig > * {
+    grid-column: 2;
+  }
+
+  .prosa--zweispaltig > h2 {
+    grid-column: 1;
+    grid-row: 1 / span 20;
+    align-self: start;
+    margin: 0;
+  }
+
+  .prosa--zweispaltig > h2 + p {
+    margin-top: 0;
+  }
 }

@@ -1,0 +1,85 @@
+---
+// Kostenabschnitt einer Leistungsseite (Anker #kosten): „ab … €“ groß, die Dauer,
+// der Selbstzahler-Langtext und der Hinweis auf den Kostenvoranschlag (Texte aus ui.yaml).
+// Benutzt in src/components/seiten/Leistungsseite.astro.
+import { ANKER, type Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import Preis from './Preis.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+  preisAb: string;
+  dauer: string;
+}
+
+const { sprache, preisAb, dauer } = Astro.props;
+const t = await uebersetzer(sprache);
+---
+
+<section class="abschnitt abschnitt--flaeche" id={ANKER.kosten} aria-labelledby="kosten-titel">
+  <div class="inhalt kosten">
+    <div class="kosten__preisblock">
+      <h2 id="kosten-titel">{t('preise.ueberschrift')}</h2>
+      <Preis sprache={sprache} preisAb={preisAb} groesse="gross" />
+      <p class="kosten__dauer">
+        <Icon name="kalender" groesse={20} />
+        <span><Text text={dauer} /></span>
+      </p>
+    </div>
+    <div class="kosten__text">
+      <p>{t('selbstzahler.lang')}</p>
+      <p class="kosten__hinweis">{t('preise.hinweis')}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kosten {
+    display: grid;
+    gap: var(--raum-xl) var(--raum-3xl);
+  }
+
+  @media (min-width: 56em) {
+    .kosten {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: start;
+    }
+  }
+
+  .kosten__preisblock {
+    display: grid;
+    justify-items: start;
+    gap: var(--raum-m);
+  }
+
+  .kosten__dauer {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--raum-xs);
+    color: var(--farbe-text-leise);
+  }
+
+  .kosten__dauer :global(.icon) {
+    flex: none;
+    margin-top: 0.2em;
+    color: var(--farbe-link);
+  }
+
+  .kosten__text {
+    display: grid;
+    gap: var(--raum-s);
+    max-width: var(--textbreite);
+  }
+
+  @media (min-width: 56em) {
+    .kosten__text {
+      padding-top: 0.6rem;
+    }
+  }
+
+  .kosten__hinweis {
+    color: var(--farbe-text-leise);
+  }
+</style>

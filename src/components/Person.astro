@@ -1,0 +1,129 @@
+---
+// Personenkarte auf „Über uns“: Initialen im Bogen-Motiv, Name, Berufsbezeichnung,
+// Zeitleiste der Stationen, Erfahrung und Diagnostik. Daten aus inhalte/seiten/<sprache>/ueber-uns.md (personen).
+import Bogen from './Bogen.astro';
+import Text from './Text.astro';
+
+interface Props {
+  person: {
+    name: string;
+    initialen: string;
+    berufsbezeichnung: string;
+    stationen: { zeitraum: string; text: string }[];
+    erfahrung: string;
+    diagnostik: string;
+  };
+  id: string;
+}
+
+const { person, id } = Astro.props;
+---
+
+<article class="person" aria-labelledby={id}>
+  <header class="person__kopf">
+    <Bogen groesse={104} strich={2.4} class="person__avatar">
+      <span aria-hidden="true">{person.initialen}</span>
+    </Bogen>
+    <div>
+      <h2 class="person__name" id={id}>{person.name}</h2>
+      <p class="person__beruf"><Text text={person.berufsbezeichnung} /></p>
+    </div>
+  </header>
+
+  <ol class="person__stationen" role="list">
+    {
+      person.stationen.map((station) => (
+        <li class="person__station">
+          <span class="person__zeitraum">
+            <Text text={station.zeitraum} />
+          </span>
+          <span>
+            <Text text={station.text} />
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="person__absatz">
+    <p><Text text={person.erfahrung} /></p>
+    <p><Text text={person.diagnostik} /></p>
+  </div>
+</article>
+
+<style>
+  .person {
+    display: grid;
+    align-content: start;
+    gap: var(--raum-l);
+    height: 100%;
+    padding: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+    background: var(--farbe-flaeche);
+    border: var(--linie-duenn) solid var(--farbe-linie);
+    border-radius: var(--radius-karte);
+  }
+
+  .person__kopf {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--raum-m);
+  }
+
+  .person :global(.person__avatar .bogenpaar__inhalt) {
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+  }
+
+  .person__name {
+    font-size: var(--text-h3);
+    font-weight: 500;
+  }
+
+  .person__beruf {
+    margin-top: var(--raum-3xs);
+    color: var(--farbe-text-leise);
+  }
+
+  /* Zeitleiste: feine Linie mit Punkten */
+  .person__stationen {
+    display: grid;
+    gap: var(--raum-m);
+    padding: 0 0 0 var(--raum-m);
+    list-style: none;
+    border-left: var(--linie-duenn) solid var(--farbe-deko);
+  }
+
+  .person__station {
+    position: relative;
+    display: grid;
+    gap: var(--raum-3xs);
+  }
+
+  .person__station::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--raum-m) - 4.5px);
+    top: 0.45em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--farbe-hintergrund);
+    border: 1.5px solid var(--farbe-bogen-2);
+  }
+
+  .person__zeitraum {
+    font-size: var(--text-klein);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--farbe-link);
+  }
+
+  .person__absatz {
+    display: grid;
+    gap: var(--raum-s);
+    padding-top: var(--raum-m);
+    border-top: var(--linie-duenn) solid var(--farbe-linie);
+    color: var(--farbe-text-leise);
+  }
+</style>

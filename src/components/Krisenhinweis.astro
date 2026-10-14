@@ -1,0 +1,64 @@
+---
+// Hinweis auf Hilfsangebote in akuten Krisen (Texte aus ui.yaml → krisenhinweis).
+// Telefonnummern sind auf dem Handy direkt antippbar. Benutzt auf der Seite „Klinische Diagnostik“
+// und (ab Phase 3) unter jedem Ergebnis eines klinischen Selbsttests.
+import type { Sprache } from '../config/site';
+import { uebersetzer } from '../lib/inhalte';
+import { findeTelefonnummern } from '../lib/text';
+
+interface Props {
+  sprache: Sprache;
+  /** Überschriftenebene: h2 als eigener Abschnitt, h3 innerhalb eines Ergebnisses */
+  ebene?: 'h2' | 'h3';
+  id?: string;
+}
+
+const { sprache, ebene = 'h2', id = 'krisenhinweis' } = Astro.props;
+const t = await uebersetzer(sprache);
+const teile = findeTelefonnummern(t('krisenhinweis.text'));
+const Ueberschrift = ebene;
+---
+
+<aside class="krise" aria-labelledby={`${id}-titel`}>
+  <Ueberschrift class="krise__titel" id={`${id}-titel`}>{t('krisenhinweis.ueberschrift')}</Ueberschrift>
+  <p class="krise__text">
+    {
+      teile.map((teil) =>
+        teil.art === 'telefon' ? (
+          <a class="krise__telefon" href={`tel:${teil.nummer}`}>
+            {teil.text}
+          </a>
+        ) : (
+          teil.text
+        ),
+      )
+    }
+  </p>
+</aside>
+
+<style>
+  .krise {
+    display: grid;
+    gap: var(--raum-xs);
+    padding: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+    background: var(--farbe-flaeche-hinweis);
+    border-left: 3px solid var(--farbe-primaer);
+    border-radius: var(--radius-klein);
+  }
+
+  .krise__titel {
+    font-size: var(--text-h3);
+    font-weight: 500;
+  }
+
+  .krise__text {
+    max-width: var(--textbreite);
+  }
+
+  .krise__telefon {
+    color: var(--farbe-text);
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration-color: var(--farbe-primaer);
+  }
+</style>

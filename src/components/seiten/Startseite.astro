@@ -1,21 +1,26 @@
 ---
-// Startseite (Deutsch, Adresse „/“). Alle Texte kommen aus inhalte/seiten/de/startseite.md und inhalte/ui.yaml.
+// Vorlage der Startseite (Adresse „/“ bzw. „/en/“). Texte aus inhalte/seiten/<sprache>/startseite.md und ui.yaml.
 // Reihenfolge: Hero → Willkommen → Schwerpunkte → Ablauf → Selbsteinschätzung → Kosten → Gutachten → Kontakt.
+// Wird von src/pages/[...pfad].astro aufgerufen.
 import { render } from 'astro:content';
-import Ablauf from '../components/Ablauf.astro';
-import AbschnittsKopf from '../components/AbschnittsKopf.astro';
-import Bogen from '../components/Bogen.astro';
-import HeroBoegen from '../components/HeroBoegen.astro';
-import Icon from '../components/Icon.astro';
-import KontaktBlock from '../components/KontaktBlock.astro';
-import KostenUebersicht from '../components/KostenUebersicht.astro';
-import Leistungskarte from '../components/Leistungskarte.astro';
-import Text from '../components/Text.astro';
-import { ANKER, BEREICHE, kontaktUrl, seitenUrl, type Sprache } from '../config/site';
-import Basis from '../layouts/Basis.astro';
-import { holeStartseite, uebersetzer } from '../lib/inhalte';
+import Ablauf from '../Ablauf.astro';
+import AbschnittsKopf from '../AbschnittsKopf.astro';
+import Bogen from '../Bogen.astro';
+import HeroBoegen from '../HeroBoegen.astro';
+import Icon from '../Icon.astro';
+import KontaktBlock from '../KontaktBlock.astro';
+import KostenUebersicht from '../KostenUebersicht.astro';
+import Leistungskarte from '../Leistungskarte.astro';
+import Text from '../Text.astro';
+import { ANKER, BEREICHE, kontaktUrl, seitenUrl, type Sprache } from '../../config/site';
+import Basis from '../../layouts/Basis.astro';
+import { holeStartseite, uebersetzer } from '../../lib/inhalte';
 
-const sprache: Sprache = 'de';
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
 const t = await uebersetzer(sprache);
 const seite = await holeStartseite(sprache);
 const { Content: Willkommen } = await render(seite);
@@ -48,7 +53,7 @@ const d = seite.data;
   <!-- Willkommen (Fließtext aus dem Markdown) -->
   <section class="abschnitt abschnitt--flaeche willkommen">
     <div class="inhalt">
-      <div class="prosa willkommen__text">
+      <div class="prosa prosa--zweispaltig">
         <Willkommen />
       </div>
     </div>
@@ -225,48 +230,6 @@ const d = seite.data;
     .hero__leitsatz {
       justify-self: center;
       text-align: center;
-    }
-  }
-
-  /* ---------- Willkommen ---------- */
-  .willkommen__text {
-    max-width: none;
-  }
-
-  .willkommen__text :global(h2) {
-    margin-bottom: var(--raum-m);
-  }
-
-  .willkommen__text :global(p) {
-    max-width: var(--textbreite);
-  }
-
-  .willkommen__text :global(h2 + p) {
-    font-size: var(--text-gross);
-    line-height: 1.55;
-  }
-
-  @media (min-width: 60em) {
-    /* Überschrift links, Text rechts */
-    .willkommen__text {
-      display: grid;
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      column-gap: var(--raum-3xl);
-    }
-
-    .willkommen__text :global(> *) {
-      grid-column: 2;
-    }
-
-    .willkommen__text :global(> h2) {
-      grid-column: 1;
-      grid-row: 1 / span 20;
-      align-self: start;
-      margin: 0;
-    }
-
-    .willkommen__text :global(> h2 + p) {
-      margin-top: 0;
     }
   }
 

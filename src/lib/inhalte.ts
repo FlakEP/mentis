@@ -25,6 +25,25 @@ export async function holeLeistungsseite(bereich: Bereich, sprache: Sprache) {
   return (await getEntry('leistungsseiten', `${sprache}/${datei}`)) ?? fehlt(datei, sprache);
 }
 
+export async function holeUeberUns(sprache: Sprache) {
+  return (await getEntry('ueberUns', `${sprache}/ueber-uns`)) ?? fehlt('ueber-uns', sprache);
+}
+
+export async function holeRechtstext(art: 'impressum' | 'datenschutz', sprache: Sprache) {
+  return (await getEntry('rechtstexte', `${sprache}/${art}`)) ?? fehlt(art, sprache);
+}
+
+/** Die beiden Fragebögen einer Leistungsseite (in der Reihenfolge aus dem Frontmatter). */
+export async function holeSelbsttests(ids: string[]) {
+  return Promise.all(
+    ids.map(async (id) => {
+      const test = await getEntry('selbsttests', id);
+      if (!test) throw new Error(`Der Fragebogen inhalte/selbsttests/${id}.yaml fehlt.`);
+      return test.data;
+    }),
+  );
+}
+
 export async function holeKontaktseite(sprache: Sprache) {
   return (await getEntry('kontakt', `${sprache}/kontakt`)) ?? fehlt('kontakt', sprache);
 }

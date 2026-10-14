@@ -31,6 +31,7 @@ navigation:
   menue_schliessen: { de: "Menü schließen", en: "Close menu" }
   hauptmenue: { de: "Hauptmenü", en: "Main menu" }
   zum_inhalt: { de: "Zum Inhalt springen", en: "Skip to content" }
+  auf_dieser_seite: { de: "Auf dieser Seite", en: "On this page" }
 
 buttons:
   termin_anfragen: { de: "Termin anfragen", en: "Request an appointment" }
@@ -168,6 +169,9 @@ footer:
     en: "Psychological assessment in Berlin – ADHD, intelligence and mental health. For adults, children and adolescents."
   termine: { de: "Termine nach Vereinbarung", en: "Appointments by arrangement" }
   copyright: { de: "© {jahr} Mentis Uno", en: "© {jahr} Mentis Uno" }
+
+rechtstexte:
+  stand: { de: "Stand", en: "Last updated" }
 
 hinweis_englisch:
   # Wird auf englischen Rechtstexten angezeigt

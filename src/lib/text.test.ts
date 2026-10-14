@@ -1,7 +1,7 @@
 // Tests für die Textverarbeitung (Platzhalter, Akzentwörter, Variablen) und die t()-Funktion.
 import { describe, expect, it } from 'vitest';
 import { erstelleUebersetzer, textAusBaum } from './i18n';
-import { enthaeltPlatzhalter, ersetzeVariablen, ohneBetonung, zerlegeText } from './text';
+import { enthaeltPlatzhalter, ersetzeVariablen, findeTelefonnummern, ohneBetonung, zerlegeText } from './text';
 
 describe('zerlegeText', () => {
   it('erkennt Platzhalter mitten im Text', () => {
@@ -52,5 +52,21 @@ describe('ui-Texte', () => {
 
   it('meldet fehlende Texte verständlich', () => {
     expect(() => textAusBaum(baum, 'buttons.gibtsnicht', 'de')).toThrow('fehlt in inhalte/ui.yaml');
+  });
+});
+
+describe('findeTelefonnummern', () => {
+  it('erkennt alle Nummern aus dem Krisenhinweis', () => {
+    const text =
+      'Notruf 112 oder TelefonSeelsorge: 0800 111 0 111, 0800 111 0 222 oder 116 123. Nummer gegen Kummer 116 111, Elterntelefon 0800 111 0 550.';
+    const nummern = findeTelefonnummern(text)
+      .filter((teil) => teil.art === 'telefon')
+      .map((teil) => (teil.art === 'telefon' ? teil.nummer : ''));
+    expect(nummern).toEqual(['112', '08001110111', '08001110222', '116123', '116111', '08001110550']);
+  });
+
+  it('lässt den übrigen Text unverändert', () => {
+    const text = 'Rund um die Uhr: 116 123.';
+    expect(findeTelefonnummern(text).map((teil) => teil.text).join('')).toBe(text);
   });
 });

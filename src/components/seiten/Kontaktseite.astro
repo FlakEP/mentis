@@ -1,0 +1,124 @@
+---
+// Vorlage „Kontakt“: Seitenkopf → links das Formular (groß), rechts Kontaktdaten und „So geht es weiter“.
+// Texte aus inhalte/seiten/<sprache>/kontakt.md und ui.yaml. Aufgerufen von src/pages/[...pfad].astro.
+import { render } from 'astro:content';
+import type { Sprache } from '../../config/site';
+import Basis from '../../layouts/Basis.astro';
+import { holeKontaktseite } from '../../lib/inhalte';
+import Icon from '../Icon.astro';
+import KontaktFormular from '../KontaktFormular.astro';
+import SeitenKopf from '../SeitenKopf.astro';
+import Text from '../Text.astro';
+
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
+const seite = await holeKontaktseite(sprache);
+const { Content } = await render(seite);
+const d = seite.data;
+const k = d.kontaktdaten;
+---
+
+<Basis sprache={sprache} seite="kontakt" titel={d.seitentitel} beschreibung={d.beschreibung} noindex={d.noindex}>
+  <SeitenKopf ueberschrift={d.einstieg.ueberschrift} unterzeile={d.einstieg.unterzeile} />
+
+  <section class="abschnitt">
+    <div class="inhalt kontakt">
+      <div class="kontakt__formular">
+        <KontaktFormular sprache={sprache} />
+      </div>
+
+      <div class="kontakt__seite">
+        <ul class="kontakt__daten" role="list">
+          <li>
+            <Icon name="mail" groesse={20} />
+            <a href={`mailto:${k.email}`}>{k.email}</a>
+          </li>
+          {
+            k.telefon && (
+              <li>
+                <a href={`tel:${k.telefon.replace(/[^\d+]/g, '')}`}>
+                  <Text text={k.telefon} />
+                </a>
+              </li>
+            )
+          }
+          <li>
+            <Icon name="kalender" groesse={20} />
+            <span><Text text={k.termine} /></span>
+          </li>
+          <li>
+            <Icon name="ort" groesse={20} />
+            <span><Text text={k.ort} /></span>
+          </li>
+        </ul>
+
+        <div class="prosa kontakt__weiter">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .kontakt {
+    display: grid;
+    gap: var(--raum-xl);
+  }
+
+  @media (min-width: 60em) {
+    .kontakt {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--raum-3xl);
+      align-items: start;
+    }
+  }
+
+  .kontakt__formular {
+    padding: clamp(1.75rem, 1.2rem + 2.5vw, 3.5rem);
+    background: var(--farbe-flaeche);
+    border: var(--linie-duenn) solid var(--farbe-linie);
+    border-radius: var(--radius-karte);
+  }
+
+  .kontakt__seite {
+    display: grid;
+    gap: var(--raum-xl);
+  }
+
+  .kontakt__daten {
+    display: grid;
+    gap: var(--raum-xs);
+    padding: 0 0 var(--raum-xl);
+    list-style: none;
+    border-bottom: var(--linie-duenn) solid var(--farbe-linie);
+  }
+
+  .kontakt__daten li {
+    display: flex;
+    align-items: center;
+    gap: var(--raum-s);
+    min-height: var(--beruehrziel);
+  }
+
+  .kontakt__daten :global(.icon) {
+    flex: none;
+    color: var(--farbe-link);
+  }
+
+  .kontakt__daten a {
+    font-weight: 600;
+  }
+
+  .kontakt__weiter :global(h2) {
+    font-size: var(--text-h3);
+    font-weight: 500;
+  }
+
+  .kontakt__weiter :global(p) {
+    color: var(--farbe-text-leise);
+  }
+</style>

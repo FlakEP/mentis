@@ -1,0 +1,64 @@
+---
+// Vorlage „Über uns“: Seitenkopf → zwei Personenkarten → „Wie wir arbeiten“ → Kontaktblock.
+// Texte aus inhalte/seiten/<sprache>/ueber-uns.md. Aufgerufen von src/pages/[...pfad].astro.
+import { render } from 'astro:content';
+import type { Sprache } from '../../config/site';
+import Basis from '../../layouts/Basis.astro';
+import { holeUeberUns } from '../../lib/inhalte';
+import KontaktBlock from '../KontaktBlock.astro';
+import Person from '../Person.astro';
+import SeitenKopf from '../SeitenKopf.astro';
+
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
+const seite = await holeUeberUns(sprache);
+const { Content } = await render(seite);
+const d = seite.data;
+---
+
+<Basis sprache={sprache} seite="ueber_uns" titel={d.seitentitel} beschreibung={d.beschreibung} noindex={d.noindex}>
+  <SeitenKopf ueberschrift={d.einstieg.ueberschrift} unterzeile={d.einstieg.unterzeile} />
+
+  <section class="abschnitt">
+    <div class="inhalt">
+      <ul class="personen" role="list">
+        {
+          d.personen.map((person, index) => (
+            <li>
+              <Person person={person} id={`person-${index + 1}`} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--flaeche">
+    <div class="inhalt">
+      <div class="prosa prosa--zweispaltig">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <KontaktBlock sprache={sprache} />
+</Basis>
+
+<style>
+  .personen {
+    display: grid;
+    gap: var(--raum-m);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 56em) {
+    .personen {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--raum-l);
+    }
+  }
+</style>

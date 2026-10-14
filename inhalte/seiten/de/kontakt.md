@@ -23,4 +23,4 @@ kontaktdaten:
 
 Nach Ihrer Anfrage melden wir uns per E-Mail oder telefonisch. In einem kurzen Gespräch klären wir Ihr Anliegen, den Ablauf und die voraussichtlichen Kosten. Danach vereinbaren wir die Termine.
 
-Unser Angebot richtet sich an Selbstzahlerinnen und Selbstzahler.
+Unser Angebot richtet sich an Selbstzahlerinnen und Selbstzahler. Ob Ihre private Krankenversicherung die Kosten übernimmt, hängt von Ihrem Tarif ab – bitte klären Sie das vorab mit Ihrer Versicherung.

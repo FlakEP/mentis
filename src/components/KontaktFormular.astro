@@ -1,0 +1,55 @@
+---
+// Kontaktformular für Terminanfragen. Phase 2: Solange kein Formulardienst eingerichtet ist,
+// erscheint stattdessen der Hinweis auf die E-Mail-Adresse (siehe Spezifikation 9.2). Der Selbstzahler-Kurztext
+// kommt mit dem Formular in Phase 4 (direkt über dem Absende-Button).
+// Das eigentliche Formular folgt in Phase 4. Benutzt auf der Kontaktseite (später auch im Dialog und Kontaktblock).
+import type { Sprache } from '../config/site';
+import { holeKontaktdaten, uebersetzer } from '../lib/inhalte';
+import Icon from './Icon.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+}
+
+const { sprache } = Astro.props;
+const t = await uebersetzer(sprache);
+const kontakt = await holeKontaktdaten(sprache);
+---
+
+<div class="formular">
+  <h2>{t('kontaktformular.ueberschrift')}</h2>
+  <p class="formular__einleitung"><Text text={t('kontaktformular.einleitung')} /></p>
+  <div class="formular__ersatz">
+    <p>{t('kontaktformular.direkt_email')}</p>
+    <a class="button button--primaer" href={`mailto:${kontakt.email}`}>
+      <Icon name="mail" groesse={20} />
+      {kontakt.email}
+    </a>
+  </div>
+</div>
+
+<style>
+  .formular {
+    display: grid;
+    gap: var(--raum-m);
+  }
+
+  .formular__einleitung {
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  .formular__ersatz {
+    display: grid;
+    justify-items: start;
+    gap: var(--raum-s);
+    margin-top: var(--raum-xs);
+  }
+
+  .formular__ersatz .button {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+</style>

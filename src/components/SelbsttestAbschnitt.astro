@@ -1,0 +1,111 @@
+---
+// Abschnitt „Kostenlose Selbsteinschätzung“ (Anker #selbsteinschaetzung) auf einer Leistungsseite.
+// Zeigt die beiden Fragebögen der Seite (für mich selbst / für mein Kind) mit Zielgruppe, Einleitung und Zeitraum.
+// ÄNDERN: Welche Fragebögen erscheinen, steht im Frontmatter der Leistungsseite (Feld „selbsttests“).
+// Hinweis: In Phase 3 wird dieser Abschnitt um den eigentlichen Fragebogen (Schritt für Schritt) ergänzt.
+import { ANKER, type Sprache } from '../config/site';
+import { holeSelbsttests, uebersetzer } from '../lib/inhalte';
+import Bogen from './Bogen.astro';
+import Text from './Text.astro';
+
+interface Props {
+  sprache: Sprache;
+  tests: string[];
+}
+
+const { sprache, tests } = Astro.props;
+const t = await uebersetzer(sprache);
+const fragebogen = await holeSelbsttests(tests);
+---
+
+<section class="abschnitt abschnitt--ruhig" id={ANKER.selbsteinschaetzung} aria-labelledby="selbsttest-titel">
+  <div class="inhalt">
+    <div class="selbsttest__kopf">
+      <h2 id="selbsttest-titel">{t('selbsttest.ueberschrift')}</h2>
+      <p class="selbsttest__vorab">{t('selbsttest.hinweis_vorab')}</p>
+    </div>
+
+    <p class="selbsttest__frage">{t('selbsttest.auswahl_frage')}</p>
+    <ul class="selbsttest__liste" role="list">
+      {
+        fragebogen.map((test) => (
+          <li class="selbsttest__karte">
+            <Bogen groesse={40} strich={5} />
+            <span class="ueberzeile selbsttest__fuer">
+              {t(test.perspektive === 'selbst' ? 'selbsttest.auswahl_selbst' : 'selbsttest.auswahl_fremd')}
+            </span>
+            <h3>
+              <Text text={test.titel[sprache]} />
+            </h3>
+            <p class="selbsttest__zielgruppe">
+              <Text text={test.zielgruppe[sprache]} />
+            </p>
+            <p>
+              <Text text={test.einleitung[sprache]} />
+            </p>
+            {test.zeitraum[sprache] && (
+              <p class="selbsttest__zeitraum">
+                <Text text={test.zeitraum[sprache]} />
+              </p>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .selbsttest__kopf {
+    display: grid;
+    gap: var(--raum-m);
+    max-width: 44rem;
+    margin-bottom: var(--raum-xl);
+  }
+
+  .selbsttest__vorab {
+    font-size: var(--text-gross);
+    line-height: 1.55;
+    color: var(--farbe-text-leise);
+  }
+
+  .selbsttest__frage {
+    margin-bottom: var(--raum-m);
+    font-weight: 600;
+  }
+
+  .selbsttest__liste {
+    display: grid;
+    gap: var(--raum-m);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 52em) {
+    .selbsttest__liste {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .selbsttest__karte {
+    display: grid;
+    align-content: start;
+    gap: var(--raum-s);
+    padding: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+    background: var(--farbe-hintergrund);
+    border-radius: var(--radius-karte);
+  }
+
+  .selbsttest__fuer {
+    margin: var(--raum-2xs) 0 0;
+  }
+
+  .selbsttest__zielgruppe,
+  .selbsttest__zeitraum {
+    color: var(--farbe-text-leise);
+  }
+
+  .selbsttest__zeitraum {
+    font-style: italic;
+  }
+</style>

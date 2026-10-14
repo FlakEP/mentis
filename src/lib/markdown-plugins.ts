@@ -1,6 +1,7 @@
-// Zwei kleine Erweiterungen für die Markdown-Texte aus inhalte/seiten/:
+// Kleine Erweiterungen für die Markdown-Texte aus inhalte/seiten/:
 // 1. HTML-Kommentare (<!-- Hinweise für die Inhaber -->) werden entfernt und erscheinen nie auf der Website.
-// 2. Platzhalter [[PLATZHALTER: …]] bekommen ein <span class="platzhalter"> (im Entwicklungsmodus gelb). Eingebunden in astro.config.ts.
+// 2. Einfache Zeilenumbrüche bleiben erhalten (wichtig für Anschriften im Impressum).
+// 3. Platzhalter [[PLATZHALTER: …]] bekommen ein <span class="platzhalter"> (im Entwicklungsmodus gelb). Eingebunden in astro.config.ts.
 
 import { PLATZHALTER_MUSTER } from './text';
 
@@ -21,6 +22,26 @@ export function remarkKommentareEntfernen() {
     if (!knoten.children) return;
     knoten.children = knoten.children.filter((kind) => !istKommentar(kind));
     knoten.children.forEach(durchlaufe);
+  };
+  return (baum: Knoten) => durchlaufe(baum);
+}
+
+/** Remark-Plugin: macht aus einem einfachen Zeilenumbruch im Text einen echten Umbruch (<br>). */
+export function remarkZeilenumbrueche() {
+  const durchlaufe = (knoten: Knoten) => {
+    if (!knoten.children) return;
+    knoten.children = knoten.children.flatMap((kind): Knoten[] => {
+      if (kind.type !== 'text' || !kind.value?.includes('\n')) {
+        durchlaufe(kind);
+        return [kind];
+      }
+      return kind.value
+        .split(/\r?\n/)
+        .flatMap((zeile, index): Knoten[] => [
+          ...(index > 0 ? [{ type: 'break' }] : []),
+          ...(zeile ? [{ type: 'text', value: zeile }] : []),
+        ]);
+    });
   };
   return (baum: Knoten) => durchlaufe(baum);
 }

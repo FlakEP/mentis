@@ -114,6 +114,7 @@ export const uiSchema = z.strictObject({
     menue_schliessen: zweisprachig,
     hauptmenue: zweisprachig,
     zum_inhalt: zweisprachig,
+    auf_dieser_seite: zweisprachig,
   }),
   buttons: z.strictObject({
     termin_anfragen: zweisprachig,
@@ -172,6 +173,7 @@ export const uiSchema = z.strictObject({
     direkt_email: zweisprachig,
   }),
   footer: z.strictObject({ kurzbeschreibung: zweisprachig, termine: zweisprachig, copyright: zweisprachig }),
+  rechtstexte: z.strictObject({ stand: zweisprachig }),
   hinweis_englisch: z.strictObject({ en: text }),
 });
 

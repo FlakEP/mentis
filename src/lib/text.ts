@@ -51,3 +51,24 @@ export function ohneBetonung(text: string): string {
 export function ersetzeVariablen(text: string, werte: Record<string, string | number> = {}): string {
   return text.replace(/\{(\w+)\}/g, (ganz, name: string) => (name in werte ? String(werte[name]) : ganz));
 }
+
+/**
+ * Findet Telefonnummern in Hilfetexten (z. B. 112, 116 123, 0800 111 0 111),
+ * damit sie auf dem Handy direkt angetippt werden können. Benutzt im Krisenhinweis.
+ */
+const TELEFON_MUSTER = /(?<!\d ?)(?:0800(?: \d+){2,3}|116 \d{3}|112)(?![\d])/g;
+
+export type Telefonteil = { art: 'text'; text: string } | { art: 'telefon'; text: string; nummer: string };
+
+export function findeTelefonnummern(text: string): Telefonteil[] {
+  const teile: Telefonteil[] = [];
+  let letzteStelle = 0;
+  for (const treffer of text.matchAll(TELEFON_MUSTER)) {
+    const stelle = treffer.index ?? 0;
+    if (stelle > letzteStelle) teile.push({ art: 'text', text: text.slice(letzteStelle, stelle) });
+    teile.push({ art: 'telefon', text: treffer[0], nummer: treffer[0].replace(/\s/g, '') });
+    letzteStelle = stelle + treffer[0].length;
+  }
+  if (letzteStelle < text.length) teile.push({ art: 'text', text: text.slice(letzteStelle) });
+  return teile;
+}

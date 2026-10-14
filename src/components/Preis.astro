@@ -9,17 +9,19 @@ import Text from './Text.astro';
 interface Props {
   sprache: Sprache;
   preisAb: string;
+  /** „gross“ für den Kostenabschnitt einer Leistungsseite */
+  groesse?: 'normal' | 'gross';
   class?: string;
 }
 
-const { sprache, preisAb, class: klasse } = Astro.props;
+const { sprache, preisAb, groesse = 'normal', class: klasse } = Astro.props;
 const t = await uebersetzer(sprache);
 const offen = enthaeltPlatzhalter(preisAb);
 // Zahlen werden mit Tausenderpunkt geschrieben, z. B. 1.200
 const betrag = offen ? preisAb : new Intl.NumberFormat(sprache === 'de' ? 'de-DE' : 'en-GB').format(Number(preisAb));
 ---
 
-<span class:list={['preis', klasse]}>
+<span class:list={['preis', `preis--${groesse}`, { 'preis--offen': offen }, klasse]}>
   <span class="preis__ab">{t('preise.ab')}</span>
   {
     sprache === 'de' ? (
@@ -54,5 +56,24 @@ const betrag = offen ? preisAb : new Intl.NumberFormat(sprache === 'de' ? 'de-DE
     font-size: var(--text-h3);
     font-variant-numeric: lining-nums;
     letter-spacing: -0.01em;
+  }
+
+  .preis--gross {
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+
+  .preis--gross .preis__ab {
+    font-size: var(--text-gross);
+  }
+
+  .preis--gross .preis__betrag {
+    font-size: var(--text-preis);
+    line-height: 1.1;
+  }
+
+  /* Solange nur ein Platzhalter eingetragen ist, nicht riesig darstellen */
+  .preis--gross.preis--offen .preis__betrag {
+    font-size: var(--text-h3);
   }
 </style>

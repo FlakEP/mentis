@@ -14,6 +14,9 @@ export const STANDARD_SPRACHE: Sprache = 'de';
  */
 export const ENGLISCH_AKTIV = false;
 
+/** Sprachen, für die Seiten gebaut werden. */
+export const AKTIVE_SPRACHEN: Sprache[] = ENGLISCH_AKTIV ? ['de', 'en'] : ['de'];
+
 /** Technische Namen aller Seiten. */
 export type SeitenId =
   | 'start'
