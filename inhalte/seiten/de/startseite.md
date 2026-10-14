@@ -9,7 +9,7 @@ seitentitel: "Mentis Uno – Psychologische Diagnostik in Berlin"
 beschreibung: "Psychologische Diagnostik in Berlin: ADHS-, Intelligenz- und klinische Diagnostik für Erwachsene, Kinder und Jugendliche. Für Selbstzahler."
 
 hero:
-  ueberschrift: "Klarheit beginnt mit einer *sorgfältigen* Diagnostik."   # *Sternchen* = Akzentwort (kursiv, Terrakotta)
+  ueberschrift: "*Klarheit* beginnt mit einer sorgfältigen Diagnostik."   # *Sternchen* = Akzentwort (kursiv, Terrakotta)
   unterzeile: >-
     Mentis Uno ist eine Praxis für psychologische Diagnostik in Berlin. Wir
     untersuchen Fragen rund um ADHS, Intelligenz und psychische Gesundheit –
